@@ -12,15 +12,15 @@ int main(void)
 	using namespace std;
 	int _ceshi=1;
 
-	cout << _ceshi<<endl;
+	cout << _ceshi<<endl;           //在本系统中运行无异常
 
 	return 0;
 }
-#endif//在本系统中运行无异常
+#endif
 
 
 //程序清单3.1 查看类型的长度
-#if 0
+#if 1
 #include <climits>              // use limits.h for older systems
 int main()
 {
@@ -51,7 +51,7 @@ int main()
 #endif
 
 
-//C++11初始化变量的方式
+//C++11新增初始化变量的方式——{}方式，是一种通用初始化方式
 #if 0
 int main(void)
 {
@@ -134,10 +134,10 @@ int main()
     cout << oct;      // manipulator for changing number base
     cout << "inseam = " << inseam << " (octal for 42)" << endl<<endl;
 
-    inseam = 042;
+    inseam = 042;//以八进制形式存储
     cout << "inseam = " << inseam << " (octal for 042)" << endl;
     cout << dec;
-    cout << "inseam = " << inseam << " (decimal for 042)" << endl;
+    cout << "inseam = " << inseam << " (decimal for 042)" << endl;//以十进制形式显示
 
     // cin.get();
     return 0;
@@ -255,14 +255,14 @@ int main()
     using namespace std;
     cout.setf(ios_base::fixed, ios_base::floatfield); // fixed-point使用定点计数法
 
-    float tub = 10.0 / 3.0;     // good to about 6 places
-    double mint = 10.0 / 3.0;   // good to about 15 places
+    float tub = 10.0 / 3.0;     // good to about 6 places   至少6位有效位
+    double mint = 10.0 / 3.0;   // good to about 15 places   至少15位有效位
     const float million = 1.0e6;
 
     cout << "tub = " << tub;
     cout << ", a million tubs = " << million * tub;
     cout << ",\nand ten million tubs = ";
-    cout << 10 * million * tub << endl;
+    cout << 10 * million * tub << endl;                     //证明float类型在该系统上能表示的有效位是前7位
 
     cout << "mint = " << mint << " and a million mints = ";
     cout << million * mint << endl;
@@ -371,9 +371,10 @@ int main()
 {
     using namespace std;
     cout.setf(ios_base::fixed, ios_base::floatfield);
-    float tree = 3;     // int converted to float
+    float tree = 3;     // int converted to float                            整型可以转化成浮点型
     int guess = 3.9832; // float converted to int
-    int debt = 7.2E12;  // result not defined in C++
+    int debt = 7.2E12;  // ***注***result not defined in C++   情况1：小数部分丢失，情况2：原来的值可能超出目标类型的取值范围，在这种情况下，结果将是不确定的
+
     cout << "tree = " << tree << endl;
     cout << "guess = " << guess << endl;
     cout << "debt = " << debt << endl;
@@ -384,7 +385,7 @@ int main()
 
 
 //用{}方式初始化变量时的类型转换
-#if 1
+#if 0
 int main(void)
 {
     using namespace std;
@@ -395,7 +396,7 @@ int main(void)
     //char a = {x};                 //编译器看来，x是个变量，其值可能很大，编译器判定为从int转换到char，不允许缩窄   (若改为char x=66，则可以)
 
     const int x = 66;          //***注***
-    char a = {x};                 //此种情况允许，编译器认为只读变量x的值是66(可以理解为#define x 66)，在char的范围内，可对a初始化      
+    char a = {x};                 //此种情况允许，编译器认为只读变量x的值是66（可以理解为#define x 66），在char的范围内，可对a初始化      
 
     cout << a << endl;
 
@@ -408,7 +409,30 @@ int main(void)
 #endif
 
 
-//程序清单3.14 
-#if 1
+//程序清单3.14 强制类型转换
+#if 0
+int main()
+{
+    using namespace std;
+    int auks, bats, coots;// 海雀，蝙蝠，水鸟
 
+    // the following statement adds the values as double,
+    // then converts the result to int
+    auks = 19.99 + 11.99;                  //19.99+11.99=31.98则auks=31
+
+    // these statements add values as int
+    bats = (int)19.99 + (int)11.99;   // old C syntax               C语法
+    coots = int(19.99) + int(11.99);  // new C++ syntax       C++新语法
+    cout << "auks = " << auks << ", bats = " << bats;
+    cout << ", coots = " << coots << endl;
+
+    char ch = 'Z';
+    cout << "The code for " << ch << " is ";    // print as char
+    cout << int(ch) << endl;                               // print as int
+    cout << "Yes, the code is ";
+    cout << static_cast<int>(ch) << endl;        // using static_cast
+
+   // cin.get();
+    return 0;
+}
 #endif
