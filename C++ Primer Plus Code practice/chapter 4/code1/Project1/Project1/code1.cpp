@@ -42,7 +42,7 @@ int main()
 #endif
 
 
-//程序清单4.2 在数组中使用字符串
+//程序清单4.2 使用字符串数组
 #if 0
 #include <cstring>  // for the strlen() function
 int main()
@@ -71,7 +71,7 @@ int main()
 #endif
 
 
-//程序清单4.3 用cin获取字符数组的输入时只读取一个单词
+//程序清单4.3 用cin获取字符数组的输入时只会读取一个单词
 #if 0
 int main()
 {
@@ -216,7 +216,7 @@ int main()
     cout << "You can append strings.\n";
     s1 += s2;//通过使用string类对象，可以直接用+=号把s2字符串附加到s1字符串
     cout << "s1 += s2 yields s1 = " << s1 << endl;
-    s2 += " for a day";//S2字符串还可以附加一个字符串字面量
+    s2 += " for a day";//S2字符串还可以为自身附加一个字符串字面量
     cout << "s2 += \" for a day\" yields s2 = " << s2 << endl;
 
     //cin.get();
@@ -295,7 +295,7 @@ int main()
 
 
 //使用C++新增类型：原始字符串
-#if 1
+#if 0
 int main(void)
 {
     using namespace std;
@@ -304,6 +304,326 @@ int main(void)
 
     cout << "使用转义序列输出"<<"\"\"   \\n  \"\\n\"\n\n";
 
+    return 0;
+}
+#endif
+
+
+//程序清单4.11 使用结构
+#if 0
+#include <string>
+struct inflatable   // structure declaration 声明一个标记为inflatable的结构布局(结构模板)
+{
+    char name[20];
+    float volume;
+    double price;
+};
+
+struct ceshi
+{
+    std::string name;//string类对象也可以作为结构成员   前提条件：添加#include <string>；必须提供一条using编译指令，或者用std::string来引用它
+    float volumn;
+};
+
+int main()
+{
+    using namespace std;
+    inflatable guest =                              //声明并初始化一个以inflatable结构布局的结构变量
+    {
+        "Glorious Gloria",  // name value
+        1.88,               // volume value
+        29.99               // price value
+    };  // guest is a structure variable of type inflatable
+        // It's initialized to the indicated values
+    inflatable pal                                     //C++11支持将列表初始化用于结构，且=号可不写
+    {
+        "Audacious Arthur",
+        3.12,
+        32.99
+    };  // pal is a second variable of type inflatable
+
+
+
+    cout << "Expand your guest list with " << guest.name;
+    cout << " and " << pal.name << "!\n";
+    // pal.name is the name member of the pal variable
+    cout << "You can have both for $";
+    cout << guest.price + pal.price << "!\n";
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单4.12 拷贝结构
+#if 0
+struct inflatable
+{
+    char name[20];
+    float volume;
+    double price;
+};
+int main()
+{
+    using namespace std;
+    inflatable bouquet =
+    {
+        "sunflowers",
+        0.20,
+        12.49
+    };
+    inflatable choice;
+
+    cout << "bouquet: " << bouquet.name << " for $";
+    cout << bouquet.price << endl;
+
+    choice = bouquet;  // assign one structure to another 拷贝结构
+    cout << "choice: " << choice.name << " for $";
+    cout << choice.price << endl;
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单4.13 使用结构数组
+#if 0
+struct inflatable
+{
+    char name[20];
+    float volume;
+    double price;
+};
+int main()
+{
+    using namespace std;
+    inflatable guests[2] =          // initializing an array of structs
+    {
+        {"Bambi", 0.5, 21.99},      // first structure in array
+        {"Godzilla", 2000, 565.99}  // next structure in array
+    };
+
+    cout << "The guests " << guests[0].name << " and " << guests[1].name
+        << "\nhave a combined volume of "
+        << guests[0].volume + guests[1].volume << " cubic feet.\n";
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单4.14 使用&运算符
+#if 0
+int main()
+{
+    using namespace std;
+    int donuts = 6;
+    double cups = 4.5;
+
+    cout << "donuts value = " << donuts;
+    cout << " and donuts address = " << &donuts << endl;
+    // NOTE: you may need to use unsigned (&donuts)
+    // and unsigned (&cups)
+    cout << "cups value = " << cups;
+    cout << " and cups address = " << &cups << endl;
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单4.15 使用指针
+#if 0
+int main()
+{
+    using namespace std;
+    int updates = 6;        // declare a variable
+    int* p_updates;        // declare pointer to an int
+
+    p_updates = &updates;   // assign address of int to pointer 对指针变量赋值
+
+    // express values two ways
+    cout << "Values: updates = " << updates;
+    cout << ", *p_updates = " << *p_updates << endl;
+
+    // express address two ways
+    cout << "Addresses: &updates = " << &updates;
+    cout << ", p_updates = " << p_updates << endl;
+
+    // use pointer to change value
+    *p_updates = *p_updates + 1;
+    cout << "Now updates = " << updates << endl;
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单4.16 初始化指针
+#if 0
+int main()
+{
+    using namespace std;
+    int higgens = 5;
+    int* pt = &higgens;
+
+    cout << "Value of higgens = " << higgens
+        << "; Address of higgens = " << &higgens << endl;
+    cout << "Value of *pt = " << *pt
+        << "; Value of pt = " << pt << endl;
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//C++对于指针赋值操作更加严格
+#if 0
+int main(void)
+{
+    int* pt;
+    //pt = 0x00b8;     //C允许，但C++不允许  报错：不能将整数赋给指向int类型的指针
+    pt = (int*)0x00b8;//C++允许，因为赋值语句两边都是整数的地址
+                                  //***注***指针pt本身的类型不一定是int
+    return 0;
+}
+#endif
+
+
+//程序清单4.17 使用C++的new和delete运算符
+#if 0
+int main()
+{
+    using namespace std;
+
+    int nights = 1001;
+    int* pt = new int;         // allocate space for an int
+    *pt = 1001;                 // store a value there
+
+    cout << "nights value = ";
+    cout << nights << ": location " << &nights << endl;
+    cout << "int ";
+    cout << "value = " << *pt << ": location = " << pt << endl;
+
+    double* pd = new double;   // allocate space for a double
+    *pd = 10000001.0;           // store a double there
+
+    cout << "double ";
+    cout << "value = " << *pd << ": location = " << pd << endl;
+    cout << "location of pointer pd: " << &pd << endl;
+
+    cout << "size of pt = " << sizeof(pt);
+    cout << ": size of *pt = " << sizeof(*pt) << endl;
+    cout << "size of pd = " << sizeof pd;
+    cout << ": size of *pd = " << sizeof(*pd) << endl;
+
+    delete(pt);
+    delete(pd);
+
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单4.18 使用动态数组并访问数组中的元素
+#if 0
+int main()
+{
+    using namespace std;
+
+    double* p3 = new double[3]; // space for 3 doubles
+    p3[0] = 0.2;                  // treat p3 like an array name
+    p3[1] = 0.5;
+    p3[2] = 0.8;
+
+    cout << "p3[1] is " << p3[1] << ".\n";                          //或写作：*(p3+1)
+
+    p3 = p3 + 1;                  // increment the pointer
+
+    cout << "Now p3[0] is " << p3[0] << " and ";
+    cout << "p3[1] is " << p3[1] << ".\n";
+
+    p3 = p3 - 1;                  // point back to beginning
+
+    delete[] p3;                 // free the memory
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单4.19 指针算术
+#if 0
+int main()
+{
+    using namespace std;
+
+    double wages[3] = { 10000.0, 20000.0, 30000.0 };
+    short stacks[3] = { 3, 2, 1 };
+
+    // Here are two ways to get the address of an array
+    double* pw = wages;     // name of an array = address
+    short* ps = &stacks[0]; // or use address operator with array element
+   
+    cout << "pw = " << pw << ", *pw = " << *pw << endl;
+    pw = pw + 1;
+    cout << "add 1 to the pw pointer:\n";
+    cout << "pw = " << pw << ", *pw = " << *pw << "\n\n";
+
+    cout << "ps = " << ps << ", *ps = " << *ps << endl;
+    ps = ps + 1;
+    cout << "add 1 to the ps pointer:\n";
+    cout << "ps = " << ps << ", *ps = " << *ps << "\n\n";
+
+    cout << "access two elements with array notation\n";//使用数组的索引值访问两个元素
+    cout << "stacks[0] = " << stacks[0]
+        << ", stacks[1] = " << stacks[1] << endl;
+    cout << "access two elements with pointer notation\n";//使用指针表示法访问两个元素
+    cout << "*stacks = " << *stacks
+        << ", *(stacks + 1) =  " << *(stacks + 1) << endl;
+
+    cout << sizeof(wages) << " = size of wages array\n";
+    cout << sizeof(pw) << " = size of pw pointer\n";
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单4.20 
+#if 1
+#include <cstring>              // declare strlen(), strcpy()
+int main()
+{
+    using namespace std;
+    char animal[20] = "bear";   // animal holds bear
+    const char* bird = "wren"; // bird holds address of string
+    char* ps;                  // uninitialized
+
+    cout << animal << " and ";  // display bear
+    cout << bird << "\n";       // display wren
+    // cout << ps << "\n";      //may display garbage, may cause a crash
+
+    cout << "Enter a kind of animal: ";
+    cin >> animal;              // ok if input < 20 chars
+    // cin >> ps; Too horrible a blunder to try; ps doesn't point to allocated space
+
+    ps = animal;                // set ps to point to string
+    cout << ps << "!\n";       // ok, same as using animal
+    cout << "Before using strcpy():\n";
+    cout << animal << " at " << (int*)animal << endl;//强制类型转换，目的是显示字符串的地址
+    cout << ps << " at " << (int*)ps << endl;
+
+    ps = new char[strlen(animal) + 1];  // get new storage
+    strcpy(ps, animal);         // copy string to new storage
+    cout << "After using strcpy():\n";
+    cout << animal << " at " << (int*)animal << endl;
+    cout << ps << " at " << (int*)ps << endl;
+
+    delete[] ps;
+    // cin.get();
+    // cin.get();
     return 0;
 }
 #endif
