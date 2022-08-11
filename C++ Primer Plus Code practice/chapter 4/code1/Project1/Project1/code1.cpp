@@ -591,8 +591,8 @@ int main()
 #endif
 
 
-//程序清单4.20 
-#if 1
+//程序清单4.20 创建动态字符串数组
+#if 0
 #include <cstring>              // declare strlen(), strcpy()
 int main()
 {
@@ -605,6 +605,7 @@ int main()
     cout << bird << "\n";       // display wren
     // cout << ps << "\n";      //may display garbage, may cause a crash
 
+    //输入字符串
     cout << "Enter a kind of animal: ";
     cin >> animal;              // ok if input < 20 chars
     // cin >> ps; Too horrible a blunder to try; ps doesn't point to allocated space
@@ -615,15 +616,188 @@ int main()
     cout << animal << " at " << (int*)animal << endl;//强制类型转换，目的是显示字符串的地址
     cout << ps << " at " << (int*)ps << endl;
 
+    //获得字符串的副本
     ps = new char[strlen(animal) + 1];  // get new storage
     strcpy(ps, animal);         // copy string to new storage
     cout << "After using strcpy():\n";
     cout << animal << " at " << (int*)animal << endl;
-    cout << ps << " at " << (int*)ps << endl;
-
+    cout << ps << " at " << (int*)ps << endl;                   //以上是使用C风格字符串，对比程序清单4.8和4.9，
+                                                                                             //C++string类型更为简单
     delete[] ps;
     // cin.get();
     // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单4.21 用new创建动态结构
+#if 0
+struct inflatable   // structure definition
+{
+    char name[20];
+    float volume;
+    double price;
+};
+
+int main()
+{
+    using namespace std;
+
+    inflatable* ps = new inflatable; // allot memory for structure
+    //或：
+    //struct inflatable* ps = new inflatable;
+
+    cout << "Enter name of inflatable item: ";
+    cin.get(ps->name, 20);            // method 1 for member access
+
+    cout << "Enter volume in cubic feet: ";
+    cin >> (*ps).volume;               // method 2 for member access
+
+    cout << "Enter price: $";
+    cin >> ps->price;
+
+    cout << "Name: " << (*ps).name << endl;                        // method 2
+    cout << "Volume: " << ps->volume << " cubic feet\n"; // method 1
+    cout << "Price: $" << ps->price << endl;                        // method 1
+    delete ps;                        // free memory used by structure
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单4.22 使用new和delete来存储通过键盘输入的字符串(使用动态分配的内存的应用)
+#if 0
+#include <cstring>      // or string.h
+
+using namespace std;
+char* getname(void);   // function prototype
+
+int main()
+{
+    char* name;        // create pointer but no storage
+
+    name = getname();   // assign address of string to name
+
+    cout << name << " at " << (int*)name << "\n";
+    delete[] name;     // memory freed
+
+    name = getname();   // reuse freed memory
+
+    cout << name << " at " << (int*)name << "\n";
+    delete[] name;     // memory freed again
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+
+char* getname()        // return pointer to new string
+{
+    char temp[80];      // temporary storage 块作用域，无链接，自动存储期
+
+    cout << "Enter last name: ";
+    cin >> temp;        //temp数组暂存输入的内容
+
+    char* pn = new char[strlen(temp) + 1];//计算输入的字符数量并动态分配一个内存空间
+
+    strcpy(pn, temp); // copy string into smaller space 
+                                 //***注***strcpy()检测到temp中的'\0'后把'\0'也拷贝入pn指向的内存空间的相应位置，然后停止拷贝
+    return pn;          // temp lost when function ends
+}
+#endif
+
+
+//程序清单4.23 使用数组、结构、指针
+#if 0
+struct antarctica_years_end
+{
+    int year;
+    /* some really interesting data, etc. */
+};
+
+int main()
+{
+    //------------------------------------------------------------------------------
+    antarctica_years_end jiegou_shuzu[3]; //声明一个数组，内含三个结构
+
+    jiegou_shuzu[0].year = 2003;
+
+    std::cout << jiegou_shuzu->year << std::endl;
+    //------------------------------------------------------------------------------
+
+    antarctica_years_end jiegou01, jiegou02, jiegou03;//声明三个结构
+
+    jiegou01.year = 1998;
+
+    antarctica_years_end* p = &jiegou02;//声明并初始化一个指向结构的指针
+    p->year = 1999;
+
+
+    const antarctica_years_end* zhizhen_shuzu[3] =\
+    { &jiegou01, &jiegou02, &jiegou03 };//声明一个数组，内含三个指针
+ 
+    std::cout << zhizhen_shuzu[1]->year << std::endl;
+    //------------------------------------------------------------------------------
+
+    const antarctica_years_end** p_zhizhen_shuzu_1 \
+        = zhizhen_shuzu;//声明并初始化一个指向指针的指针
+
+    auto p_zhizhen_shuzu_2 = zhizhen_shuzu; //***注***C++11的auto可以为声明一个类型提供方便
+                                                                           //编译器知道zhizhen_shuzu的类型，所以能够推断出p_zhizhen_shuzu_2的类型
+    //也可以声明为 const antarctica_years_end ** p_zhizhen_shuzu_2 = zhizhen_shuzu; 
+
+    std::cout << (*p_zhizhen_shuzu_1)->year << std::endl;
+    std::cout << (  *(p_zhizhen_shuzu_2 + 1)  )->year << std::endl;
+    // std::cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单4.25 比较数组、vector对象、array对象
+#if 0
+#include <vector>   // STL(Standard Template Library，STL) C++98
+#include <array>    // C++0x
+int main()
+{
+    using namespace std;
+    //------------------------------------------------------------------------------
+
+    // C, original C++
+    double a1[4] = { 1.2, 2.4, 3.6, 4.8 };
+    //------------------------------------------------------------------------------
+
+    // C++98 STL
+    vector<double> a2(4);   // create vector with 4 elements
+    //vector<double> a2(4) = { 1.0 / 3.0 , 1.0 / 5.0 , 1.0 / 7.0 , 1.0 / 9.0 }; 
+                                                //不能将列表初始化用于vector对象(C++11可以这样做)
+    a2[0] = 1.0 / 3.0;
+    a2[1] = 1.0 / 5.0;
+    a2[2] = 1.0 / 7.0;
+    a2[3] = 1.0 / 9.0;
+    //vector<double> a5(4);
+    //a5 = a2;                              //可以将一个vector对象赋给另一个vector对象
+    //------------------------------------------------------------------------------
+
+    // C++11-- create and initialize array object
+    array<double, 4> a3 = { 3.14, 2.72, 1.62, 1.41 };//能将列表初始化用于array对象
+    array<double, 4> a4;
+    a4 = a3;                                //可以将一个array对象赋给另一个array对象
+    //------------------------------------------------------------------------------
+    
+    // use array notation
+    cout << "a1[2]: " << a1[2] << " at " << &a1[2] << endl;
+    cout << "a2[2]: " << a2[2] << " at " << &a2[2] << endl;
+    cout << "a3[2]: " << a3[2] << " at " << &a3[2] << endl;
+    cout << "a4[2]: " << a4[2] << " at " << &a4[2] << endl;
+    // misdeed
+    a1[-2] = 20.2;
+    cout << "a1[-2]: " << a1[-2] << " at " << &a1[-2] << endl;
+    cout << "a3[2]: " << a3[2] << " at " << &a3[2] << endl;
+    cout << "a4[2]: " << a4[2] << " at " << &a4[2] << endl;
+    //  cin.get();
     return 0;
 }
 #endif

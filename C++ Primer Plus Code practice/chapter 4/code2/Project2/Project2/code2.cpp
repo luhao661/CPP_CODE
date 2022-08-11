@@ -71,7 +71,7 @@ int main(void)
 	float ideas[10]{1,2};
 	std::cout << ideas[1];
 
-	char shuju[20]="cheeseburger";
+	char shuju[20]="cheeseburger";//»ò£ºchar shuju[]="cheeseburger";
 	std::string str = "Waldorf Salad";
 	
 	return 0;
@@ -135,7 +135,7 @@ int main(void)
 
 
 //13.
-#if 1
+#if 0
 int main(void)
 {
 	using namespace std;
@@ -167,7 +167,7 @@ int main(void)
 {
 	using namespace std;
 
-	struct fish fish_canshu = { "öÔÓã",1,2.2 };
+	//struct fish fish_canshu = { "öÔÓã",1,2.2 };
 	//struct fish* p1 = &fish_canshu;
 
 	struct fish* p = new fish;
