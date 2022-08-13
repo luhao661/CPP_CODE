@@ -96,16 +96,23 @@ int main(void)
 
 	do
 	{
+		years++;
+
 		lixi_dap = lilv_dap * benjin_dap;
 		money_dap += lixi_dap;
 
+#ifdef JUST_CHECKING
+		cout << "第" << years << "年：" << "Daphne " << money_dap<<"\t";
+#endif
 		lixi_cle = lilv_cle * money_cle;
 		money_cle += lixi_cle;
-
-		years++;
+#ifdef JUST_CHECKING
+		cout << "第" << years << "年：" << "Cleo " << money_cle<<endl;
+#endif
 	} while (money_cle<= money_dap);
 
-
+	cout << "第" << years << "年：" << "Daphne " << money_dap << "\t";
+	cout << "Cleo " << money_cle << endl;
 
 	return 0;
 }
