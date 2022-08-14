@@ -222,6 +222,28 @@ int main()
     return 0;
 }
 #endif
+//程序清单5.13 while循环(使用string类)
+#if 0
+const int ArSize = 20;
+int main()
+{
+    using namespace std;
+    string name;
+
+    cout << "Your first name, please: ";
+    cin >> name;
+    cout << "Here is your name, verticalized and ASCIIized:\n";
+    int i = 0;                  // start at beginning of string
+    while (name[i] != '\0')     // process to end of string
+    {
+        cout << name[i] << ": " << int(name[i]) << endl;
+        i++;                    // don't forget this step
+    }
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+#endif
 
 
 //程序清单5.14 编写延时循环，使用wait或使用clock()
