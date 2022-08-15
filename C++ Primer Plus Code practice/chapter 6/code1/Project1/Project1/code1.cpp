@@ -35,7 +35,7 @@ int main()
 #endif
 
 
-//程序清单6.2 if...else...语句
+//程序清单6.2 分支语句：if...else...语句
 #if 0
 int main()
 {
@@ -96,7 +96,7 @@ int main()
 #endif
 
 
-//程序清单6.4 cin只读取一个字符，并用 if...else...if...else结构
+//程序清单6.4 cin只读取一个字符，并用 if...else...if...else结构，||逻辑运算符
 #if 0
 int main()
 {
@@ -122,7 +122,7 @@ int main()
 #endif
 
 
-//程序清单6.5 循环、逻辑运算符、分支运算符的应用
+//程序清单6.5 循环、&&逻辑运算符、分支运算符的应用
 #if 0
 const int ArSize = 6;
 int main()
@@ -178,7 +178,7 @@ int main()
 #endif
 
 
-//使用一系列 if...else...if...else结构
+//程序清单6.6 使用一系列 if...else...if...else结构
 #if 0
 const char* qualify[4] =       // an array of pointers*/
 {                               // to strings
@@ -208,6 +208,390 @@ int main()
         index = 3;
 
     cout << "You qualify for the " << qualify[index];
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单6.7 !逻辑运算符
+#if 0
+#include <climits>
+
+bool is_int(double);
+
+int main()
+{
+    using namespace std;
+    double num;
+
+    cout << "Yo, dude! Enter an integer value: ";
+    cin >> num;
+    while (!is_int(num))    // continue while num is not int-able
+    {
+        cout << "Out of range -- please try again: ";
+        cin >> num;
+    }
+
+    int val = int(num);    // type cast
+    cout << "You've entered the integer " << val << "\nBye\n";
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+
+bool is_int(double x)//double 类型足以存储典型的int值，然后对输入的值进行逻辑判断
+{
+    if (x <= INT_MAX && x >= INT_MIN)   // use climits values
+        return true;
+    else
+        return false;
+}
+#endif
+
+
+//程序清单6.8 使用头文件cctype中提供的函数
+#if 0
+#include <cctype>              // prototypes for character functions
+
+int main()
+{
+    using namespace std;
+    cout << "Enter text for analysis, and type @"
+        " to terminate input.\n";
+    char ch;
+    int whitespace = 0;
+    int digits = 0;
+    int chars = 0;
+    int punct = 0;
+    int others = 0;
+
+    cin.get(ch);                // get first character
+    while (ch != '@')            // test for sentinel
+    {
+        if (isalpha(ch))         // is it an alphabetic character?
+            chars++;
+        else if (isspace(ch))    // is it a whitespace character?
+            whitespace++;
+        else if (isdigit(ch))    // is it a digit?
+            digits++;
+        else if (ispunct(ch))    // is it punctuation?
+            punct++;
+        else
+            others++;
+        cin.get(ch);            // get next character
+    }
+
+    cout << chars << " letters, "
+        << whitespace << " whitespace, "
+        << digits << " digits, "
+        << punct << " punctuations, "
+        << others << " others.\n";
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单6.9 条件运算符
+#if 0
+int main()
+{
+    using namespace std;
+
+    int a, b;
+    cout << "Enter two integers: ";
+    cin >> a >> b;
+
+    cout << "The larger of " << a << " and " << b;
+
+    int c = a > b ? a : b;   // c = a if a > b, else c = b
+
+    cout << " is " << c << endl;
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单6.10 switch语句
+#if 0
+using namespace std;
+
+void showmenu();   // function prototypes
+void report();
+void comfort();
+
+int main()
+{
+    showmenu();
+
+    int choice;
+    cin >> choice;
+
+    while (choice != 5)
+    {
+        switch (choice)
+        {
+        case 1:   cout << "\a\n";
+            break;
+        case 2:   report();
+            break;
+        case 3:   cout << "The boss was in all day.\n";
+            break;
+        case 4:   comfort();
+            break;
+        default:   cout << "That's not a choice.\n";
+        }
+
+        showmenu();
+        cin >> choice;
+    }
+    //***注***
+    //若输入字母，则会一直执行default标签对应的功能。
+
+    cout << "Bye!\n";
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+
+void showmenu()
+{
+    cout << "Please enter 1, 2, 3, 4, or 5:\n"
+        "1) alarm           2) report\n"
+        "3) alibi           4) comfort\n"
+        "5) quit\n";
+}
+void report()
+{
+    cout << "It's been an excellent week for business.\n"
+        "Sales are up 120%. Expenses are down 35%.\n";
+}
+void comfort()
+{
+    cout << "Your employees think you are the finest CEO\n"
+        "in the industry. The board of directors think\n"
+        "you are the finest CEO in the industry.\n";
+}
+#endif
+
+
+//程序清单6.11 将枚举量用作标签
+#if 0
+// create named constants for 0 - 6
+enum { red, orange, yellow, green, blue, violet, indigo };
+//只使用符号常量对应的枚举量，而不使用枚举类型的变量，则可以省略枚举类型的名称
+
+int main()
+{
+    using namespace std;
+    
+    cout << "Enter color code (0-6): ";
+    int code;
+    cin >> code;
+
+    while (code >= red && code <= indigo)
+    {
+        switch (code)
+        {
+        case red: cout << "Her lips were red.\n"; break;
+        case orange: cout << "Her hair was orange.\n"; break;
+        case yellow: cout << "Her shoes were yellow.\n"; break;
+        case green: cout << "Her nails were green.\n"; break;
+        case blue: cout << "Her sweatsuit was blue.\n"; break;
+        case violet: cout << "Her eyes were violet.\n"; break;
+        case indigo: cout << "Her mood was indigo.\n"; break;
+        }
+        cout << "Enter color code (0-6): ";
+        cin >> code;
+    }
+    cout << "Bye\n";
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单6.12 continue语句，break语句
+#if 0
+const int ArSize = 80;
+
+int main()
+{
+    using namespace std;
+
+    char line[ArSize];
+    int spaces = 0;
+
+    cout << "Enter a line of text:\n";
+    cin.get(line, ArSize);
+
+    cout << "Complete line:\n" << line << endl;
+    cout << "Line through first period:\n";
+
+    for (int i = 0; line[i] != '\0'; i++)
+    {
+        cout << line[i];    // display character
+
+        if (line[i] == '.') // quit if it's a period
+            break;
+        if (line[i] != ' ') // skip rest of loop
+            continue;
+
+        spaces++;
+    }
+    cout << "\n" << spaces << " spaces\n";
+    cout << "Done.\n";
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单6.13 读取数字的循环(当输入了非规定的数据时结束循环)
+#if 0
+const int Max = 5;
+
+int main()
+{
+    using namespace std;
+
+    // get data
+    double fish[Max];
+    cout << "Please enter the weights of your fish.\n";
+    cout << "You may enter up to " << Max
+        << " fish <q to terminate>.\n";
+    cout << "fish #1: ";
+
+    int i = 0;                                                      // i 是数组的索引值
+    while (i < Max && cin >> fish[i]) {
+        if (++i < Max)
+            cout << "fish #" << i + 1 << ": ";
+    }
+                                                                        //退出循环后 i 的值相当于数组的元素数量
+    // calculate average
+    double total = 0.0;
+    for (int j = 0; j < i; j++)
+        total += fish[j];
+
+    // report results
+    if (i == 0)
+        cout << "No fish\n";
+    else
+        cout << total / i << " = average weight of "
+        << i << " fish\n";
+
+    cout << "Done.\n";
+    // code to keep VC execution window open if q is entered
+    //	if (!cin)  // input terminated by non-numeric response
+    //	{
+    //	    cin.clear();  // reset input
+    //	    cin.get();    // read q
+    //	}
+    //	cin.get();    // read end of line after last input
+    //	cin.get();    // wait for user to press <Enter>
+    return 0;
+}
+#endif
+
+
+//程序清单6.14 读取数字的循环(当输入了非规定的数据时继续读取新的输入)
+#if 0
+const int Max = 5;
+
+int main()
+{
+    using namespace std;
+
+    // get data
+    int golf[Max];
+    cout << "Please enter your golf scores.\n";
+    cout << "You must enter " << Max << " rounds.\n";
+
+    int i;
+    for (i = 0; i < Max; i++)
+    {
+        cout << "round #" << i + 1 << ": ";
+
+        while (!(cin >> golf[i]))//输入非规定的数据时cin返回false
+        {
+            cin.clear();     //用clear()方法重置错误输入标记，程序才能继续读取输入
+
+            while (cin.get() != '\n')
+                continue;    //消耗掉错误的输入
+
+            cout << "Please enter a number: ";
+        }
+
+    }
+
+    // calculate average
+    double total = 0.0;
+    for (i = 0; i < Max; i++)
+        total += golf[i];
+
+    // report results
+    cout << total / Max << " = average score "
+        << Max << " rounds\n";
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单6.15 文件输入/输出
+#if 1
+#include <fstream>                  // for file I/O         1.包含头文件fstream
+
+int main()
+{
+    using namespace std;
+
+    char automobile[50];
+    int year;
+    double a_price;
+    double d_price;
+
+    ofstream outFile;                    // create object for output
+                                                     //2.声明一个ofstream对象                                                   
+    outFile.open("carinfo.txt");    // associate with a file
+                                                     //3.将该对象与一个文件关联起来
+    cout << "Enter the make and model of automobile: ";
+    cin.getline(automobile, 50);
+    cout << "Enter the model year: ";
+    cin >> year;
+    cout << "Enter the original asking price: ";
+    cin >> a_price;
+    d_price = 0.913 * a_price;
+
+    // display information on screen with cout
+
+    cout << fixed;
+    cout.precision(2);
+    cout.setf(ios_base::showpoint);
+    cout << "Make and model: " << automobile << endl;
+    cout << "Year: " << year << endl;
+    cout << "Was asking $" << a_price << endl;
+    cout << "Now asking $" << d_price << endl;
+
+    // now do exact same things using outFile instead of cout
+    //4.像使用cout那样使用该ofstream对象
+    outFile << fixed;
+    outFile.precision(2);
+    outFile.setf(ios_base::showpoint);
+    outFile << "Make and model: " << automobile << endl;
+    outFile << "Year: " << year << endl;
+    outFile << "Was asking $" << a_price << endl;
+    outFile << "Now asking $" << d_price << endl;
+
+    outFile.close();                // done with file
     // cin.get();
     // cin.get();
     return 0;
