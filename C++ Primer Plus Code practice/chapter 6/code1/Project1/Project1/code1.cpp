@@ -501,7 +501,7 @@ int main()
 #endif
 
 
-//程序清单6.14 读取数字的循环(当输入了非规定的数据时继续读取新的输入)
+//程序清单6.14 读取数字的循环(当输入了非规定的数据时继续读取输入)
 #if 0
 const int Max = 5;
 
@@ -526,7 +526,7 @@ int main()
             while (cin.get() != '\n')
                 continue;    //消耗掉错误的输入
 
-            cout << "Please enter a number: ";
+            cout << "Please enter a number: ";//提示用户再输入
         }
 
     }
@@ -546,33 +546,32 @@ int main()
 #endif
 
 
-//程序清单6.15 文件输入/输出
-#if 1
-#include <fstream>                  // for file I/O         1.包含头文件fstream
-
+//程序清单6.15 向文件输入内容
+#if 0
+#include <fstream>                  // for file I/O        
+                                                    //1.包含头文件fstream(其中定义了ofstream类)
 int main()
 {
     using namespace std;
-
-    char automobile[50];
-    int year;
-    double a_price;
-    double d_price;
 
     ofstream outFile;                    // create object for output
                                                      //2.声明一个ofstream对象                                                   
     outFile.open("carinfo.txt");    // associate with a file
                                                      //3.将该对象与一个文件关联起来
     cout << "Enter the make and model of automobile: ";
+    char automobile[50];
     cin.getline(automobile, 50);
+
     cout << "Enter the model year: ";
+    int year;
     cin >> year;
+
     cout << "Enter the original asking price: ";
+    double a_price;
     cin >> a_price;
-    d_price = 0.913 * a_price;
+    double d_price = 0.913 * a_price;
 
     // display information on screen with cout
-
     cout << fixed;
     cout.precision(2);
     cout.setf(ios_base::showpoint);
@@ -591,9 +590,90 @@ int main()
     outFile << "Was asking $" << a_price << endl;
     outFile << "Now asking $" << d_price << endl;
 
+    //5.使用完文件后，用close()将其关闭
     outFile.close();                // done with file
+
     // cin.get();
     // cin.get();
     return 0;
 }
+#endif
+
+
+//程序清单6.16 读取文件内容
+#if 0
+#include <fstream>                  // file I/O support
+                                                    //1.包含头文件fstream(其中定义了ifstream类)
+#include <cstdlib>                   //exit()
+
+const int SIZE = 60;
+
+int main()
+{
+    using namespace std;
+
+    ifstream inFile;                       // object for handling file input
+                                                    //2.声明一个ifstream对象                                                   
+    cout << "Enter name of data file: ";
+    char filename[SIZE];
+    cin.getline(filename, SIZE);
+
+    inFile.open(filename);           // associate inFile with a file
+                                                    //3.将该对象与一个文件关联起来
+
+    //检查文件是否被成功打开
+    if (!inFile.is_open())//failed to open file
+    {
+        cout << "Could not open the file " << filename << endl;
+        cout << "Program terminating.\n";
+        // cin.get();    //keep window open
+        exit(EXIT_FAILURE);
+    }
+
+    double value;
+    double sum = 0.0;
+    int count = 0;                         // number of items read
+
+    inFile >> value;                     // get first value
+                                                   //4.像使用cin那样使用该ifstream对象
+
+    while (inFile.good())   // while input good and not at EOF
+    {
+        ++count;                // one more item read
+        sum += value;       // calculate running total
+        inFile >> value;     // get next value
+    }
+
+    //或写为：
+    /*while (inFile >> value)   //inFile >> value返回inFile，执行bool转换后为true或false
+    {
+        ++count;                
+        sum += value;
+    }*/
+    
+    //确定循环终止的原因
+    if (inFile.eof())
+        cout << "End of file reached.\n";
+    else if (inFile.fail())
+        cout << "Input terminated by data mismatch.\n";
+    else//inFile.bad()为true
+        cout << "Input terminated for unknown reason.\n";
+
+    if (count == 0)
+        cout << "No data processed.\n";
+    else
+    {
+        cout << "Items read: " << count << endl;
+        cout << "Sum: " << sum << endl;
+        cout << "Average: " << sum / count << endl;
+    }
+
+    //5.使用完文件后，用close()将其关闭
+    inFile.close();         // finished with the file
+    // cin.get();
+    return 0;
+}
+//***注***
+//不使用命令行环境也能顺利读取文件
+//scores.txt
 #endif

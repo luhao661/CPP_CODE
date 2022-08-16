@@ -1,0 +1,4 @@
+Make and model: abc def
+Year: 2209
+Was asking $13500.00
+Now asking $12325.50
