@@ -6,6 +6,34 @@
 
 
 //6.10∏¥œ∞Ã‚
+//3.
+#if 0
+using namespace std;
+int main()
+{
+	char ch;
+	int ct1, ct2;
+
+	ct1 = ct2 = 0;
+	while ((ch = cin.get()) != '$')
+	{
+		cout << ch;
+		ct1++;
+		if (ch = '$')
+			ct2++;
+		cout << ch;
+	}
+	cout << "ct1= "<<ct1<<", ct2="<<ct2<<endl;
+
+	return 0;
+}
+/* ‰»Î£∫
+Hi!
+Send $10 or $20 now!
+*/
+#endif
+
+
 //4.
 #if 0
 weight>=115&&weight<125
@@ -47,11 +75,18 @@ default:
 
 //9.
 #if 0
-int line = 0;
-char ch;
-while (cin.get(ch)&&ch!='Q')
+int main (void)
 {
-	if (ch == '\n')
-		line++;
+	using namespace std;
+
+	int line = 0;
+	char ch;
+	while (cin.get(ch)&&ch!='Q')
+	{
+		if (ch == '\n')
+			line++;
+
+		//cout << ch;
+	}
 }
 #endif
