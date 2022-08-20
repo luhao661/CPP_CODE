@@ -463,19 +463,19 @@ void show_time(travel_time t)
 
 
 //程序清单7.12 传递并返回结构  实际应用
-#if 1
+#if 0
 #include <cmath>//sqrt()、atan2()
 
-// structure declarations
-struct polar
-{
-    double distance;      // distance from origin
-    double angle;         // direction from origin
-};
 struct rect
 {
     double x;             // horizontal distance from origin
     double y;             // vertical distance from origin
+};
+
+struct polar
+{
+    double distance;      // distance from origin
+    double angle;         // direction from origin
 };
 
 // prototypes
@@ -508,6 +508,7 @@ polar rect_to_polar(rect xypos)
     answer.distance =
         sqrt(xypos.x * xypos.x + xypos.y * xypos.y);
     answer.angle = atan2(xypos.y, xypos.x);
+
     return answer;      // returns a polar structure
 }
 
@@ -520,5 +521,357 @@ void show_polar(polar dapos)
     cout << "distance = " << dapos.distance;
     cout << ", angle = " << dapos.angle * Rad_to_deg;
     cout << " degrees\n";
+}
+#endif
+
+
+//程序清单7.13 传递结构的地址
+#if 0
+#include <cmath>
+
+// structure templates
+struct rect
+{
+    double x;             // horizontal distance from origin
+    double y;             // vertical distance from origin
+};
+
+struct polar
+{
+    double distance;      // distance from origin
+    double angle;         // direction from origin
+};
+
+// prototypes
+void rect_to_polar(const rect* pxy, polar* pda);
+void show_polar(const polar* pda);
+
+int main()
+{
+    using namespace std;
+    rect rplace;
+    polar pplace;
+
+    cout << "Enter the x and y values: ";
+    while (cin >> rplace.x >> rplace.y)
+    {
+        rect_to_polar(&rplace, &pplace);    // pass addresses
+        show_polar(&pplace);        // pass address
+        cout << "Next two numbers (q to quit): ";
+    }
+    cout << "Done.\n";
+    return 0;
+}
+
+// convert rectangular to polar coordinates
+void rect_to_polar(const rect* pxy, polar* pda)
+{
+    using namespace std;
+    pda->distance =
+        sqrt(pxy->x * pxy->x + pxy->y * pxy->y);
+    pda->angle = atan2(pxy->y, pxy->x);
+}
+
+// show polar coordinates, converting angle to degrees
+void show_polar(const polar* pda)
+{
+    using namespace std;
+    const double Rad_to_deg = 57.29577951;
+
+    cout << "distance = " << pda->distance;
+    cout << ", angle = " << pda->angle * Rad_to_deg;
+    cout << " degrees\n";
+}
+#endif
+
+
+//程序清单7.14 用string对象数组代替二维数组
+#if 0
+#include <string>
+
+using namespace std;
+
+const int SIZE = 5;
+
+void display(const string sa[], int n);
+
+int main()
+{
+    string list[SIZE];     // an array holding 5 string object
+
+    cout << "Enter your " << SIZE << " favorite astronomical sights:\n";
+    for (int i = 0; i < SIZE; i++)
+    {
+        cout << i + 1 << ": ";
+        getline(cin, list[i]);
+    }
+
+    cout << "Your list:\n";
+    display(list, SIZE);//list==&list[0]：string数组的首行的整个string对象的地址
+    // cin.get();
+
+    return 0;
+}
+
+void display(const string sa[], int n)//形参：指向string对象的指针
+{
+    for (int i = 0; i < n; i++)
+        cout << i + 1 << ": " << sa[i] << endl;
+    //写法二：    
+    //cout << i + 1 << ": " << *(sa+i) << endl;
+}
+#endif
+
+
+//程序清单7.15 array模板可以存储类对象，并成为一个array对象，也可以代替二维数组
+//函数访问array对象的方式(写法)有些不同
+#if 0
+#include <array>//array类
+#include <string>//string类
+
+const int Seasons = 4;
+
+const std::array<std::string, Seasons> Snames =
+{ "Spring", "Summer", "Fall", "Winter" };//声明一个const array对象，该对象包含4个string对象
+
+//******************注***********************
+/*法二
+//const char *Snames[Seasons] =
+//{ "Spring", "Summer", "Fall", "Winter" };
+*/
+/*法三
+const char Snames[Seasons][20] =
+{ "Spring", "Summer", "Fall", "Winter" };
+*/
+
+void fill(std::array<double, Seasons>* pa);//形参：指向array对象的指针
+void show(std::array<double, Seasons> da);//形参：array对象
+
+int main()
+{
+    std::array<double, Seasons> expenses;//声明一个array对象，包含4个double类型的值
+
+                               //***注***
+    fill(&expenses);//实参：array整个对象的地址，而不是&array[0]
+    show(expenses);
+    // std::cin.get();
+    // std::cin.get();
+    return 0;
+}
+
+void fill(std::array<double, Seasons>* pa)
+{
+    for (int i = 0; i < Seasons; i++)
+    {
+        std::cout << "Enter " << Snames[i] << " expenses: ";
+        std::cin >> (*pa)[i];//此处写法唯一
+        //std::cin >> *(pa + i);//***注***错误：每次+1都增加1个array对象所占的字节数
+    }
+}
+
+void show(std::array<double, Seasons> da)
+{
+    double total = 0.0;
+    std::cout << "\nEXPENSES\n";
+
+    for (int i = 0; i < Seasons; i++)
+    {
+        std::cout << Snames[i] << ": $" << da[i] << '\n';
+        total += da[i];
+    }
+    
+    std::cout << "Total: $" << total << '\n';
+}
+#endif
+
+
+//程序清单7.16 递归
+#if 0
+void countdown(int n);
+
+int main()
+{
+    countdown(4);           // call the recursive function
+    // std::cin.get();
+    return 0;
+}
+
+void countdown(int n)
+{
+    using namespace std;
+
+    cout << "Counting down ... " << n << " (n at "<<&n<<")" << endl;
+    if (n > 0)
+        countdown(n - 1);     // function calls itself
+    cout << n << ": Kaboom!" << " (n at " << &n << ")"<<endl;
+}
+#endif
+
+
+//程序清单7.17 包含多个递归调用的递归
+#if 0
+const int Len = 66;
+const int Divs = 6;
+void subdivide(char ar[], int low, int high, int level);
+int main()
+{
+    char ruler[Len];
+    int i;
+    for (i = 1; i < Len - 2; i++)
+        ruler[i] = ' ';//第2个元素至第Len-2个元素都为空格
+
+    ruler[Len - 1] = '\0';//第Len个(最后一个)元素为空字符
+
+    int max = Len - 2;
+    int min = 0;                            //min和max都为索引值
+    ruler[min] = ruler[max] = '|';//第1个元素和第Len-1个元素为'|'
+
+    std::cout << ruler << std::endl;//打印第一行
+
+    for (i = 1; i <= Divs; i++)//处理第 i +1 行
+    {
+        subdivide(ruler, min, max, i);
+        std::cout << ruler << std::endl;
+
+        //清理数组中的'|'字符(可以不写)
+        //for (int j = 1; j < Len - 2; j++)
+        //    ruler[j] = ' ';  // reset to blank ruler
+    }
+    // std::cin.get();
+
+    return 0;
+}
+
+void subdivide(char ar[], int low, int high, int level)
+{
+    if (level == 0)
+        return;
+
+    int mid = (high + low) / 2;
+    ar[mid] = '|';
+    subdivide(ar, low, mid, level - 1);//左侧
+    subdivide(ar, mid, high, level - 1);//右侧
+}
+#endif
+
+
+//程序清单7.18 使用函数指针
+#if 0
+double betsy(int);
+double pam(int);
+
+// second argument is pointer to a type double function that
+// takes a type int argument
+void estimate(int lines, double (*pf)(int));
+
+int main()
+{
+    using namespace std;
+    int code;
+
+    cout << "How many lines of code do you need? ";
+    cin >> code;
+    cout << "Here's Betsy's estimate:\n";
+    estimate(code, betsy);
+    cout << "Here's Pam's estimate:\n";
+    estimate(code, pam);
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+
+double betsy(int lns)
+{
+    return 0.05 * lns;
+}
+
+double pam(int lns)
+{
+    return 0.03 * lns + 0.0004 * lns * lns;
+}
+
+void estimate(int lines, double (*pf)(int))
+{
+    using namespace std;
+    cout << lines << " lines will take ";
+    cout << (*pf)(lines) << " hour(s)\n";
+}
+#endif
+
+
+//程序清单7.19 
+#if 1
+// various notations, same signatures 不同的函数名，但相同的函数返回值和参数列表
+const double* f1(const double ar[], int n);
+const double* f2(const double[], int);
+const double* f3(const double*, int);
+
+int main()
+{
+    using namespace std;
+
+    double av[3] = { 1112.3, 1542.6, 2227.9 };
+
+    // pointer to a function
+    const double* (*p1)(const double*, int) = f1;//*p1表明p1是函数指针，函数返回值： const double*(const double类型值的地址)，函数形参：(const double*, int)
+
+    auto p2 = f2;  //对单值初始化可用auto自动类型推断
+    //法二：
+    // const double *(*p2)(const double *, int) = f2;
+
+    cout << "Using pointers to functions:\n";
+    cout << " Address  Value\n";
+    cout << (*p1)(av, 3) << ": " << *(*p1)(av, 3) << endl;
+    cout << p2(av, 3) << ": " << *p2(av, 3) << endl;
+
+    // pa an array of pointers
+    // auto doesn't work with list initialization
+    const double* (*pa[3])(const double*, int) = { f1,f2,f3 };
+    // but it does work for initializing to a single value
+    // pb a pointer to first element of pa
+    auto pb = pa;
+    // pre-C++0x can use the following code instead
+    // const double *(**pb)(const double *, int) = pa;
+    cout << "\nUsing an array of pointers to functions:\n";
+    cout << " Address  Value\n";
+    for (int i = 0; i < 3; i++)
+        cout << pa[i](av, 3) << ": " << *pa[i](av, 3) << endl;
+    cout << "\nUsing a pointer to a pointer to a function:\n";
+    cout << " Address  Value\n";
+    for (int i = 0; i < 3; i++)
+        cout << pb[i](av, 3) << ": " << *pb[i](av, 3) << endl;
+
+    // what about a pointer to an array of function pointers
+    cout << "\nUsing pointers to an array of pointers:\n";
+    cout << " Address  Value\n";
+    // easy way to declare pc 
+    auto pc = &pa;
+    // pre-C++0x can use the following code instead
+   // const double *(*(*pc)[3])(const double *, int) = &pa;
+    cout << (*pc)[0](av, 3) << ": " << *(*pc)[0](av, 3) << endl;
+    // hard way to declare pd
+    const double* (*(*pd)[3])(const double*, int) = &pa;
+    // store return value in pdb
+    const double* pdb = (*pd)[1](av, 3);
+    cout << pdb << ": " << *pdb << endl;
+    // alternative notation
+    cout << (*(*pd)[2])(av, 3) << ": " << *(*(*pd)[2])(av, 3) << endl;
+    // cin.get();
+    return 0;
+}
+
+// some rather dull functions
+
+const double* f1(const double* ar, int n)
+{
+    return ar;
+}
+const double* f2(const double ar[], int n)
+{
+    return ar + 1;
+}
+const double* f3(const double ar[], int n)
+{
+    return ar + 2;
 }
 #endif
