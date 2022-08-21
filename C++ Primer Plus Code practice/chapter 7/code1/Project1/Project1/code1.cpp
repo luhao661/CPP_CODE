@@ -799,10 +799,10 @@ void estimate(int lines, double (*pf)(int))
 #endif
 
 
-//程序清单7.19 
-#if 1
-// various notations, same signatures 不同的函数名，但相同的函数返回值和参数列表
-const double* f1(const double ar[], int n);
+//程序清单7.19 深入探讨函数指针
+#if 0
+// 1.various notations, same signatures 不同的函数名，但相同的函数返回值和参数列表
+const double* f1(const double ar[], int n);//形参：指向const double 类型值得指针；数组的元素个数
 const double* f2(const double[], int);
 const double* f3(const double*, int);
 
@@ -812,26 +812,29 @@ int main()
 
     double av[3] = { 1112.3, 1542.6, 2227.9 };
 
-    // pointer to a function
-    const double* (*p1)(const double*, int) = f1;//*p1表明p1是函数指针，函数返回值： const double*(const double类型值的地址)，函数形参：(const double*, int)
+//************************************************************************************************************************************************************************
+    // 2.可以在声明函数指针的同时进行初始化
+    const double* (*p1)(const double*, int) = f1;//①声明一个函数指针p1
+                                                                              //*p1表明p1是函数指针，函数返回值： const double*(const double类型值的地址)，函数形参：(const double*, int)
 
-    auto p2 = f2;  //对单值初始化可用auto自动类型推断
-    //法二：
+    auto p2 = f2;  // 3.声明一个函数指针p2，并对其初始化。对单值初始化可用auto自动类型推断来进行初始化
+    //写法二：
     // const double *(*p2)(const double *, int) = f2;
 
     cout << "Using pointers to functions:\n";
     cout << " Address  Value\n";
+    //显示const double 值的地址；显示const double 值
     cout << (*p1)(av, 3) << ": " << *(*p1)(av, 3) << endl;
     cout << p2(av, 3) << ": " << *p2(av, 3) << endl;
-
-    // pa an array of pointers
-    // auto doesn't work with list initialization
-    const double* (*pa[3])(const double*, int) = { f1,f2,f3 };
-    // but it does work for initializing to a single value
+ //************************************************************************************************************************************************************************
+    
+    const double* (*pa[3])(const double*, int) = { f1,f2,f3 };//②声明一个数组pa，包含3个元素，每个元素都是函数指针，pa指向函数指针数组的首元素，pa存函数指针数组的首元素的地址
     // pb a pointer to first element of pa
-    auto pb = pa;
-    // pre-C++0x can use the following code instead
+    auto pb = pa;//③声明一个指向函数指针数组的指针pb，并对其初始化。
+                           // 4.***注***auto不能适用于推断列表初始化对应的类型声明，此处用auto声明的pb，pb存函数指针数组的首元素的地址
+    //写法二：
     // const double *(**pb)(const double *, int) = pa;
+
     cout << "\nUsing an array of pointers to functions:\n";
     cout << " Address  Value\n";
     for (int i = 0; i < 3; i++)
@@ -840,14 +843,18 @@ int main()
     cout << " Address  Value\n";
     for (int i = 0; i < 3; i++)
         cout << pb[i](av, 3) << ": " << *pb[i](av, 3) << endl;
+//************************************************************************************************************************************************************************
 
-    // what about a pointer to an array of function pointers
+    //④***注***错误理解：
+    //声明一个指向函数指针数组的首元素的指针pa的指针pc，pc存函数指针数组的首元素的指针pa的地址
+    //***正确理解***：
+    //声明一个指向整个函数指针数组的指针pc，pc存整个函数指针数组的地址
+    auto pc = &pa;
+    //写法二：
+    // const double *(*(*pc)[3])(const double *, int) = &pa;
+
     cout << "\nUsing pointers to an array of pointers:\n";
     cout << " Address  Value\n";
-    // easy way to declare pc 
-    auto pc = &pa;
-    // pre-C++0x can use the following code instead
-   // const double *(*(*pc)[3])(const double *, int) = &pa;
     cout << (*pc)[0](av, 3) << ": " << *(*pc)[0](av, 3) << endl;
     // hard way to declare pd
     const double* (*(*pd)[3])(const double*, int) = &pa;
@@ -861,7 +868,90 @@ int main()
 }
 
 // some rather dull functions
+const double* f1(const double* ar, int n)
+{
+    return ar;
+}
+const double* f2(const double ar[], int n)
+{
+    return ar + 1;
+}
+const double* f3(const double ar[], int n)
+{
+    return ar + 2;
+}
+#endif
+//扩展：
+//可以利用typedef让声明更加清晰易懂
+#if 0
+typedef const double* (*p_fun)(const double*, int);//把指向此种函数返回值和函数参数的函数的函数指针命名为p_fun
 
+// 1.various notations, same signatures 不同的函数名，但相同的函数返回值和参数列表
+const double* f1(const double ar[], int n);//形参：指向const double 类型值得指针；数组的元素个数
+const double* f2(const double[], int);
+const double* f3(const double*, int);
+
+int main()
+{
+    using namespace std;
+
+    double av[3] = { 1112.3, 1542.6, 2227.9 };
+
+//************************************************************************************************************************************************************************
+
+    p_fun p1= f1;//①声明一个函数指针p1
+
+    auto p2 = f2;  //声明一个函数指针p2，并对其初始化。对单值初始化可用auto自动类型推断来进行初始化
+    //写法二：
+    //p_fun p2= f2;
+
+    cout << "Using pointers to functions:\n";
+    cout << " Address  Value\n";
+    //显示const double 值的地址；显示const double 值
+    cout << (*p1)(av, 3) << ": " << *(*p1)(av, 3) << endl;
+    cout << p2(av, 3) << ": " << *p2(av, 3) << endl;
+//************************************************************************************************************************************************************************
+
+    p_fun pa[3]= { f1,f2,f3 };//②声明一个数组pa，包含3个元素，每个元素都是函数指针，pa指向函数指针数组的首元素，pa存函数指针数组的首元素的地址
+
+    auto pb = pa;//③声明一个指向函数指针数组的指针pb，并对其初始化。
+                           //***注***auto不能适用于推断列表初始化对应的类型声明，此处用auto声明的pb，pb存函数指针数组的首元素的地址
+    //写法二：
+    //p_fun* pb = pa;
+
+    cout << "\nUsing an array of pointers to functions:\n";
+    cout << " Address  Value\n";
+    for (int i = 0; i < 3; i++)
+        cout << pa[i](av, 3) << ": " << *pa[i](av, 3) << endl;
+    cout << "\nUsing a pointer to a pointer to a function:\n";
+    cout << " Address  Value\n";
+    for (int i = 0; i < 3; i++)
+        cout << pb[i](av, 3) << ": " << *pb[i](av, 3) << endl;
+//************************************************************************************************************************************************************************
+
+    //④***注***错误理解：
+    //声明一个指向函数指针数组的首元素的指针pa的指针pc，pc存函数指针数组的首元素的指针pa的地址
+    //***正确理解***：
+    //声明一个指向整个函数指针数组的指针pc，pc存整个函数指针数组的地址
+    auto pc = &pa;
+    //写法二：
+    // p_fun(*pc)[3] = &pa;   
+
+    cout << "\nUsing pointers to an array of pointers:\n";
+    cout << " Address  Value\n";
+    cout << (*pc)[0](av, 3) << ": " << *(*pc)[0](av, 3) << endl;
+    // hard way to declare pd
+    const double* (*(*pd)[3])(const double*, int) = &pa;
+    // store return value in pdb
+    const double* pdb = (*pd)[1](av, 3);
+    cout << pdb << ": " << *pdb << endl;
+    // alternative notation
+    cout << (*(*pd)[2])(av, 3) << ": " << *(*(*pd)[2])(av, 3) << endl;
+    // cin.get();
+    return 0;
+}
+
+// some rather dull functions
 const double* f1(const double* ar, int n)
 {
     return ar;
