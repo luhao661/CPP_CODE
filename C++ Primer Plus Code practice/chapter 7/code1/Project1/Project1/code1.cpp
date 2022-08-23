@@ -830,7 +830,7 @@ int main()
     
     const double* (*pa[3])(const double*, int) = { f1,f2,f3 };//②声明一个数组pa，包含3个元素，每个元素都是函数指针，pa指向函数指针数组的首元素，pa存函数指针数组的首元素的地址
     // pb a pointer to first element of pa
-    auto pb = pa;//③声明一个指向函数指针数组的指针pb，并对其初始化。
+    auto pb = pa;//③声明一个指向函数指针数组的首元素的指针pb，并对其初始化。
                            // 4.***注***auto不能适用于推断列表初始化对应的类型声明，此处用auto声明的pb，pb存函数指针数组的首元素的地址
     //写法二：
     // const double *(**pb)(const double *, int) = pa;
@@ -914,7 +914,7 @@ int main()
 
     p_fun pa[3]= { f1,f2,f3 };//②声明一个数组pa，包含3个元素，每个元素都是函数指针，pa指向函数指针数组的首元素，pa存函数指针数组的首元素的地址
 
-    auto pb = pa;//③声明一个指向函数指针数组的指针pb，并对其初始化。
+    auto pb = pa;//③声明一个指向函数指针数组的首元素的指针pb，并对其初始化。
                            //***注***auto不能适用于推断列表初始化对应的类型声明，此处用auto声明的pb，pb存函数指针数组的首元素的地址
     //写法二：
     //p_fun* pb = pa;
