@@ -13,7 +13,7 @@ float tofu(int);
 double mpg(double, double);
 long summation(long *p,int num);
 double doctor(const char *string);
-void ofcourse(struct boss);
+void ofcourse(struct boss bos);
 char* plot(struct map *p_structure);
 #endif
 
@@ -107,20 +107,22 @@ struct applicant applicant_structure;
 
 void show(struct applicant applicant_structure)
 {
-	std::cout << applicant_structure.name << "\t";
-	std::cout << applicant_structure.credit_ratings<<std::endl;
+	std::cout << applicant_structure.name << "\n";
+	for(int i=0;i<3;i++)
+	std::cout << applicant_structure.credit_ratings[i] << std::endl;
 }
 
-void show(struct applicant *p_applicant_structure)
+void show(const struct applicant *p_applicant_structure)
 {
-	std::cout << p_applicant_structure->name << "\t";
-	std::cout << p_applicant_structure->credit_ratings << std::endl;
+	std::cout << p_applicant_structure->name << "\n";
+	for (int i = 0; i < 3; i++)
+	std::cout << p_applicant_structure->credit_ratings[i] << std::endl;
 }
 #endif
 
 
 //13.
-#if 1
+#if 0
 struct applicant
 {
 	char name[30];
