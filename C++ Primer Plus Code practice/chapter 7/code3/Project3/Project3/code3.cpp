@@ -157,7 +157,7 @@ long double probability(unsigned numbers, unsigned picks,
 
 
 //5.
-#if 0
+#if 1
 long long temp = 1;
 long long jiecheng(long long num);
 
@@ -177,6 +177,9 @@ int main(void)
 
 	return 0;
 }
+
+//法一：递归的返回值不使用
+ #if 0
 long long jiecheng(long long num)
 {
 	if (num == 0 || num == 1)
@@ -191,13 +194,59 @@ long long jiecheng(long long num)
 }
 #endif
 
+/*
+long long jiecheng(long long num)
+{
+	if (num == 0 || num == 1)
+		return 1;
+	else
+	{
+		temp = num * jiecheng(num--);//错误：这样会无限调用函数jiecheng()
+		return temp;
+	}
+}
+*/
+
+//法二：
+long long jiecheng(long long num)
+{
+	if (num == 0 || num == 1)
+		return 1;
+	if(num>1)
+	{
+		temp = num * jiecheng(num--);
+		//***注***
+		//若写成--num，则此语句先是把num递减，然后把*号左侧用num递减后的值代替，再进入调用的函数，所以得2!=1
+		//若写成num--，则此语句先是把*号左侧用num的值代替，然后把num递减，再进入调用的函数，但是在第二次进入函数时(用监视器查看num值可知)num又变回了原值，导致程序无限循环
+		// 理解：书P112：
+		//此语句末尾是个顺序点，C++只能保证此语句后面，num的值会减少1，并不保证在此语句进行的某个时刻，使num值减1
+		return temp;
+	}
+}
+#endif
+
+
+//6.对比程序清单5.9 反转数组的另一种方法
+#if 0
+void reverse_array(double* ar, int size)
+{
+	double temp;
+	for (int i = 0; i < size / 2; i++)
+	{
+		temp = ar[i];
+		arr[i] = ar[size-i-i];
+		arr[size - i - 1] = temp;
+	}
+}
+#endif
+
 
 //7.
 #if 0
 const int Max = 5;
 
 // function prototypes
-double* fill_array(double ar[], int limit);
+double* fill_array(double ar[], double *);
 void show_array(const double ar[], double*);  // don't change data
 void revalue(double r, double ar[], double*);
 
@@ -206,7 +255,7 @@ int main()
 	using namespace std;
 	double properties[Max];
 
-	double*end = fill_array(properties, Max);
+	double*end = fill_array(properties, properties+Max);
 
 	show_array(properties, end);
 
@@ -231,16 +280,16 @@ int main()
 	return 0;
 }
 
-double* fill_array(double ar[], int limit)
+double* fill_array(double ar[], double *end)
 {
 	using namespace std;
 	double temp;
-	int i;
-	double* end;
+	int i=0;
+	double* the_end;
 
-	for (i = 0; i < limit; i++)
+	for (  ; ar!=end; ar++)
 	{
-		cout << "Enter value #" << (i + 1) << ": ";
+		cout << "Enter value #" << (++i ) << ": ";
 		cin >> temp;
 		if (!cin)    // bad input
 		{
@@ -253,15 +302,15 @@ double* fill_array(double ar[], int limit)
 		else if (temp < 0)     // signal to terminate
 			break;
 
-		ar[i] = temp;
+		*ar = temp;
 	}
-	end = ar + i;
+	the_end = ar;
 
-	return end;
+	return the_end;
 }
 
-// the following function can use, but not alter,
-// the array whose address is ar
+ //the following function can use, but not alter,
+ //the array whose address is ar
 void show_array(const double ar[], double *end)
 {
 	using namespace std;
@@ -271,6 +320,28 @@ void show_array(const double ar[], double *end)
 		cout << ar[i] << endl;
 	}
 }
+
+//法二：
+#if 0
+void show_array(const double ar[], double* end)
+{
+	using namespace std;
+
+	 int *p_num=new int[end - ar];
+	 int index;
+	 for (index = end - ar-1; index >=0; index--)
+		 *(p_num + index) = index;
+
+	 index = 0;
+	for (; ar!=end; ar++,index++)
+	{
+		cout << "Property #" << *(p_num + index)+1 << ": $";
+		cout << *ar << endl;
+	}
+
+	delete[]p_num;
+}
+#endif
 
 // multiplies each element of ar[] by r
 void revalue(double r, double ar[], double*end)
@@ -282,62 +353,304 @@ void revalue(double r, double ar[], double*end)
 
 
 //8.a.
-#if 1
-#include <array>//array类
-#include <string>//string类
-
+#if 0
 const int Seasons = 4;
 
-const std::array<std::string, Seasons> Snames =
-{ "Spring", "Summer", "Fall", "Winter" };//声明一个const array对象，该对象包含4个string对象
-
-//******************注***********************
-/*法二
-//const char *Snames[Seasons] =
-//{ "Spring", "Summer", "Fall", "Winter" };
-*/
-/*法三
-const char Snames[Seasons][20] =
+const char  * Snames[Seasons] =
 { "Spring", "Summer", "Fall", "Winter" };
-*/
 
-void fill(std::array<double, Seasons>* pa);//形参：指向array对象的指针
-void show(std::array<double, Seasons> da);//形参：array对象
+void fill(double *p_num,int NumToFill);
+void show(const double *p_num,int NumToShow);
 
 int main()
 {
-	std::array<double, Seasons> expenses;//声明一个array对象，包含4个double类型的值
-
-							   //***注***
-	fill(&expenses);//实参：array整个对象的地址，而不是&array[0]
-	show(expenses);
+	double expenses[Seasons];
+							   
+	fill(expenses,Seasons);
+	show(expenses,Seasons);
 	// std::cin.get();
 	// std::cin.get();
 	return 0;
 }
 
-void fill(std::array<double, Seasons>* pa)
+void fill(double* p_num, int NumToFill)
 {
-	for (int i = 0; i < Seasons; i++)
+	for (int i = 0; i < NumToFill; i++)
 	{
 		std::cout << "Enter " << Snames[i] << " expenses: ";
-		std::cin >> (*pa)[i];//此处写法唯一
-		//std::cin >> *(pa + i);//***注***错误：每次+1都增加1个array对象所占的字节数
+		std::cin >> *(p_num+i);
 	}
 }
 
-void show(std::array<double, Seasons> da)
+void show(const double* p_num, int NumToShow)
 {
 	double total = 0.0;
 	std::cout << "\nEXPENSES\n";
 
-	for (int i = 0; i < Seasons; i++)
+	for (int i = 0; i < NumToShow; i++)
 	{
-		std::cout << Snames[i] << ": $" << da[i] << '\n';
-		total += da[i];
+		std::cout << Snames[i] << ": $" << *(p_num+i) << '\n';
+		total +=*(p_num+i);
 	}
 
 	std::cout << "Total: $" << total << '\n';
 }
 #endif
 
+
+//8.b.
+#if 0
+const int Seasons = 4;
+
+const char* Snames[Seasons] =
+{ "Spring", "Summer", "Fall", "Winter" };
+
+typedef struct
+{
+	double expenses[Seasons];
+}Expenses_Typedef;
+
+void fill(Expenses_Typedef* p_structure, int NumToFill);
+void show(const Expenses_Typedef* p_structure, int NumToShow);
+
+int main()
+{
+	Expenses_Typedef Expenses_structure;
+
+	fill(&Expenses_structure, Seasons);
+	show(&Expenses_structure, Seasons);
+	// std::cin.get();
+	// std::cin.get();
+	return 0;
+}
+
+void fill(Expenses_Typedef* p_structure, int NumToFill)
+{
+	for (int i = 0; i < NumToFill; i++)
+	{
+		std::cout << "Enter " << Snames[i] << " expenses: ";
+		std::cin >> p_structure->expenses[i];
+	}
+}
+
+void show(const Expenses_Typedef* p_structure, int NumToShow)
+{
+	double total = 0.0;
+	std::cout << "\nEXPENSES\n";
+
+	for (int i = 0; i < NumToShow; i++)
+	{
+		std::cout << Snames[i] << ": $" << *(p_structure->expenses+i) << '\n';
+		total += * (p_structure->expenses + i);
+	}
+	//***注***
+	/*
+	p_structure->expenses[0] = 0;
+	*/
+	//此语句不被允许，因为把Expenses_Typedef布局的结构变量声明为了const
+	//即结构变量中的值都不可以改变
+	std::cout << "Total: $" << total << '\n';
+}
+#endif
+
+
+//9.
+#if 0
+#include <cstring>//strlen()，memcpy()
+using namespace std;
+
+const int SLEN = 30;
+
+struct student
+{
+	char fullname[SLEN];
+	char hobby[SLEN];
+	int ooplevel;
+};
+
+int getinfo(struct student *p_structure,int num);
+void display1(student st);
+void display2(const student *ps);
+void display3(const student pa[],int n);
+
+int main(void)
+{
+	cout << "Enter class size : ";
+	int class_size;
+	cin >> class_size;
+	while (cin.get() != '\n')
+		continue;
+
+	student* ptr_stu = new student[class_size];
+
+	int entered = getinfo(ptr_stu,class_size);
+	cout << "\n学生信息如下\n";
+	for (int i = 0; i < entered; i++)
+	{
+		display1(ptr_stu[i]);
+		display2(&ptr_stu[i]);
+	}
+	display3(ptr_stu,entered);
+
+	delete[]ptr_stu;
+	cout << "Done !\n";
+
+	return 0;
+}
+int getinfo(struct student* p_structure, int num)
+{
+	int count = 0;
+	char temp[SLEN];
+
+	for (int i = 0; i < num; i++)
+	{
+		cout << "请填充第"<<i+1<<"个结构——"<<endl;
+		cout << "请输入学生全名(按Enter以结束输入)：";
+		cin.getline(temp,SLEN);
+		if (temp[0] == '\0')
+			break;
+		else
+			memcpy((p_structure + i)->fullname,temp,strlen(temp)*sizeof(char)+1);
+		//***注***
+		//若上述语句写为strlen(temp)*sizeof(char) 则无法拷贝空字符，造成后续打印的有意义的内容的后面是乱码
+		cout << "请输入该学生的兴趣爱好：";
+		cin.getline((p_structure + i)->hobby, SLEN);
+		cout << "请输入该学生的面向对象编程的熟练等级：";
+		while (!(cin >> (p_structure + i)->ooplevel))
+		{
+			cin.clear();
+			while (cin.get() != '\n')
+				continue;
+			cout << "请输入整数数字！"<<endl;			
+		}
+		cin.get();
+
+		count++;
+	}
+
+	return count;
+}
+void display1(student st)
+{
+	cout << "学生姓名："<<st.fullname<<endl;
+	cout << "学生的爱好："<<st.hobby<<endl;
+	cout << "学生的面向对象编程的熟练等级："<<st.ooplevel<<endl<<endl;
+}
+void display2(const student* ps)
+{
+	cout << "学生姓名：" << ps->fullname << endl;
+	cout << "学生的爱好：" << ps->hobby << endl;
+	cout << "学生的面向对象编程的熟练等级：" << ps->ooplevel << endl << endl;
+}
+void display3(const student pa[], int n)
+{
+	for (int i = 0; i < n; i++)
+	{	
+		cout << "学生姓名：" << (pa+i)->fullname << endl;
+		cout << "学生的爱好：" << (pa+i)->hobby << endl;
+		cout << "学生的面向对象编程的熟练等级：" << (pa+i)->ooplevel << endl << endl;
+	}
+}
+#endif
+
+
+//10.
+#if 0
+double calculate(double, double, double (*p_fun)(double, double));
+
+double add(double x, double y);
+double sub(double x,double y);
+int main(void)
+{
+	using namespace std;
+
+	double result;
+
+	cout << "请输入两个数字：";
+	double a, b;
+	while (cin >> a >> b)
+	{
+		result = calculate(a, b, add);
+		cout <<a<<"+"<<b<< "结果为" << result << endl;
+
+		result = calculate(a, b, sub);
+		cout << a << "-" << b << "结果为" << result << endl;
+
+		cout << "请输入两个数字(输入非数字以退出程序)：";
+	}
+
+	return 0;
+}
+double calculate(double x, double y, double (*p_fun)(double, double))
+{
+	double result;
+
+	result = p_fun(x,y);
+
+	return result;
+}
+
+double add(double x, double y)
+{
+	return x + y;
+}
+double sub(double x, double y)
+{
+	return x - y;
+}
+#endif
+
+
+//10.使用函数指针数组
+#if 0
+double calculate(double, double, double (*p_fun)(double, double));
+
+double add(double x, double y);
+double sub(double x, double y);
+double mul(double,double);
+
+int main(void)
+{
+	using namespace std;
+
+	double (*pf[3])(double, double) = {add,sub,mul};//创建并初始化一个函数指针数组
+	const char* p_string[3] = {"+","-","*"};
+
+	double result;
+
+	cout << "请输入两个数字：";
+	double a, b;
+	while (cin >> a >> b)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			result = calculate(a, b, pf[i]);
+			cout << a << p_string[i] << b << "结果为" << result << endl;
+		}
+		cout << "请输入两个数字(输入非数字以退出程序)：";
+	}
+
+	return 0;
+}
+double calculate(double x, double y, double (*p_fun)(double, double))
+{
+	double result;
+
+	result = p_fun(x, y);
+
+	return result;
+}
+
+double add(double x, double y)
+{
+	return x + y;
+}
+double sub(double x, double y)
+{
+	return x - y;
+}
+double mul(double x, double y)
+{
+	return x * y;
+}
+#endif
