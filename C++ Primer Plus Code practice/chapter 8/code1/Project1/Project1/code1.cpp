@@ -354,8 +354,8 @@ const string& version3(string& s1, const string& s2)   // bad design
 #endif
 
 
-//程序清单8.8 
-#if 1
+//程序清单8.8 基类引用可以指向基类或派生类对象，而无需进行强制类型转换
+#if 0
 #include <fstream>
 #include <cstdlib>
 using namespace std;
@@ -365,14 +365,14 @@ const int LIMIT = 5;
 
 int main()
 {
-    ofstream fout;
-    const char* fn = "ep-data.txt";
+    ofstream fout;//以输出方式打开文件，用于写文件
+    const char* filename = "ep-data.txt";
 
-    fout.open(fn);
+    fout.open(filename);
 
     if (!fout.is_open())
     {
-        cout << "Can't open " << fn << ". Bye.\n";
+        cout << "Can't open " << filename << ". Bye.\n";
         exit(EXIT_FAILURE);
     }
 
@@ -390,24 +390,30 @@ int main()
         cin >> eps[i];
     }
 
-    file_it(fout, objective, eps, LIMIT);
-    file_it(cout, objective, eps, LIMIT);
+    file_it(fout, objective, eps, LIMIT);//向文件写入数据
+    file_it(cout, objective, eps, LIMIT);//在显示屏上显示数据
     cout << "Done\n";
     // cin.get();
     // cin.get();
     return 0;
 }
 
+//形参：指向ostream对象的引用，物镜焦距fo，指向目镜焦距数组首元素的指针，数组长度
+//***注***
+//os可以指向ostream对象，也可以指向ofstream对象
 void file_it(ostream& os, double fo, const double fe[], int n)
 {
-    // save initial formatting state
     ios_base::fmtflags initial;
+    //fmtflags：存储格式化信息的数据类型
+    //声明一个fmtflags类型的变量initial
     initial = os.setf(ios_base::fixed, ios_base::floatfield);
+    //initial用来保存最初的格式化状态
+
     std::streamsize sz = os.precision(0);
 
     os << "Focal length of objective: " << fo << " mm\n";
     os.precision(1);
-    os.width(12);
+    os.width(12);//此设置仅在显示下一个值时有效
     os << "f.l. eyepiece";
     os.width(15);
     os << "magnification" << endl;
@@ -418,8 +424,334 @@ void file_it(ostream& os, double fo, const double fe[], int n)
         os.width(15);
         os << int(fo / fe[i] + 0.5) << endl;
     }
-    // restore initial formatting state
-    os.setf(initial, ios_base::floatfield);
+
+    os.setf(initial);
+    // restore initial formatting state 将所有的格式化设置恢复到原来的值
+    //方法setf()返回调用它之前有效的所有格式化设置(被存储在initial中)
     os.precision(sz);
 }
+#endif
+
+
+//程序清单8.9 使用默认参数
+#if 0
+const int ArSize = 80;
+
+char* left(const char* str, int n = 1);//n的默认值是1
+
+int main()
+{
+    using namespace std;
+
+    char sample[ArSize];
+    cout << "Enter a string:\n";
+    cin.get(sample, ArSize);
+
+    char* ps = left(sample, 4);
+    cout << ps << endl;
+    delete[] ps;       // free old string
+
+    ps = left(sample);
+    cout << ps << endl;
+    delete[] ps;       // free new string
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+
+// This function returns a pointer to a new string
+// consisting of the first n characters in the str string.
+char* left(const char* str, int n)
+{
+    if (n < 0)
+        n = 0;
+    char* p = new char[n + 1];//利用动态内存分配，使创建的数组在被调函数结束时仍存在
+
+    //法二：
+    /*
+    int len = strlen(str);
+    n = (n < len) ? n:len;
+
+    char* p = new char[n + 1];
+    */
+    //法三：
+    /*
+    int m=0;
+    while(m<n&&str[m])
+    m++;
+
+    char* p = new char[n + 1];
+    */
+
+    int i;
+    for (i = 0;         i < n && str[i];         i++)
+        p[i] = str[i];  // copy characters
+
+    while (i <= n)
+        p[i++] = '\0';  // set rest of string to '\0'
+
+    return p;//指针p属于自动变量，在返回给主调函数其所存的地址值后，p将不再存在
+}
+#endif
+
+
+//程序清单8.10 使用函数重载
+#if 0
+unsigned long left(unsigned long num, unsigned ct);
+char* left(const char* str, int n = 1);
+
+int main()
+{
+    using namespace std;
+    unsigned long n = 12345678; // test value
+    const char* trip = "Hawaii!!";   // test value
+
+    char* temp;
+
+    for (int i = 1; i < 10; i++)
+    {
+        cout << left(n, i) << endl;
+
+        temp = left(trip, i);
+        cout << temp << endl;
+        delete[] temp; // point to temporary storage
+    }
+    // cin.get();
+    return 0;
+}
+
+// This function returns the first ct digits of the number num.
+unsigned long left(unsigned long num, unsigned ct)
+{
+    unsigned digits = 1;
+    unsigned long n = num;
+
+    if (ct == 0 || num == 0)
+        return 0;       // return 0 if no digits
+
+    while (n /= 10)
+        digits++;   //计算数字num有几位
+
+    if (digits > ct)//若位数大于要保留的位数(从高位到低位保留)
+    {
+        ct = digits - ct;//计算要删除几位(从低位向高位删除)
+
+        while (ct--)
+            num /= 10;
+        return num;         // return left ct digits
+    }
+    else //若位数小于或等于要保留的位数(从高位到低位保留)
+        return num;     // return the whole number
+}
+
+// This function returns a pointer to a new string
+// consisting of the first n characters in the str string.
+char* left(const char* str, int n)
+{
+    if (n < 0)
+        n = 0;
+
+    char* p = new char[n + 1];
+
+    int i;
+    for (i = 0; i < n && str[i]; i++)
+        p[i] = str[i];  // copy characters
+
+    while (i <= n)
+        p[i++] = '\0';  // set rest of string to '\0'
+
+    return p;
+}
+#endif
+
+
+//程序清单8.11 使用函数模板
+#if 0
+// function template prototype 声明一个函数模板
+template <typename T>  // or class T 或使用关键字class   将类型命名为T
+void Swap(T& a, T& b);     
+
+int main()
+{
+    using namespace std;
+    int i = 10;
+    int j = 20;
+    cout << "i, j = " << i << ", " << j << ".\n";
+    cout << "Using compiler-generated int swapper:\n";
+    Swap(i, j);  // generates void Swap(int &, int &)
+    cout << "Now i, j = " << i << ", " << j << ".\n";
+
+    double x = 24.5;
+    double y = 81.7;
+    cout << "x, y = " << x << ", " << y << ".\n";
+    cout << "Using compiler-generated double swapper:\n";
+    Swap(x, y);  // generates void Swap(double &, double &)
+    cout << "Now x, y = " << x << ", " << y << ".\n";
+    // cin.get();
+    return 0;
+}
+
+// function template definition 定义函数模板
+template <typename T>  // or class T
+void Swap(T& a, T& b)
+{
+    T temp;   // temp a variable of type T 创建一个T类型的变量temp
+    temp = a;
+    a = b;
+    b = temp;
+}
+#endif
+
+
+//程序清单8.12 使用重载的模板
+#if 0
+template <typename T>     // original template
+void Swap(T& a, T& b);
+
+template <typename T>     // new template
+void Swap(T* a, T* b, int n);
+
+const int Lim = 8;
+void Show(int a[]);
+
+int main()
+{
+    using namespace std;
+    int i = 10, j = 20;
+    cout << "i, j = " << i << ", " << j << ".\n";
+    cout << "Using compiler-generated int swapper:\n";
+    Swap(i, j);              // matches original template
+    cout << "Now i, j = " << i << ", " << j << ".\n";
+
+    int d1[Lim] = { 0,7,0,4,1,7,7,6 };
+    int d2[Lim] = { 0,7,2,0,1,9,6,9 };
+    cout << "Original arrays:\n";
+    Show(d1);
+    Show(d2);
+    Swap(d1, d2, Lim);        // matches new template
+    cout << "Swapped arrays:\n";
+    Show(d1);
+    Show(d2);
+    // cin.get();
+    return 0;
+}
+
+template <typename T>
+void Swap(T& a, T& b)
+{
+    T temp;
+    temp = a;
+    a = b;
+    b = temp;
+}
+
+template <typename T>
+void Swap(T a[], T b[], int n)
+{
+    T temp;
+    for (int i = 0; i < n; i++)
+    {
+        temp = a[i];
+        a[i] = b[i];
+        b[i] = temp;
+    }
+}
+
+void Show(int a[])
+{
+    using namespace std;
+    cout << a[0] << a[1] << "/";
+    cout << a[2] << a[3] << "/";
+    for (int i = 4; i < Lim; i++)
+        cout << a[i];
+    cout << endl;
+}
+#endif
+
+
+//程序清单8.13 使用显示具体化模板
+#if 1
+struct job
+{
+    char name[40];
+    double salary;
+    int floor;
+};
+
+template <typename T>//声明一个常规模板
+void Swap(T& a, T& b);
+
+// explicit specialization 声明一个显示具体化模板
+template <> void Swap<job>(job& j1, job& j2);//这实际上是显示实例化
+//或写成：
+//template <> void Swap<>(job& j1, job& j2);
+//template <> void Swap(job& j1, job& j2);
+
+void Show(job& j);
+
+int main()
+{
+    using namespace std;
+
+    cout.precision(2);
+    cout.setf(ios::fixed, ios::floatfield);
+
+    int i = 10, j = 20;
+    cout << "i, j = " << i << ", " << j << ".\n";
+    cout << "Using compiler-generated int swapper:\n";
+    Swap(i, j);    // generates void Swap(int &, int &)
+    cout << "Now i, j = " << i << ", " << j << ".\n";
+
+    job sue = { "Susan Yaffee", 73000.60, 7 };
+    job sidney = { "Sidney Taffee", 78060.72, 9 };
+    cout << "Before job swapping:\n";
+    Show(sue);
+    Show(sidney);
+
+    cout << "After job swapping:\n";
+    Swap(sue, sidney); // uses void Swap(job &, job &)
+    Show(sue);
+    Show(sidney);
+    // cin.get();
+    return 0;
+}
+
+template <typename T>
+void Swap(T& a, T& b)    // general version
+{
+    T temp;
+    temp = a;
+    a = b;
+    b = temp;
+}
+
+// swaps just the salary and floor fields of a job structure
+template <> void Swap<job>(job& j1, job& j2)  // specialization
+//写法二：
+//template <> void Swap<>(job& j1, job& j2)  // specialization
+//写法三：
+//template <> void Swap(job& j1, job& j2)  // specialization
+{
+    double t1;
+    t1 = j1.salary;
+    j1.salary = j2.salary;
+    j2.salary = t1;
+
+    int t2;
+    t2 = j1.floor;
+    j1.floor = j2.floor;
+    j2.floor = t2;
+}
+
+void Show(job& j)
+{
+    using namespace std;
+    cout << j.name << ": $" << j.salary
+        << " on floor " << j.floor << endl;
+}
+#endif
+
+
+//
+#if 1
 #endif
