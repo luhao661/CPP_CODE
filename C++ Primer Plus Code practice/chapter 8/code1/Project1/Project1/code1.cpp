@@ -669,8 +669,8 @@ void Show(int a[])
 #endif
 
 
-//程序清单8.13 使用显示具体化模板
-#if 1
+//程序清单8.13 使用显式具体化
+#if 0
 struct job
 {
     char name[40];
@@ -678,11 +678,13 @@ struct job
     int floor;
 };
 
-template <typename T>//声明一个常规模板
+template <typename T>//声明一个常规模板，将类型命名为T
 void Swap(T& a, T& b);
 
-// explicit specialization 声明一个显示具体化模板
-template <> void Swap<job>(job& j1, job& j2);//这实际上是显示实例化
+// explicit specialization 
+template <> void Swap<job>(job& j1, job& j2);
+//显式具体化
+//不使用Swap()模板来生成函数定义，而使用专门为job类型显式地定义的函数定义
 //或写成：
 //template <> void Swap<>(job& j1, job& j2);
 //template <> void Swap(job& j1, job& j2);
@@ -699,7 +701,7 @@ int main()
     int i = 10, j = 20;
     cout << "i, j = " << i << ", " << j << ".\n";
     cout << "Using compiler-generated int swapper:\n";
-    Swap(i, j);    // generates void Swap(int &, int &)
+    Swap(i, j);    //隐式实例化，生成 void Swap(int &, int &)
     cout << "Now i, j = " << i << ", " << j << ".\n";
 
     job sue = { "Susan Yaffee", 73000.60, 7 };
@@ -750,8 +752,251 @@ void Show(job& j)
         << " on floor " << j.floor << endl;
 }
 #endif
+//程序清单8.13 改：
+//调用函数时来创建显式实例化需要注意的点
+#if 0
+struct job
+{
+    char name[40];
+    double salary;
+    int floor;
+};
+
+template <typename T>//声明一个常规模板，将类型命名为T
+void Swap( T& a,  T& b);
+
+void Show(job& j);
+
+int main()
+{
+    using namespace std;
+
+    cout.precision(2);
+    cout.setf(ios::fixed, ios::floatfield);
+
+    int i = 10;
+    double j = 20.2;
+    cout << "i, j = " << i << ", " << j << ".\n";
+    cout << "Using compiler-generated int swapper:\n";
+    Swap<double>(i, j);    //显式实例化，根据模板，生成 void Swap(double &, double &)
+    //***注***
+    //虽然传入函数的都是double类型的值，但是主调函数中的 i 仍是int类型，所以不能产生指向int类型的 i 的引用
+    cout << "Now i, j = " << i << ", " << j << ".\n";
+
+   // cin.get();
+    return 0;
+}
+
+template <typename T>
+void Swap(const T& a, const T& b)    // general version
+{
+    T temp;
+    temp = a;
+    a = b;
+    b = temp;
+
+    return;
+}
+
+ void Show(job& j)
+{
+    using namespace std;
+    cout << j.name << ": $" << j.salary
+        << " on floor " << j.floor << endl;
+}
+#endif
 
 
-//
-#if 1
+
+//使用显式实例化
+//法一：声明时创建显式实例化
+#if 0
+template <typename T>
+T add(T a,T b);
+
+template double add<double>(double, double);//使用add()模板生成一个使用double类型的实例(函数定义)
+
+int main(void)
+{
+    using namespace std;
+
+    double m = 6;
+    double n = 10.2;
+
+    cout << add(m, n) << endl;
+
+    return 0;
+}
+
+template <typename T>
+T add(T a, T b)
+{
+    return a + b;
+}
+#endif
+//法二：调用函数时来创建显式实例化
+#if 0
+template <typename T>
+T add(T a, T b);
+
+int main(void)
+{
+    using namespace std;
+
+    int m = 6;
+    double n = 10.2;
+
+    cout <<add<double>(m,n)<<endl;//显示实例化，使用add()模板生成一个使用double类型的实例
+
+    return 0;
+}
+
+template <typename T>
+T add(T a, T b)
+{
+    return a + b;
+}
+#endif
+
+
+//程序清单8.14 重载解析，演示部分排序规则
+#if 0
+template <typename T>            // template A 假设实参是数组名称，即指向数组首元素的指针
+void ShowArray(T arr[], int n);
+
+template <typename T>            // template B 假设实参是指向一个指针数组首元素的指针
+//void ShowArray(T* arr[], int n);
+//写法二：
+void ShowArray(T** arr, int n);
+
+struct debts
+{
+    char name[50];
+    double amount;
+};
+
+int main()
+{
+    using namespace std;
+//************************************************************************
+    int things[6] = { 13, 31, 103, 301, 310, 130 };
+    cout << "Listing Mr. E's counts of things:\n";
+    // things is an array of int
+    ShowArray(things, 6);  // uses template A
+//************************************************************************
+
+    struct debts mr_E[3] =
+    {
+        {"Ima Wolfe", 2400.0},
+        {"Ura Foxe", 1300.0},
+        {"Iby Stout", 1800.0}
+    };
+
+    double* pd[3];//声明一个指针数组
+    // set pointers to the amount members of the structures in mr_E
+    for (int i = 0; i < 3; i++)
+        pd[i] = &mr_E[i].amount;//对指针数组的每个元素(即每个指针)赋值，赋的是结构的成员amount的地址
+
+    cout << "Listing Mr. E's debts:\n";
+    // pd is an array of pointers to double
+    ShowArray(pd, 3);      // uses template B (more specialized)
+//************************************************************************
+
+    // cin.get();
+    return 0;
+}
+
+template <typename T>
+void ShowArray(T arr[], int n)
+{
+    using namespace std;
+
+    cout << "template A\n";
+    for (int i = 0; i < n; i++)
+        cout << arr[i] << ' ';
+
+    cout << endl;
+}
+
+template <typename T>
+void ShowArray(T** arr, int n)
+{
+    using namespace std;
+
+    cout << "template B\n";
+    for (int i = 0; i < n; i++)
+        /*cout << *arr[i] << ' ';*/cout<<**(arr+i)<<' ';
+    cout << endl;
+}
+#endif
+
+
+//程序清单8.15 编写合适的函数调用，指示编译器使用用户所希望的函数或模板函数
+#if 0
+template<class T>
+T lesser(T a, T b)         // #1
+{
+    return a < b ? a : b;
+}
+
+int lesser(int a, int b)  // #2
+{
+    a = a < 0 ? -a : a;
+    b = b < 0 ? -b : b;
+    return a < b ? a : b;
+}
+
+int main()
+{
+    using namespace std;
+
+    int m = 20;
+    int n = -30;
+    double x = 15.5;
+    double y = 25.9;
+
+    cout << lesser(m, n) << endl;       // use #2
+    cout << lesser(x, y) << endl;       // use #1 with double
+    cout << lesser<>(m, n) << endl;     // use #1 with int
+    cout << lesser<int>(x, y) << endl; // use #1 with int
+
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//C++11的关键字decltype 用于确定形参进行运算后得到的值的类型，以及确定函数的返回值的类型
+#if 0
+template <typename T1, typename T2>
+auto add(T1 x,T2 y)->decltype(x+y);// ->decltype(x+y) 说明返回类型是x+y运算后的值的类型
+
+int main(void)
+{
+    using namespace std;
+
+    int a = 1;
+    double b = 2.2;
+    cout << add(a, b) << endl;
+
+    return 0;
+}
+/*
+template <typename T1, typename T2>
+auto add(T1 x, T2 y)->decltype(x + y)
+{
+    decltype(x + y) sum = x + y;
+
+    return sum;
+}
+*/
+//也可以使用typedef，给类型增加一个方便使用的标签(取个别名)
+template <typename T1, typename T2>
+auto add(T1 x, T2 y)->decltype(x + y)
+{
+    typedef decltype(x + y)  LeiXin;
+    LeiXin sum = x + y;
+
+    return sum;
+}
 #endif
