@@ -14,9 +14,18 @@ void song(const char *name="O.My Papa", int times = 1);
 
 //3.
 #if 0
-void iquote(int num);
-void iquote(double num);
-void iquote(std::string str);
+void iquote(int num)
+{
+    cout << "\"" << num << "\"" << endl;
+}
+void iquote(double num)
+{
+    cout << "\"" << num << "\"" << endl;
+}
+void iquote(std::string str)
+{
+    cout << "\"" << str << "\"" << endl;
+}
 #endif
 
 
@@ -97,15 +106,28 @@ void show(const std::array<double, Seasons> &r_a)
 
 //6.
 #if 0
+//a.
+//使用默认值法
 double mass(double density,double volume=1.0);
+//使用函数重载法
+double mass(double density, double volume);
+double mass(double density);
 
+//b.
 //void repeat(int num=5, const char*);//报错：默认实参不在形参列表的结尾
+//使用函数重载法
+void repeat(int num, const char*);
+void repeat(const char*);
 
+//c.
 int average(int,int);
 double average(double, double);
 
-char mangle(char );
-const char* mangle(char*);
+//d.
+/*
+char mangle(char* );
+const char* mangle(char*);  //***注***函数特征标相同，无法实现函数重载
+*/
 #endif
 
 
@@ -131,17 +153,18 @@ struct box
 };
 
 template <typename T>
-T mass(T density, T volume = 1.0);
+T& bigger(T &, T &);
 
-template <>box& mass(box& b1, box& b2);
+template <>box& bigger(box& b1, box& b2);
+
 
 template <typename T>
-T mass(T density, T volume = 1.0)
+T& bigger(T&x, T& y)
 {
-
+    return x > y ? x : y;
 }
 
-template <>box& mass(box& b1, box& b2)
+template <>box& bigger(box& b1, box& b2)
 {
     if (b1.volume > b2.volume)
         return b1;
