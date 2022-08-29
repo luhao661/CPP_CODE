@@ -25,7 +25,38 @@ void print(const char*p, int num)
 	if(num==0)
 	cout << p<<endl<<endl;
 	else
-	cout << p <<"\t";
+	cout << p <<"\t";				//错误：未能完成当第二个参数不为0时，打印的次数为函数调用的次数
+}
+#endif
+//1.改正
+#if 0
+void print(const char*, int num = 0);
+
+int main(void)
+{
+	const char* p = "ABCdefg";
+
+	print(p);
+	print(p);
+	print(p,1);
+
+
+	return 0;
+}
+void print(const char* p, int num)
+{
+	using namespace std;
+
+	static int count = 0;						//块作用域的静态变量count用于存储调用函数的次数
+
+	count++;
+	if (num == 0)
+	{
+		cout <<"第二个参数为0\t"<< p << endl;
+	}
+	else
+		for (int i = 0; i < count; i++)
+			cout << "第二个参数不为0\t" << p << endl;
 }
 #endif
 
@@ -106,6 +137,17 @@ void convert(std::string& shuju)
 			shuju[i] = toupper(shuju[i]);
 	}
 }
+//法二：
+#if 0
+void convert(std::string& shuju)
+{
+	for (int i = 0; i<shuju.size(); i++)
+	{
+		if (islower(shuju[i]))
+			shuju[i] = toupper(shuju[i]);
+	}
+}
+#endif
 #endif
 
 
@@ -122,8 +164,10 @@ struct stringy {
 
 // prototypes for set(),show(),and show()go here
 void set(stringy&,const char*);
-void show(stringy&,int num=1);
+void show(const stringy&,int num=1);
 void show(const char*,int num=1);
+//或写为：
+//void show(const string& st,int num=1);
 
 int main()
 {
@@ -155,7 +199,7 @@ void set(stringy&r_stringy, const char* p)
 
 	r_stringy.ct = strlen(p);
 }
-void show(stringy& r_stringy, int num)
+void show(const stringy& r_stringy, int num)
 {
 	if (num < 0)
 		num = 1;
@@ -211,7 +255,6 @@ T max5(const T* p)
 template <typename T>
 T maxn(const T * p, int num);
 
-
 //template <>const char* maxn(const char** p, int num);//显式具体化
 //报错：
 //没有与指定类型匹配的函数模板maxn实例
@@ -221,7 +264,7 @@ T maxn(const T * p, int num);
 //template <>char maxn(const char* p,int num);
 //错误的显式具体化：
 //template <>char* maxn(const char**p, int num);
-//错误原因：T被解释为char*，但是函数的第一个参数为const char* *p，无法通过编译，因为const char* 不是个类型名
+//错误原因：T被解释为char*，但是函数的第一个参数为const char* *p，无法通过编译，因为const char* * 不是个类型名
 
 //***注2***
 //const char* maxn(const char** p, int num);此函数能完成预期目标，但这不是模板函数
@@ -266,6 +309,8 @@ template <>const char* maxn(const char** p, int num)
 */
 #endif
 //6.改进版本1
+//***修改办法***光标移动到maxn(shuzu, 5)的maxn处，编译器会自动推断出 T 应解释为什么类型
+//由此可以创建显式具体化
 #if 0
 #include <cstring>
 template <typename T>
@@ -275,13 +320,16 @@ template <>const char* maxn<const char*>(const char* const* p, int num);
 
 //***注1***
 // T 被解释为const char*
+//const char* const* p
+//实质上是定义了一个指向字符串的二级指针，第二个const限制一级指针指向的内容不能修改，第一个的const限制二级指针指向的内容不能修改。
+//https://blog.csdn.net/xc889078/article/details/8909498
 
 //***注2***
 //可行的显式具体化：
 //template <>char maxn(const char* p,int num);
 //错误的显式具体化：
 //template <>char* maxn(const char**p, int num);
-//错误原因：T被解释为char*，但是函数的第一个参数为const char* *p，无法通过编译，因为const char* 不是个类型名
+//错误原因：T被解释为char*，但是函数的第一个参数为const char* *p，无法通过编译，因为const char* * 不是个类型名
 
 //***注3***
 //const char* maxn(const char** p, int num);此函数能完成预期目标，但这不是模板函数
@@ -324,7 +372,7 @@ template <>const char* maxn<const char*>(const char* const* p, int num)
 }
 #endif
 //6.改进版本2
-#if 1
+#if 0
 #include <cstring>
 template <typename T>
 const T maxn(const T* p, int num);
@@ -332,14 +380,17 @@ const T maxn(const T* p, int num);
 template <> const char*const maxn<const char*>(const char* const* p, int num);//显式具体化
 
 //***注1***
-// T 被解释为char*const
+// T 被解释为const char*
+//const char* const* p
+//实质上是定义了一个指向字符串的二级指针，第二个const限制一级指针指向的内容不能修改，第一个的const限制二级指针指向的内容不能修改。
+//https://blog.csdn.net/xc889078/article/details/8909498
 
 //***注2***
 //可行的显式具体化：
 //template <>char maxn(const char* p,int num);
 //错误的显式具体化：
 //template <>char* maxn(const char**p, int num);
-//错误原因：T被解释为char*，但是函数的第一个参数为const char* *p，无法通过编译，因为const char* 不是个类型名
+//错误原因：T被解释为char*，但是函数的第一个参数为const char* *p，无法通过编译，因为const char* * 不是个类型名
 
 //***注3***
 //const char* maxn(const char** p, int num);此函数能完成预期目标，但这不是模板函数
@@ -381,6 +432,98 @@ template <> const char* const maxn(const char* const* p, int num)
 	return max;
 }
 #endif
+//6.改进版本3 使用string对象
+#if 0
+#include <cstring>
+template <typename T>
+ T maxn( const T* p, int num);
+
+template <>  std::string maxn<std::string>(const std::string* p, int num);//显式具体化
+
+int main(void)
+{
+	using namespace std;
+
+	int shuju1[6] = { 1,2,3,4,5,6 };
+	double shuju2[4] = { 1.1,2.2,3.3,4.4 };
+
+	cout << maxn(shuju1, 6) << endl;
+	cout << maxn(shuju2, 4) << endl << endl;
+
+	string shuzu[5] = { "a","bc","defgh","ij","klm" };
+	cout << maxn(shuzu, 5) << endl;//实参：第一行整个string对象的地址
+
+	return 0;
+}
+template <typename T>
+ T maxn(const T* p, int num)
+{
+	T max = *p;
+
+	for (int i = 0; i < num; i++)
+		if (*(p + i) > max)
+			max = p[i];
+
+	return max;
+}
+ std::string maxn<std::string>(const std::string* p, int num)
+ {
+	 std::string max = *p;
+
+	for (int i = 0; i < num; i++)
+		if ((*(p + i)).size() > max.size())
+			max = p[i];
+
+	return max;
+}
+#endif
+ //6.版本4  使用string对象，但仍用处理C风格字符串的字符串处理函数
+//但无法通过编译
+#if 0
+#include <cstring>
+ template <typename T>
+ T maxn(T* p, int num);
+
+ template <>  char* maxn(char**, int num);//显式具体化
+
+ int main(void)
+ {
+	 using namespace std;
+
+	 int shuju1[6] = { 1,2,3,4,5,6 };
+	 double shuju2[4] = { 1.1,2.2,3.3,4.4 };
+
+	 cout << maxn(shuju1, 6) << endl;
+	 cout << maxn(shuju2, 4) << endl << endl;
+
+	 string shuzu[5] = { "a","bc","defgh","ij","klm" };
+	 cout << maxn(shuzu, 5) << endl;//实参：第一行整个string对象的地址
+
+	 return 0;
+ }
+ template <typename T>
+ T maxn(const T* p, int num)
+ {
+	 T max = *p;
+
+	 for (int i = 0; i < num; i++)
+		 if (*(p + i) > max)
+			 max = p[i];
+
+	 return max;
+ }
+ template <>  char* maxn(char** p, int num)
+ {
+	 char* max = *p;
+
+	 for (int i = 0; i < num; i++)
+		 if (strlen(*(p + i)) > strlen(max))
+			 max = p[i];
+
+	 return max;
+ }
+#endif
+
 
 //7.
 #if 0

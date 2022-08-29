@@ -1,2 +1,4 @@
-﻿  code3.cpp
-  Project3.vcxproj -> D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 8\code3\Project3\x64\Debug\Project3.exe
+﻿code3.obj : error LNK2019: 无法解析的外部符号 "int __cdecl maxn<int>(int *,int)" (??$maxn@H@@YAHPEAHH@Z)，函数 main 中引用了该符号
+code3.obj : error LNK2019: 无法解析的外部符号 "double __cdecl maxn<double>(double *,int)" (??$maxn@N@@YANPEANH@Z)，函数 main 中引用了该符号
+code3.obj : error LNK2019: 无法解析的外部符号 "class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl maxn<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > >(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > *,int)" (??$maxn@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@PEAV01@H@Z)，函数 main 中引用了该符号
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 8\code3\Project3\x64\Debug\Project3.exe : fatal error LNK1120: 3 个无法解析的外部命令
