@@ -140,6 +140,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="code1.cpp" />
+    <ClCompile Include="cxqd9.1.cpp" />
+    <ClCompile Include="cxqd9.5.cpp" />
+    <ClCompile Include="cxqd9.6.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cxqd9.1.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

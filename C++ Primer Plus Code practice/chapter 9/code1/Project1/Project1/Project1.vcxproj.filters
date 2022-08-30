@@ -18,5 +18,19 @@
     <ClCompile Include="code1.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="cxqd9.1.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="cxqd9.5.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="cxqd9.6.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cxqd9.1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
