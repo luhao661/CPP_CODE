@@ -27,9 +27,15 @@
     <ClCompile Include="cxqd9.6.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="cxqd9.12.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cxqd9.1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="namesp.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

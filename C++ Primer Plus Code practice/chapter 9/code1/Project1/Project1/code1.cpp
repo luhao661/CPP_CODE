@@ -190,7 +190,7 @@ void strcount(const char* str)
 
 
 //程序清单9.10 new运算符的变体——定位new运算符
-#if 1
+#if 0
 #include <new> // for placement new 定位new运算符的原型
 
 const int LSIZE = 512;
@@ -272,8 +272,67 @@ int main()
 
     //***注***
     //不能加上delete[] pd2; 或  delete[] pd4;
-   //程序会崩溃
+   //程序会崩溃，因为buffer在存储静态变量的内存中，而不是用new分配的堆中
 
     return 0;
+}
+#endif
+
+
+//程序清单9.13 名称空间的特性
+#if 0
+#include <iostream>
+#include "namesp.h"
+
+void other(void);
+void another(void);
+
+int main(void)
+{
+    using debts::Debt;
+    using debts::showDebt;//要使用名称空间中的函数，也只需给出名称
+    Debt golf = { {"Benny", "Goatsniff"}, 120.0 };
+    showDebt(golf);
+
+    other();
+    another();
+    // std::cin.get();
+    // std::cin.get();
+    return 0;
+}
+
+void other(void)
+{
+    using std::cout;
+    using std::endl;
+    using namespace debts;//using编译指令可传递，
+                                             //所以此语句可导入名称空间debts和名称空间pers
+
+    Person dg = { "Doodles", "Glister" };
+    showPerson(dg);
+    cout << endl;
+
+    Debt zippy[3];//创建一个结构数组
+    int i;
+
+    for (i = 0; i < 3; i++)
+        getDebt(zippy[i]);
+
+    for (i = 0; i < 3; i++)
+        showDebt(zippy[i]);
+
+    cout << "Total debt: $" << sumDebts(zippy, 3) << endl;
+
+    return;
+}
+
+void another(void)
+{
+    using pers::Person;//使用using声明
+
+    Person collector = { "Milo", "Rightshift" };
+
+    pers::showPerson(collector);//使用作用域解析运算符::
+    std::cout << std::endl;
 }
 #endif
