@@ -305,7 +305,7 @@ void other(void)
 {
     using std::cout;
     using std::endl;
-    using namespace debts;//using编译指令可传递，
+    using namespace debts;//using编译指令具有可传递性，
                                              //所以此语句可导入名称空间debts和名称空间pers
 
     Person dg = { "Doodles", "Glister" };
