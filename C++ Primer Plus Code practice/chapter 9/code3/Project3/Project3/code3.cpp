@@ -112,8 +112,6 @@ int main()
 	using namespace std;
 
 	string input;
-	char next;
-
 	cout << "Enter a line:\n";
 	getline(cin,input);
 
@@ -137,8 +135,11 @@ void strcount(const std::string str)
 	cout << "\"" << str << "\" contains ";
 
 	int count = 0;               // automatic local variable
-	while (str[count])               // go to end of string
-		count++;
+	//while (str[count])               // go to end of string
+	//	count++;
+
+	//·¨¶þ£º
+	count = str.size();/*  count=str.length();  */
 
 	total += count;
 
@@ -178,12 +179,32 @@ int main()
 		cout << (p + i)->slag <<std::endl;
 	}
 
+	delete[]p;
+
 	return 0;
 }
 #endif
 
 
 //4.
-#if 1
+#if 0
+#include "9.6.4.h"
 
+int main()
+{
+	using SALES::Sales;
+	using SALES::setSales;
+
+	Sales Sales_Structure[2];
+
+	setSales(Sales_Structure[0]);
+
+	double data[2]{1.1,2.2};
+	setSales(Sales_Structure[1],data,2);
+
+	SALES::showSales(Sales_Structure[0]);
+	showSales(Sales_Structure[1]);
+
+	return 0;
+}
 #endif

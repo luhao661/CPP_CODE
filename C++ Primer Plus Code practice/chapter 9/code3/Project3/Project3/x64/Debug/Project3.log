@@ -1,2 +1,5 @@
-﻿  code3.cpp
+﻿  9.6.4.cpp
+  code3.cpp
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 9\code3\Project3\Project3\code3.cpp(142,20): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+  正在生成代码...
   Project3.vcxproj -> D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 9\code3\Project3\x64\Debug\Project3.exe
