@@ -9,10 +9,10 @@
 class Stock  // class declaration 类声明，此类设计被标记为Stock
 {
 private://私有接口
-    std::string company;//类成员
-    long shares;
-    double share_val;
-    double total_val;
+    std::string company;//公司名称     //类成员
+    long shares;//所持股票数量
+    double share_val;//每股的价格
+    double total_val;//股票总值
     void set_tot() { total_val = shares * share_val; }
 
 public://公共接口
