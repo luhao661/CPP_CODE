@@ -36,7 +36,7 @@ int main()
 
 //程序清单10.6 构造函数和析构函数以及C++11的列表初始化用于类
 //链接cxqd10.5.cpp
-#if 1
+#if 0
 #include "cxqd10.4.h"
 
 int main()
@@ -83,6 +83,107 @@ int main()
         cout << "Done\n";
     }
 
+    return 0;
+}
+#endif
+
+
+//程序清单10.9 对象数组，this指针
+//链接cxqd10.8
+#if 0
+#include "cxqd10.7.h"
+
+const int STKS = 4;
+int main()
+{
+    {
+        // create an array of initialized objects
+        Stock stocks[STKS] = 
+        {
+            Stock("NanoSmart", 12, 20.0),
+            Stock("Boffo Objects", 200, 2.0),
+            Stock("Monolithic Obelisks", 130, 3.25),
+        };
+
+        std::cout << "Stock holdings:\n";
+        int i;
+        for (i = 0; i < STKS; i++)
+            stocks[i].show();
+
+        // set pointer to first element 声明并初始化一个指向Stock类对象的指针top
+        const Stock* top = &stocks[0];
+        for (i = 1; i < STKS; i++)
+            top = &(top->topval(stocks[i]));//指针也可以用->来访问对象的方法成员
+
+        // now top points to the most valuable holding
+        std::cout << "\nMost valuable holding:\n";
+        top->show();    
+    }
+    // std::cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单10.12 使用ADT——栈
+//链接cxqd10.11.cpp
+#if 0
+#include <cctype>  // or ctype.h
+#include "cxqd10.10.h"
+
+int main()
+{
+    using namespace std;
+
+    Stack st; // create an empty stack (隐式调用默认构造函数进行隐式初始化)
+
+    unsigned long data;
+    cout << "Please enter A to add a purchase order,"
+        << "P to delete, or Q to quit.\n";
+    char ch;
+    while (cin >> ch && toupper(ch) != 'Q')
+    {
+        while (cin.get() != '\n')
+            continue;
+
+        if (!isalpha(ch))
+        {
+            cout << '\a';
+            continue;
+        }
+
+        switch (ch)
+        {
+            case 'A':
+            case 'a': 
+                cout << "Enter a number to add: ";
+                while(!(cin >> data))
+                {
+                    cin.clear();
+                    while (cin.get() != '\n')
+                        continue;
+                    cout << "请输入数字：";
+                }
+                if (st.isfull())
+                    cout << "stack already full\n";
+                else
+                    st.push(data);
+                break;
+            case 'P':
+            case 'p':
+                if (st.isempty())
+                cout << "stack already empty\n";
+                else 
+                {
+                st.pop(data);//弹出栈的值会赋给data
+                cout << "栈顶成员 ：" << data << " popped\n";
+                }
+                break;
+        }
+        cout << "Please enter A to add a purchase order,"
+            << "P to delete, or Q to quit.\n";
+    }
+    cout << "Bye\n";
     return 0;
 }
 #endif
