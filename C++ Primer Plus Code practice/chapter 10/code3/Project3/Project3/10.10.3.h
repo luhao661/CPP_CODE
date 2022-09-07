@@ -13,10 +13,11 @@ class Golf
 	}golf_structure;						//此处创建的结构变量并没有存储在对象中
 
 public:
+	//非交互版本
 	Golf(const char* p_data,const int hc);
-	Golf();
 	//交互版本
-	int setgolf();
+	Golf();
+	~Golf();
 	void handicap(const int hc);
 	void showgolf() const;
 };

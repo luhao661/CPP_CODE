@@ -1,21 +1,21 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
+#if 0
+
 #include<iostream>
 #include "10.10.3.h"
 
+//非交互版本(构造函数)
 Golf::Golf(const char *p_data,const int hc)
 {
 	strcpy(golf_structure.fullname,p_data);
-	golf_structure.handicap = hc;
+	this->golf_structure.handicap = hc;
 }
+//析构函数
+Golf::~Golf()
+{}
+//默认构造函数
 Golf::Golf()
-{
-	//golf_structure = (struct golf){"no name",0};  C++不支持此复合字面量
-	struct golf temp = { "no name",0 };
-	golf_structure = temp;
-}
-//交互版本
-int Golf::setgolf()
 {
 	using std::cout;
 	using std::cin;
@@ -25,12 +25,6 @@ int Golf::setgolf()
 	cout << "请输入姓名(输入Enter以结束输入)：";
 	char temp[Len];
 	cin.getline(temp, Len);
-
-	if (!strlen(temp))
-	{
-		biaoji = 0;
-		return biaoji;
-	}
 
 	cout << "请输入等级：";
 	int handicap;
@@ -43,9 +37,11 @@ int Golf::setgolf()
 	}
 	cin.get();
 
-	Golf(temp, handicap);
+	//Golf(temp, handicap);//错误：构造函数被用来创建对象，而不能通过对象和方法来调用
+	strcpy(this->golf_structure.fullname,temp);
+	this->golf_structure.handicap = handicap;
 
-	return biaoji;
+	return;
 }
 void Golf::handicap(const int hc)
 {
@@ -59,3 +55,5 @@ void Golf::showgolf() const
 	cout << "姓名：" << golf_structure.fullname << endl;
 	cout << "残疾等级：" << golf_structure.handicap << endl;
 }
+
+#endif
