@@ -107,7 +107,7 @@ int main()
 
 //5.
 //链接10.10.5.cpp
-#if 1
+#if 0
 #include "10.10.5.h"
 #include <cctype>
 using namespace std;
@@ -194,7 +194,7 @@ void fill_stack(Stack& st)
 	}
 
 	cin.clear();//***注***此句必写
-	cin.get();//消耗掉换行符
+	cin.get();//消耗掉换行符(即清空缓冲区的数据)
 }
 void delete_item(Stack& st)
 {
@@ -214,5 +214,137 @@ void delete_item(Stack& st)
 	sum += item.payment;
 
 	cout << "共计"<<sum<<"元\n\n";
+}
+#endif
+
+
+//6.
+//链接10.10.6.cpp
+#if 0
+#include "10.10.6.h"
+
+int main()
+{
+	Move move;
+	move.showmove();
+
+	Move temp(1,1);
+	move = move.add(temp);//给类对象赋值
+	move.showmove();
+
+	move.rest();
+	move.showmove();
+
+	return 0;
+}
+#endif
+
+
+//7.
+//链接10.10.7.cpp
+#if 0
+#include "10.10.7.h"
+
+int main()
+{
+	BetelPlorg b1;
+	b1.show();
+
+	BetelPlorg b2("Xiao min",20);
+	b2.show();
+
+	b2.modification(80);
+	b2.show();
+
+	return 0;
+}
+#endif
+
+
+//8.
+//链接10.10.8.cpp
+#if 1
+#include "10.10.8.h"
+void showmovies(Item& item);
+
+char* s_gets(char* string, int num);
+
+int main(void)
+{
+	List movies;//创建一个类对象movies(隐式调用默认构造函数进行隐式初始化)
+
+	Item temp;//创建一个film结构布局的结构temp
+
+////初始化链表的头指针
+//	InitializeList(&movies);
+	if (movies.ListIsFull())
+	{
+		fprintf(stderr, "错误，链表数量已达到最大值！");
+		exit(1);
+	}
+
+	//获取用户输入并存储
+	puts("请输入电影的标题：");
+	while (s_gets(temp.title, LENGTH) != NULL && temp.title[0] != '\0')
+	{
+		puts("请输入您的评分(0-10)：");
+		scanf("%d", &temp.rating);
+
+		while (getchar() != '\n')
+			continue;
+
+		if (movies.AddItem(temp) == false)
+		{
+			fprintf(stderr, "错误，分配内存失败！");
+			break;
+		}
+		if (movies.ListIsFull())
+		{
+			puts("链表数量已达到最大值！");
+			break;
+		}
+
+		puts("请输入下一个电影的标题(输入^Z或空行以退出)：");
+	}
+
+	//显示
+	if (movies.ListIsEmpty())
+		printf("没有数据输入！\n");
+	else
+	{
+		printf("以下是电影目录\n");
+		movies.Visit(showmovies);
+	}
+	printf("你输入了%d部电影\n", movies.ListItemCount());
+
+	//清理
+	movies.EmptyTheList();
+	printf("再见！\n");
+
+	return 0;
+}
+void showmovies(Item &item)
+{
+	printf("电影名:%-20s电影评分:%d\n", item.title, item.rating);
+}
+char* s_gets(char* string, int num)
+{
+	char* fanhui;
+	char* find;
+
+	fanhui = fgets(string, num, stdin);
+
+	if (fanhui)
+	{
+		if (find = strchr(string, '\n'))
+			*find = '\0';
+		else
+		{
+			while (getchar() != '\n')
+				continue;
+		}
+	}
+
+	return fanhui;
 }
 #endif

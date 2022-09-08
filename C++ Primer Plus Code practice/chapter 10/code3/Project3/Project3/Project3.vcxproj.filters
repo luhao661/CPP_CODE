@@ -33,6 +33,15 @@
     <ClCompile Include="10.10.5.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="10.10.6.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="10.10.7.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="10.10.8.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="10.10.1.h">
@@ -48,6 +57,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="10.10.5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="10.10.6.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="10.10.7.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="10.10.8.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
