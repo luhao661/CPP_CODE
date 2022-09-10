@@ -21,6 +21,7 @@ public:
     void update(double price);
     void show()const;
     const Stock& topval(const Stock& s) const;
+    const int fanhui_shares()const { return shares; }
 };
 
 #endif

@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 0
+#if 1
 #include <iostream>
 #include "cxqd10.7.h"
 using namespace std;
@@ -106,4 +106,5 @@ const Stock& Stock::topval(const Stock& s) const
     else
         return *this;
 }
+
 #endif

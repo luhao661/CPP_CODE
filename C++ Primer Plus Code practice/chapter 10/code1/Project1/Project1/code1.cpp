@@ -90,7 +90,7 @@ int main()
 
 //程序清单10.9 对象数组，this指针
 //链接cxqd10.8
-#if 0
+#if 1
 #include "cxqd10.7.h"
 
 const int STKS = 4;
@@ -118,7 +118,15 @@ int main()
         // now top points to the most valuable holding
         std::cout << "\nMost valuable holding:\n";
         top->show();    
+
+        putchar('\n');
+        int shares = stocks[0].fanhui_shares();
+        //***注***声明为const的值不能赋给非const数据，
+        //但是若const数据是作为返回值返回的，则其先被复制入临时存储单元，临时存储单元的内容
+        //在被复制入shares变量中，所以除去返回引用的情况外，传统返回值有无const无伤大雅
+        std::cout << shares << std::endl;
     }
+
     // std::cin.get();
     return 0;
 }
