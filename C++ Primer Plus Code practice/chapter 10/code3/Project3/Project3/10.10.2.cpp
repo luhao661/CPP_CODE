@@ -15,6 +15,9 @@ void Person::Show()const
 	using std::cout;
 	using std::endl;
 
+	/*if (lname == "" && fname[0] == '\0')
+		cout << "ÎÞÐÕÃû£¡\n";
+	else*/
 	cout << "Ãû£º"<<fname<<'\t'<<"ÐÕ£º"<<lname<<endl;
 }
 void Person::FormalShow()const

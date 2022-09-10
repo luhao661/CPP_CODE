@@ -11,9 +11,7 @@ Golf::Golf(const char *p_data,const int hc)
 	strcpy(golf_structure.fullname,p_data);
 	this->golf_structure.handicap = hc;
 }
-//析构函数
-Golf::~Golf()
-{}
+
 //默认构造函数
 Golf::Golf()
 {
@@ -43,10 +41,16 @@ Golf::Golf()
 
 	return;
 }
+
+//析构函数
+Golf::~Golf()
+{}
+
 void Golf::handicap(const int hc)
 {
 	golf_structure.handicap = hc;
 }
+
 void Golf::showgolf() const
 {
 	using std::cout;

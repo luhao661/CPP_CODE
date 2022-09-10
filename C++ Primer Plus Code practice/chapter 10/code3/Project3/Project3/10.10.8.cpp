@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 #include "10.10.8.h" 
 #include <stdio.h>//定义了NULL为0
 
@@ -36,7 +36,7 @@ bool List::AddItem(Item item)
 		return false;
 
 	current->item = item;//若分配成功，则把项拷贝到新节点中(拷贝结构)
-//***注***此处可同名是因为两个变量的作用域不同
+//***注***此处可同名是因为1.两个变量的作用域不同 2.等号左侧明显表明是结构中的item成员，等号右侧明显表明是形参item，不会造成歧义。
 
 	current->next = NULL;//表明该节点是链表的最后一个节点
 

@@ -261,9 +261,9 @@ int main()
 #endif
 
 
-//8.
+//8.(类型：链表，实现形式：链式结构)
 //链接10.10.8.cpp
-#if 1
+#if 0
 #include "10.10.8.h"
 void showmovies(Item& item);
 
@@ -348,3 +348,7 @@ char* s_gets(char* string, int num)
 	return fanhui;
 }
 #endif
+
+
+//8.法二(类型：栈，实现形式：数组)
+//头文件与栈类似

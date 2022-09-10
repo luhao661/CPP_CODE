@@ -11,6 +11,10 @@ class Golf
 		char fullname[Len];
 		int handicap;
 	}golf_structure;						//此处创建的结构变量并没有存储在对象中
+	
+	//***注***也可以不用结构，直接用基本数据类型
+	/*char fullname[Len];
+	int handicap;*/
 
 public:
 	//非交互版本

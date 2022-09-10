@@ -29,7 +29,7 @@ void Account::show() const
 	cout << "账号："<<m_identification<<endl;
 	cout << "存款："<<m_savings<<endl<<endl;
 }
-void  Account::deposit(double savings)
+void  Account::deposit(double savings)//***注***写成inline void  Account::deposit(double savings) 会报错
 {
 	m_savings += savings;
 }
