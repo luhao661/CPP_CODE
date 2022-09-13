@@ -1,8 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
 #if 0
-#include <iostream>
-#include "cxqd11.7.h"
+#include "cxqd11.10.h"
 
 Time::Time()
 {
@@ -21,6 +20,7 @@ void Time::AddMin(int m)
     hours += minutes / 60;
     minutes %= 60;
 }
+
 void Time::AddHr(int h)
 {
     hours += h;
@@ -44,29 +44,27 @@ Time Time::operator+(const Time& t) const
 Time Time::operator-(const Time& t) const
 {
     Time diff;
-
     int tot1, tot2;
     tot1 = t.minutes + 60 * t.hours;
     tot2 = minutes + 60 * hours;
     diff.minutes = (tot2 - tot1) % 60;
     diff.hours = (tot2 - tot1) / 60;
-
     return diff;
 }
 
 Time Time::operator*(double mult) const
 {
     Time result;
-
-    long totalminutes = mult * (hours * 60 + minutes) ;
+    long totalminutes =( hours * 60 + minutes )* mult;
     result.hours = totalminutes / 60;
     result.minutes = totalminutes % 60;
-
     return result;
 }
 
-void Time::Show() const
+//***注***友元函数不使用Time::限定符
+std::ostream& operator<<(std::ostream& os, const Time& t)
 {
-    std::cout << hours << " hours, " << minutes << " minutes";
+    os << t.hours << " hours, " << t.minutes << " minutes";
+    return os;
 }
 #endif 
