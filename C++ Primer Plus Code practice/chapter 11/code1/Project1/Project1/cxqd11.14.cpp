@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 // vect.cpp -- methods for the Vector class
 #include <cmath>
 #include "cxqd11.13.h"   // includes <iostream>

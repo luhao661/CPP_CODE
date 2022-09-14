@@ -142,7 +142,9 @@
     <ClCompile Include="code1.cpp" />
     <ClCompile Include="cxqd11.11.cpp" />
     <ClCompile Include="cxqd11.14.cpp" />
+    <ClCompile Include="cxqd11.17.cpp" />
     <ClCompile Include="cxqd11.2.cpp" />
+    <ClCompile Include="cxqd11.20.cpp" />
     <ClCompile Include="cxqd11.5.cpp" />
     <ClCompile Include="cxqd11.8.cpp" />
   </ItemGroup>
@@ -150,6 +152,8 @@
     <ClInclude Include="cxqd11.1.h" />
     <ClInclude Include="cxqd11.10.h" />
     <ClInclude Include="cxqd11.13.h" />
+    <ClInclude Include="cxqd11.16.h" />
+    <ClInclude Include="cxqd11.19.h" />
     <ClInclude Include="cxqd11.4.h" />
     <ClInclude Include="cxqd11.7.h" />
   </ItemGroup>
