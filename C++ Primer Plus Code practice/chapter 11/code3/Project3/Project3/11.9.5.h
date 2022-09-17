@@ -2,6 +2,8 @@
 
 #ifndef bclx11_9_5
 #define bclx11_9_5
+#include <iostream>
+
 class Stonewt
 {
 public:
@@ -20,14 +22,14 @@ public:
     ~Stonewt();
     //void show_pds() const;        // show weight in pounds format
     //void show_stn() const;        // show weight in stone format
-    friend std::ostream& operator<<(const std::ostream os,const Stonewt st);
+    friend  std::ostream& operator<<(std::ostream &os,const Stonewt &st);
 
-    Stonewt operator+(const Stonewt s)const;
+    Stonewt operator+(const Stonewt &s)const;
     //Stonewt operator+(int stn, double pds)const;//报错：此运算符函数的参数过多
-    Stonewt operator-(const Stonewt s)const;
+    Stonewt operator-(const Stonewt &s)const;
     Stonewt operator-()const;
 
     Stonewt operator*(double x)const;
-    friend Stonewt operator*(double x,const Stonewt s);
+    friend Stonewt operator*(double x,const Stonewt& s);
 };
 #endif /*bclx11_9_5*/

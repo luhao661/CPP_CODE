@@ -308,9 +308,9 @@ int main()
 #endif
 
 
-//11.9.5.
+//5.
 //链接11.9.5.cpp
-#if 1
+#if 0
 #include "11.9.5.h"
 using std::cout;
 
@@ -318,58 +318,62 @@ void display(const Stonewt& st, int n);
 
 int main()
 {
-    //初始化写法一：
-    //显式调用构造函数，也叫显式强制类型转换
-    //Stonewt p1 = Stonewt (275); // uses constructor to initialize
+    //使用默认构造函数
+    Stonewt p0;
+    cout << "The p0 weighed ";
+    cout << p0;
 
-    //初始化写法二：
-    //隐式调用构造函数 
-    //Stonewt p1(275);
+    //使用构造函数的类型转换功能；form为FLOAT_POUNDS
+    Stonewt p1 = 100.1; 
+    cout << "The p1 weighed ";
+    cout << p1;
 
-    //初始化写法三：
-    //自动类型转换，也叫隐式类型转换
-    //使用构造函数作为转换函数，首先将275转换为275.0，
-    //然后使用Stonewt(double pds)构造函数来初始化对象p1
-    //将int类型的值转化为Stonewt类型
-    Stonewt p1 = 275; // uses constructor to initialize
+    //使用构造函数的类型转换功能；form为INTEGER_POUNDS
+    Stonewt p2(200.6,Stonewt::INTEGER_POUNDS);//使用作用域为类的明示常量
+    cout << "The p2 weighed ";
+    cout << p2;
 
-    //赋值写法：
-    //Stonewt p1;
-    //p1 = 275;
-
-    Stonewt p2(285.7);    // same as Stonewt wolfe = 285.7;
-
+    //使用构造函数第二个版本；form为STONE
     //此处理解：C++自动将传递的值转换为原型中指定的类型，
     //条件是两者都是算术类型(引用除外)
     //8被自动转换成8.0后再传入构造函数
     Stonewt p3(21, 8);
-
-    cout << "The p1 weighed ";
-    p1.show_stn();
-    cout << "The p2 weighed ";
-    p2.show_stn();
     cout << "The p3 weighed ";
-    p3.show_pds();
+    cout << p3;
 
-    p1 = 276.8;          // uses constructor for conversion
-    p3 = 325;             // same as p3 = Stonewt(325);
+    //使用构造函数的类型转换和赋值功能
+    p1 = 150.8;          // uses constructor for conversion
+    cout << "After the change the p1 weighed ";
+    cout << p1;
 
-    cout << "After dinner, the p1 weighed ";
-    p1.show_stn();
+    Stonewt temp;
+    temp = p1 + p2;
+    cout << "p1+p2=" << temp;
 
-    cout << "After dinner, the p3 weighed ";
-    p3.show_pds();
+    temp = p2 - p1;
+    cout << "p2-p1=" << temp;
 
-    display(p3, 2);
+    temp = - p1;
+    cout << "-p1=" << temp;
+
+    temp = p1 * 2;
+    cout << "p1*2=" << temp;
+
+    temp = 2 * p1;
+    cout << "2*p1="<<temp;
 
     cout << "The wrestler weighed even more.\n";
     //***注***
-    //422转换为422.0，然后使用Stonewt(double pds)构造函数
+    //422转换为422.0，然后使用Stonewt(double pds,Mode form= FLOAT_POUNDS)构造函数
     //生成一个临时Stonewt对象，传入display()
     display(422, 2);
 
-    //cout << "No stone left unearned\n";//没有什么是不劳而获的
-    // std::cin.get();
+    //若输入的模式不正确
+    Stonewt p4(1.5,Stonewt::STONE);
+    cout << p4;
+    Stonewt p5(1,5,Stonewt::FLOAT_POUNDS);
+    cout << p5;
+
     return 0;
 }
 
@@ -378,7 +382,95 @@ void display(const Stonewt& st, int n)
     for (int i = 0; i < n; i++)
     {
         cout << "Wow! ";
-        st.show_stn();
+        cout << st;
     }
+    cout.put('\n');
+}
+#endif
+
+
+//6.
+//链接11.9.6.cpp
+#if 0
+#include "11.9.6.h"
+
+void show_report(const Stonewt *p,int num);
+
+int main()
+{
+    //声明一个Stonewt类型的数组，并初始化前三个对象
+    Stonewt array[6]
+    {
+    1.1,(2.2),Stonewt(3.3)
+    };
+
+    std::cout << "请输入第4~6个对象的pounds的值：";
+    for (int index = 3; index < 6; index++)
+    {
+        while (!(std::cin >> array[index]))
+        {
+            std::cin.clear();
+            while (std::cin.get() != '\n')
+                continue;
+            std::cout << "错误的输入内容！\n";
+        }
+    }
+
+    show_report(array,6);
+
+    return 0;
+}
+
+void show_report(const Stonewt* p, int num)
+{
+    using std::cout;
+    using std::endl;
+
+    Stonewt stone11(11,0);//即154pounds
+    int count = 0;
+
+    Stonewt min, max;
+    min = max = *p;
+
+    for (int i = 0; i < num; i++)
+    {
+        if (*(p + i) > max)
+            max = *(p+i);
+        if (*(p + i) < min)
+            min = *(p+i);
+        if (*(p + i) >= stone11)
+            count++;
+    }
+
+    cout << "\n最小重量：" << min << endl
+        <<"最大重量："<<max<<endl
+        <<"大于或等于11英石的数量："<<count<<endl;
+}
+#endif
+
+
+//7.
+//链接11.9.7.cpp
+#if 0
+using namespace std;
+#include "11.9.7.h"
+int main()
+{
+    Complex a(3.0, 4.0);// initialize to(3,4i)
+    Complex c;
+    cout << "Enter a complex number (q to quit) : \n";
+    while (cin >> c)
+    {
+        cout << "c is " << c << '\n';
+        cout << "complex conjugate is " << ~c << '\n';
+        cout << "a is " << a << '\n';
+        cout << "a + c is " << a + c << '\n';
+        cout << "a - c is " << a - c << '\n';
+        cout << "a * c is" << a * c << '\n';
+        cout << "2 * c is " << 2 * c << '\n';
+        cout << "Enter a complex number (q to quit):\n";
+    }
+    cout << "Done ! \n";
+    return 0;
 }
 #endif

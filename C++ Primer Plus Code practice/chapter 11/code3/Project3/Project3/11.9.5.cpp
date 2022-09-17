@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 
 #include <iostream>
 #include "11.9.5.h"
@@ -64,19 +64,24 @@ void Stonewt::show_pds() const
 }
 */
 
-std::ostream& operator<<(const std::ostream os, const Stonewt st)
+//***注***
+//返回值不能声明为const，因为若为const则os为不可修改的左值
+//由于const不能赋值给非const，所以形参os也不声明为const
+std::ostream& operator<<(std::ostream& os, const Stonewt &st)
 {
-    if (st.mode == Stonewt::STONE)//***注***友元能访问对象的私有成员，但其不在类作用域内，要用明示常量的话要用作用域解析运算符
-        cout << st.stone << " stone, " << st.pds_left << " pounds\n";
+    if (st.mode == Stonewt::STONE)//***注***友元能访问对象的私有成员，但其不在类作用域内，要用作用域为类的明示常量的话要用作用域解析运算符
+        os << st.stone << " stone, " << st.pds_left << " pounds\n";
     else if (st.mode == Stonewt::FLOAT_POUNDS)
-        cout << st.pounds << " pounds\n";
+        os<< st.pounds << " pounds\n";
     else if (st.mode == Stonewt::INTEGER_POUNDS)
-        cout << int(st.pounds + 0.5) << " pounds\n";
+        os<< int(st.pounds + 0.5) << " pounds\n";
     else
-        cout << "mode is invaild ! \n";
+        os<< "mode is invaild ! \n";
+
+    return os;
 }
 
-Stonewt Stonewt::operator+(const Stonewt s)const
+Stonewt Stonewt::operator+(const Stonewt& s)const
 {
     /*Stonewt result;
 
@@ -86,15 +91,23 @@ Stonewt Stonewt::operator+(const Stonewt s)const
     return Stonewt(pounds+s.pounds);
 }
 
-Stonewt Stonewt::operator-(const Stonewt s)const
-{}
+Stonewt Stonewt::operator-(const Stonewt& s)const
+{
+    return Stonewt(pounds-s.pounds);
+}
 Stonewt Stonewt::operator-()const
-{}
+{
+    return Stonewt(-pounds);
+}
 
 Stonewt Stonewt::operator*(double x)const
-{}
+{
+    return Stonewt(pounds*x);
+}
 
-Stonewt operator*(double x, const Stonewt s)
-{}
+Stonewt operator*(double x, const Stonewt &s)
+{
+    return s * x;
+}
 
 #endif

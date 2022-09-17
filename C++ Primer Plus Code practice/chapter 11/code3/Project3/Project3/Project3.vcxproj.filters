@@ -33,6 +33,12 @@
     <ClCompile Include="11.9.5.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="11.9.6.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="11.9.7.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="11.9.1.h">
@@ -48,6 +54,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="11.9.5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="11.9.6.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="11.9.7.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

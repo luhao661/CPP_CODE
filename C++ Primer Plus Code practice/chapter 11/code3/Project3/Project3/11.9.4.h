@@ -21,7 +21,7 @@ public:
     friend Time operator+(const Time& t1,const Time &t2);
     friend Time operator-(const Time& t1, const Time& t2);
     friend Time operator*(const Time& t1,double mult);
-    friend Time operator*(double mult, const Time& t1);
+    friend Time operator*(double mult, const Time& t1);//友元函数重载
 
     //声明一个返回ostream对象的友元函数(属于非成员函数)
     friend std::ostream& operator<<(std::ostream& os, const Time& t);
