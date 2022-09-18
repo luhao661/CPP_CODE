@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#ifndef bclx11_9_5
-#define bclx11_9_5
+#ifndef BCLX11_9_5
+#define BCLX11_9_5
 #include <iostream>
 
 class Stonewt
@@ -20,6 +20,8 @@ public:
     Stonewt(int stn, double pds, Mode form = STONE);  // constructor for stone, pounds
     Stonewt();                                  // default constructor
     ~Stonewt();
+
+    void change_mode(Mode form);
     //void show_pds() const;        // show weight in pounds format
     //void show_stn() const;        // show weight in stone format
     friend  std::ostream& operator<<(std::ostream &os,const Stonewt &st);
@@ -32,4 +34,4 @@ public:
     Stonewt operator*(double x)const;
     friend Stonewt operator*(double x,const Stonewt& s);
 };
-#endif /*bclx11_9_5*/
+#endif /*BCLX11_9_5*/

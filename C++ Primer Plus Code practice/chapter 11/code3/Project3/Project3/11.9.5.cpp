@@ -64,6 +64,11 @@ void Stonewt::show_pds() const
 }
 */
 
+void Stonewt::change_mode(Mode form)
+{
+    mode = form;
+}
+
 //***注***
 //返回值不能声明为const，因为若为const则os为不可修改的左值
 //由于const不能赋值给非const，所以形参os也不声明为const

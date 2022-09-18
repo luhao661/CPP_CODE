@@ -2,6 +2,9 @@
 
 #ifndef BCLX11_9_6
 #define BCLX11_9_6
+
+#include <iostream>
+
 class Stonewt
 {
 private:

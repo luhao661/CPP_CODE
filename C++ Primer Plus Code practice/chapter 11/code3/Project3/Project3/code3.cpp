@@ -14,6 +14,12 @@ int main()
     using namespace std;
     using VECTOR::Vector;//使用VECTOR名称空间的Vector类
 
+    /*
+    //若要向文件写入内容，则可有选择地把后面的out改为fout
+    ofstream fout;
+    fout.open("randwalk.txt");
+    */
+
     //记录每一步的矢量数据
     Vector step;
     //记录累计的矢量数据

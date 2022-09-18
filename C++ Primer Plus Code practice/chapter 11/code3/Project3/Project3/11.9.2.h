@@ -1,7 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#ifndef bclx11_9_2
-#define bclx11_9_2
+#ifndef BCLX11_9_2
+#define BCLX11_9_2
 
 #include <iostream>
 #include <cmath>
@@ -42,10 +42,15 @@ namespace VECTOR
         //公有方法(写成内联函数)
         double xval() const { return x; }       // report x value
         double yval() const { return y; }       // report y value
-        double magval() const
+        double magval() const//写成内联函数
         { return sqrt(x * x + y * y); }   // report magnitude
         double angval() const 
-        { return atan2(y, x); }   // report angle
+        { //***注***atan2(0,0)未定义，需要手动设置值
+            if (x == 0.0 && y == 0.0)
+                return 0.0;
+            else
+                return atan2(y, x);
+        }   // report angle
 
         //公有方法(写成封装形式)
         void polar_mode();                    // set mode to POL
@@ -68,4 +73,4 @@ namespace VECTOR
 
 }   // end namespace VECTOR
 
-#endif  /*bclx11_9_2*/
+#endif  /*BCLX11_9_2*/

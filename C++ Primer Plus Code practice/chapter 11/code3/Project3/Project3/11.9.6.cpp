@@ -64,7 +64,9 @@ std::ostream& operator<<(std::ostream& os, const Stonewt& st)
 
 bool Stonewt::operator<(const Stonewt& s)const
 {
-    return pounds < s.pounds ? true : false;
+    //return pounds < s.pounds ? true : false;
+    //»òÐ´Îª
+    return pounds < s.pounds;
 }
 
 bool Stonewt::operator<=(const Stonewt& s)const
