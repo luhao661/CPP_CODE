@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 #include "11.8.1.h"
 #include <iostream>
 using std::cout;
@@ -42,18 +42,25 @@ void Stonewt::show_lbs() const
     cout << pounds << " pounds\n";
 }
 
+#if FANGFA1==1
 Stonewt Stonewt::operator*(double a)const
 {
-    Stonewt result;
+    double total_pounds = pounds*a;
 
-
-    return result;
+    return Stonewt(total_pounds);
 }
 
 Stonewt operator*(double a, const Stonewt& st)
 {
     return st * a;
 }
+#else
+Stonewt operator*(const Stonewt& st1, const Stonewt& st2)
+{
+    double total_pounds = st1.pounds*st2.pounds;
+    return Stonewt(total_pounds);
+}
+#endif
 
 // conversion functions
 Stonewt::operator int() const
