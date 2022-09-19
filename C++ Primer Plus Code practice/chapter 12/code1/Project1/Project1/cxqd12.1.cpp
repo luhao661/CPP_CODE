@@ -8,6 +8,10 @@
 
 using std::cout;
 
+//***注***
+//1.不能在类声明中初始化不带const的静态成员变量，因为初始化了就意味着分配内存，
+//而类只描述了如何分配内存，但并不分配内存
+//2.初始化语句不用带static
 // initializing static class member
 int StringBad::num_strings = 0;
 
