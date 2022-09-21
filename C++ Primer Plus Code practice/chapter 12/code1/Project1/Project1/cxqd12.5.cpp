@@ -29,10 +29,14 @@ String::String(const char* s)     // construct String from C string
 String::String()                   // default constructor
 {
     len = 4;
+
+    //写法一：***注***使用此写法的话，析构函数的cout<<str
+    //在打印出空指针指向的内容(实际上没有任何内容)后会强制停止运行
+    //str = nullptr;
+    //写法二：
     str = new char[1];//***注***此处为了与delete[]兼容
     str[0] = '\0';                 // default string
-    //写法二：
-    //str = nullptr;
+
     num_strings++;
 }
 
@@ -46,7 +50,9 @@ String::String(const String& st)//提供复制构造函数的定义，进行深复制
 
 String::~String()                     // necessary destructor
 {
+    cout << "\"" <<str<< "\" object deleted, ";
     --num_strings;                    // required
+    cout << num_strings << " left\n"; 
     delete[] str;                    // required
 }
 

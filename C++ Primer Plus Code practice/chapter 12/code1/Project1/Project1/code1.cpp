@@ -65,7 +65,7 @@ void callme2(StringBad s)
 
 //程序清单12.6 使用一个比较完善的String类，实现字符串的存储和比较
 //链接cxqd12.5.cpp
-#if 1
+#if 0
 #include "cxqd12.4.h" 
 const int ArSize = 10;
 const int MaxLen = 81;
@@ -75,59 +75,142 @@ int main()
     using std::cout;
     using std::cin;
     using std::endl;
+    {
+        String name;
+        cout << "Hi, what's your name?\n>> ";
+        cin >> name;
 
+        cout << name << ", please enter up to " << ArSize
+            << " short sayings <empty line to quit>:\n";
+        String sayings[ArSize];     // array of objects
+        char temp[MaxLen];          // temporary string storage
+
+        int i;
+        for (i = 0; i < ArSize; i++)
+        {
+            cout << i + 1 << ": ";
+            cin.get(temp, MaxLen);
+
+            while (cin && cin.get() != '\n')//输入不为空行且没读取到换行符
+                continue;
+
+            if (!cin || temp[0] == '\0')    // empty line? ***注***temp[0]=='\0'，用于旧版实现，此处可不写
+                break;              // i not incremented
+            else
+                sayings[i] = temp;  //使用赋值运算符重载函数的重载，进行字符串到对象的赋值
+        }
+        int total = i;              // total # of lines read
+
+        if (total > 0)
+        {
+            cout << "Here are your sayings:\n";
+            for (i = 0; i < total; i++)
+                cout << sayings[i][0] << ": " << sayings[i] << endl;
+
+            int shortest = 0;//创建索引
+            int first = 0;
+            for (i = 1; i < total; i++)
+            {
+                if (sayings[shortest].length() > sayings[i].length())//比较字符串长度
+                    shortest = i;
+                if (sayings[first] > sayings[i])//比较字符串首字母的顺序
+                    first = i;
+            }
+            cout << "Shortest saying:\n" << sayings[shortest] << endl;;
+            cout << "First alphabetically:\n" << sayings[first] << endl;
+            cout << "This program used " << String::HowMany()
+                << " String objects. Bye.\n";
+        }
+        else
+            cout << "No input! Bye.\n";
+        // keep window open 
+        /*    if (!cin)
+                cin.clear();
+            while (cin.get() != '\n')
+                continue; */
+    }
+    cin.clear();
+    cin.get();
+
+    return 0;
+}
+#endif
+
+
+//程序清单12.7 使用指向对象的指针
+//链接cxqd12.5.cpp
+#if 1
+#include "cxqd12.4.h"
+#include <cstdlib>      // (or stdlib.h) for rand(), srand()
+#include <ctime>        // (or time.h) for time()
+
+const int ArSize = 10;
+const int MaxLen = 81;
+
+int main()
+{
+    using namespace std;
     String name;
     cout << "Hi, what's your name?\n>> ";
     cin >> name;
 
     cout << name << ", please enter up to " << ArSize
         << " short sayings <empty line to quit>:\n";
-    String sayings[ArSize];     // array of objects
-    char temp[MaxLen];          // temporary string storage
+    String sayings[ArSize];
+    char temp[MaxLen];               // temporary string storage
 
     int i;
     for (i = 0; i < ArSize; i++)
     {
         cout << i + 1 << ": ";
         cin.get(temp, MaxLen);
-
-        while (cin && cin.get() != '\n')//输入不为空行且没读取到换行符
+        while (cin && cin.get() != '\n')
             continue;
-
-        if (!cin || temp[0] == '\0')    // empty line? ***注***temp[0]=='\0'，用于旧版实现，此处可不写
-            break;              // i not incremented
+        if (!cin || temp[0] == '\0') // empty line?
+            break;                   // i not incremented
         else
-            sayings[i] = temp;  //使用赋值运算符重载函数的重载，进行字符串到对象的赋值
+            sayings[i] = temp;       // overloaded assignment
     }
-    int total = i;              // total # of lines read
+    int total = i;                   // total # of lines read
 
     if (total > 0)
     {
         cout << "Here are your sayings:\n";
         for (i = 0; i < total; i++)
-            cout << sayings[i][0] << ": " << sayings[i] << endl;
+            cout << sayings[i] << "\n";
 
-        int shortest = 0;//创建索引
-        int first = 0;
+        //声明并初始化指向对象的指针
+        // use pointers to keep track of shortest, first strings
+        String* shortest = &sayings[0]; // initialize to first object
+        String* first = &sayings[0];
         for (i = 1; i < total; i++)
         {
-            if (sayings[shortest].length()>sayings[i].length())//比较字符串长度
-                shortest = i;
-            if (sayings[first]> sayings[i] )//比较字符串首字母的顺序
-                first = i;
+            if (shortest->length()>sayings[i].length())
+                shortest = &sayings[i];
+            if (*first>sayings[i])        // compare values
+                first = &sayings[i];     // assign address
         }
-        cout << "Shortest saying:\n" << sayings[shortest] << endl;;
-        cout << "First alphabetically:\n" << sayings[first] << endl;
-        cout << "This program used " << String::HowMany()
-            << " String objects. Bye.\n";
+        cout << "Shortest saying:\n" << *shortest << endl;
+        cout << "First alphabetically:\n" << *first << endl;
+
+        srand(time(0));
+        int choice = rand() % total; // pick index at random
+        //使用对象来初始化新的String对象
+        // use new to create, initialize new String object
+        String* favorite = new String(sayings[choice]);
+        cout << "My favorite saying:\n" << *favorite << endl;
+        delete favorite;
     }
     else
-        cout << "No input! Bye.\n";
-    // keep window open 
+        cout << "Not much to say, eh?\n";
+    cout << "Bye.\n";
+    // keep window open
     /*    if (!cin)
             cin.clear();
         while (cin.get() != '\n')
-            continue; */
+            continue;
+        cin.get();
+    */
     return 0;
 }
 #endif
