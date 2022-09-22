@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 
 // string1.cpp -- String class methods
 #include <cstring>                 // string.h for some

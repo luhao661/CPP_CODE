@@ -32,5 +32,8 @@
     <ClInclude Include="cxqd12.4.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="cxqd12.8.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
