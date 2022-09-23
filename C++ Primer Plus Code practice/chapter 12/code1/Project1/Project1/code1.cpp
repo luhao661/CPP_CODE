@@ -327,6 +327,5 @@ int main()
 //
 //Á´½Ó
 #if 1
-int a{ 1 };
-int b(2);
+
 #endif
