@@ -21,9 +21,21 @@
     <ClCompile Include="12.10.1.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="12.10.2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="12.10.3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="12.10.1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="12.10.2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="12.10.3.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

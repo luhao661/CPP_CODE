@@ -11,8 +11,9 @@ class Cow
 public:
 	Cow();
 	Cow(const char *nm,const char *ho,double wt);
+	Cow(const Cow &c);
 	~Cow();
-	Cow& operator=(const Cow& c);
+	Cow& operator=(const Cow& c);//赋值运算符重载函数
 	void ShowCow()const;
 };
 
