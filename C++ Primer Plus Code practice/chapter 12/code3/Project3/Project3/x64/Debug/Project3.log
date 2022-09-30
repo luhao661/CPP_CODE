@@ -1,3 +1,6 @@
-﻿  code3.cpp
-D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 12\code3\Project3\Project3\code3.cpp(250,22): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+﻿  12.10.5.cpp
+  12.10.6.cpp
+  code3.cpp
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 12\code3\Project3\Project3\code3.cpp(366,22): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+  正在生成代码...
   Project3.vcxproj -> D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 12\code3\Project3\x64\Debug\Project3.exe

@@ -231,7 +231,7 @@ void showdata(Item& item)
 
 //5.
 //链接12.10.5.cpp
-#if 1
+#if 0
 #include "12.10.5.h"
 #include <cstdlib> // for rand() and srand()
 #include <ctime>   // for time()
@@ -281,9 +281,10 @@ do{
 		turnaways = customers = served = sum_line\
 			= wait_time = line_wait = 0;
 
+		//***注***
 		//错误：下次运行时队列的节点没有清空
 		//改正：
-		if (!line.isempty())
+		while (!line.isempty())
 			line.dequeue(temp);
 
 	// running the simulation
@@ -313,7 +314,7 @@ do{
 			sum_line += line.queuecount();
 		}
 
-} while (((double)line_wait / served )<= 1.0|| ((double)line_wait / served) >= 1.1);
+} while (((double)line_wait / served )<= 1.0/*|| ((double)line_wait / served) >= 1.1*/);
 
 	// reporting results
 	if (customers > 0)
@@ -387,7 +388,8 @@ int main()
 
 
 	Item temp;              //***注***客户是一个，不能放到结构体中
-	typedef struct 
+
+	typedef struct			//存储两个队列的排队情况
 	{
 		long turnaways ;     //  turned away by full queue
 		long customers ;     //  joined the queue
@@ -412,6 +414,16 @@ int main()
 				= x_struct[i].sum_line = x_struct[i].turnaways
 				= x_struct[i].wait_time=0;
 		}
+
+		//***注***
+		//错误：下次运行时队列的节点没有清空
+		//改正：
+		while (!line[0].isempty())
+			line[0].dequeue(temp);
+
+		while (!line[1].isempty())
+			line[1].dequeue(temp);
+
 		// running the simulation
 		for (int cycle = 0; cycle < cyclelimit; cycle++)
 		{
