@@ -8,9 +8,10 @@ typedef unsigned long Item;
 class Stack
 {
 private:
-    //const int MAX = 10;//报错：非静态成员引用必须与特定对象相对
     //***注***
-    //const int a = 10;可通过编译(C++11类内初始化)
+    //const int MAX = 10;//可通过编译(特性：C++11类内初始化)
+    //但是不能作为符号常量，因为此语句相当于在构造函数用成员初始化列表来初始化MAX
+    //所以在类中相当于还没创建MAX
     enum { MAX = 10 };    // constant specific to class 创建符号常量
     Item *pitems;    // holds stack items
     int size;             //数组的元素个数

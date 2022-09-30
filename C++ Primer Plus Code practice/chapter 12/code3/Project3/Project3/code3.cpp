@@ -26,8 +26,12 @@ int main()
 	cow2.ShowCow();
 	cow3.ShowCow();
 
-	Cow cow4 = cow3;//调用复制构造函数
+	Cow cow4 (cow3);//调用复制构造函数
 	cow4.ShowCow();
+
+	Cow cow5[2] = {{"ghj","aaa",50}};
+	cow5[0].ShowCow();
+	cow5[1].ShowCow();
 
 	return 0;
 }
@@ -178,7 +182,7 @@ int main()
 			break;
 		}
 		cout << "Please enter A to add a purchase order,"
-			<< "P to delete, or Q to quit.\n";
+			<< "P to delete, S to show, or Q to quit.\n";
 	}
 
 	cout << "使用复制构造函数："<<endl;
@@ -227,7 +231,7 @@ void showdata(Item& item)
 
 //5.
 //链接12.10.5.cpp
-#if 0
+#if 1
 #include "12.10.5.h"
 #include <cstdlib> // for rand() and srand()
 #include <ctime>   // for time()
@@ -276,6 +280,11 @@ do{
 		//***注***每次模拟完成后，要对各参数归0
 		turnaways = customers = served = sum_line\
 			= wait_time = line_wait = 0;
+
+		//错误：下次运行时队列的节点没有清空
+		//改正：
+		if (!line.isempty())
+			line.dequeue(temp);
 
 	// running the simulation
 		for (int cycle = 0; cycle < cyclelimit; cycle++)
@@ -337,7 +346,7 @@ bool newcustomer(double x)
 
 //6.
 //链接12.10.6.cpp
-#if 1
+#if 0
 #include "12.10.6.h"
 #include <cstdlib> // for rand() and srand()
 #include <ctime>   // for time()

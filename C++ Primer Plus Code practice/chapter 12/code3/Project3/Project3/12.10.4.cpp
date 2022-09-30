@@ -21,10 +21,13 @@ Stack::Stack(const Stack& st)
     pitems = new Item[st.size];
     Item* st_temp;
     int index;
-    for (index = 0,st_temp = st.pitems; index <= st.top; index++)
+    for (index = 0,st_temp = st.pitems; index < st.top; index++)
     {
         *(pitems + index) = *(st_temp+index);
     }
+    //通过索引来实现遍历，指向Item的指针的值实际上没变，
+    //所以可以不用临时指针st_temp
+
     //或使用memcpy()
     //memcpy(pitems,st.pitems,st.size*sizeof(Item));
     size = st.size;
@@ -33,12 +36,12 @@ Stack::Stack(const Stack& st)
 
 Stack::~Stack()
 {
-    delete[]pitems;
+    delete[]pitems;//等价于if(pitems!=nullptr)   delete[]pitems;
 }
 
 bool Stack::isempty() const
 {
-    return top == 0;
+    return top == 0;//等价于if(top==0) return true; else return false;
 }
 
 bool Stack::isfull() const

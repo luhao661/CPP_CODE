@@ -31,7 +31,7 @@ String::String()                   // default constructor
     len = 0;
 
     //写法一：***注***使用此写法的话，析构函数的cout<<str
-    //在打印出空指针指向的内容(实际上没有任何内容)后会强制停止运行
+    //在打印出空指针指向的内容(实际上没有任何内容)时会强制停止运行
     //str = nullptr;
     //写法二：
     str = new char[1];//***注***此处为了与delete[]兼容
@@ -138,7 +138,7 @@ String String::operator+(const String& s)const
 {
     String temp;//会调用默认构造函数，num_strings的值加1
 
-    temp.len = strlen(str) + strlen(s.str);
+    temp.len = strlen(str) + strlen(s.str);//或用len+s.len
     temp.str = new char[temp.len + 1];
     strcpy(temp.str, str);
     strcat(temp.str, s.str);
@@ -192,6 +192,11 @@ void String::stringup(void)
             *temp = toupper(*temp);
         temp++;
     }
+
+//写法二：
+    //for (int i = 0; i < len; i++)
+    //    str[i] = toupper(str[i]);
+
 }
 
 int String::has(const char ch) const

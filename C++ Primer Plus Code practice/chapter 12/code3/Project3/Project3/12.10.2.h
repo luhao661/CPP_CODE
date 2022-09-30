@@ -50,6 +50,8 @@ public:
     void stringlow(void);
     void stringup(void);
     int has(const char)const;
+    //可以改为
+    //int has(char)const;
 };
 
 #endif /*BCLX12_10_2_H*/

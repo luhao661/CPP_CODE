@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 
 #include "12.10.6.h"
 #include <cstdlib>         // (or stdlib.h) for rand(), NULL
