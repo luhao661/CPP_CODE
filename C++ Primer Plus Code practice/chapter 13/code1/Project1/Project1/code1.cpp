@@ -30,9 +30,9 @@ int main(void)
 #endif
 
 
-//程序清单13.6 使用派生类
+//程序清单13.6 使用派生类，演示派生类和基类的关系
 //链接cxqd13.5.cpp 
-#if 1
+#if 0
 #include "cxqd13.4.h"
 
 int main(void)
@@ -65,7 +65,59 @@ int main(void)
     cout << "Name: ";
     rplayer2.Name();
     cout << "; Rating: " << rplayer2.Rating() << endl;
+
+    RatedPlayer rplayer3(333, "Aaa", "Bbb", true);
+    TableTennisPlayer player3 (rplayer3);//使用派生类对象初始化基类对象
+    player3.Name();
+    cout.put('\n');
+
+    RatedPlayer rplayer4(444, "Ccc", "Ddd", true);
+    TableTennisPlayer player4;//使用派生类对象赋值给基类对象
+    player4 = rplayer4;
+    player4.Name();
+    cout.put('\n');
+
     // std::cin.get();
     return 0;
 }
+#endif
+
+
+//程序清单13.9 测试含虚函数的基类和派生类
+//链接cxqd13.8.cpp
+#if 1
+#include "cxqd13.7.h"
+
+int main()
+{
+    using std::cout;
+    using std::endl;
+
+    Brass Piggy("Porcelot Pigg", 381299, 4000.00);
+    BrassPlus Hoggy("Horatio Hogg", 382288, 3000.00);
+    Piggy.ViewAcct();
+    cout << endl;
+    Hoggy.ViewAcct();
+    cout << endl;
+
+    cout << "Depositing $1000 into the Hogg Account:\n";
+    Hoggy.Deposit(1000.00);
+    cout << "New balance: $" << Hoggy.Balance() << endl<<endl;
+
+    cout << "Withdrawing $4200 from the Pigg Account:\n";
+    Piggy.Withdraw(4200.00);
+    cout << "Pigg account balance: $" << Piggy.Balance() << endl<<endl;
+
+    cout << "Withdrawing $4200 from the Hogg Account:\n";
+    Hoggy.Withdraw(4200.00);
+    Hoggy.ViewAcct();
+    // std::cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单13.10 类的多态(同一个方法在派生类和基类中的行为不同)——虚函数
+//链接
+#if 1
 #endif

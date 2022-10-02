@@ -22,7 +22,7 @@ public:
 };
 
 // simple derived class 派生类
-class RatedPlayer : public TableTennisPlayer
+class RatedPlayer : public TableTennisPlayer//公有派生
 {
 private:
     unsigned int rating;
