@@ -125,7 +125,9 @@ void BrassPlus::Withdraw(double amt)
     format initialState = setFormat();
     precis prec = cout.precision(2);
 
-    double bal = Balance();//由于BrassPlus是Brass的派生类，所以派生类的方法可以访问基类的方法(两个类的方法彼此都可见)(P283)
+    double bal = Brass::Balance();//由于BrassPlus是Brass的派生类，所以派生类的方法可以访问基类的方法(两个类的方法彼此都可见)(P283)
+    //或写成double bal=Balance();***注***可以不写Brass::，因为派生类中未定义Balance()，只有基类中有，默认会调用基类中的
+
     if (amt <= bal)
         Brass::Withdraw(amt);//***注***明确指定使用基类的方法，若没有写明是Brass::则会调用派生类中的同名的方法(相当于递归调用)
     else if (amt <= bal + maxLoan - owesBank)
