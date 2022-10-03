@@ -83,7 +83,7 @@ int main(void)
 #endif
 
 
-//程序清单13.9 测试含虚函数的基类和派生类
+//程序清单13.9 测试含虚函数的基类和派生类(但不使用虚方法的特性)
 //链接cxqd13.8.cpp
 #if 1
 #include "cxqd13.7.h"
@@ -105,11 +105,11 @@ int main()
     cout << "New balance: $" << Hoggy.Balance() << endl<<endl;
 
     cout << "Withdrawing $4200 from the Pigg Account:\n";
-    Piggy.Withdraw(4200.00);
+    Piggy.Withdraw(4200.00);//使用Brass类的Withdraw方法，不支持透支
     cout << "Pigg account balance: $" << Piggy.Balance() << endl<<endl;
 
     cout << "Withdrawing $4200 from the Hogg Account:\n";
-    Hoggy.Withdraw(4200.00);
+    Hoggy.Withdraw(4200.00);//使用BrassPlus类的Withdraw方法，支持透支
     Hoggy.ViewAcct();
     // std::cin.get();
     return 0;

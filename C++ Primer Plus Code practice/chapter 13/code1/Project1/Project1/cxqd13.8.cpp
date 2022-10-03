@@ -109,7 +109,7 @@ void BrassPlus::ViewAcct() const
     format initialState = setFormat();
     precis prec = cout.precision(2);
 
-    Brass::ViewAcct();   ////***注***明确指定使用基类的方法，若没有写明是Brass::则会调用派生类中的同名的方法(相当于递归调用)
+    Brass::ViewAcct();   //***注***明确指定使用基类的方法，若没有写明是Brass::则会调用派生类中的同名的方法(相当于递归调用)
     cout << "Maximum loan: $" << maxLoan << endl;
     cout << "Owed to bank: $" << owesBank << endl;
     cout.precision(3);  // ###.### format
