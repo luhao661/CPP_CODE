@@ -4,6 +4,7 @@
 #ifndef BRASS_H_
 #define BRASS_H_
 #include <string>
+
 // Brass Account Class
 class Brass
 {

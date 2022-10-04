@@ -85,8 +85,18 @@ int main(void)
 
 //程序清单13.9 测试含虚函数的基类和派生类(但不使用虚方法的特性)
 //链接cxqd13.8.cpp
-#if 0
+#if 1
 #include "cxqd13.7.h"
+
+void fv(BrassPlus b)
+{
+    b.ViewAcct();
+}
+
+void fv_1(Brass* pb)
+{
+    pb->ViewAcct();
+}
 
 int main()
 {
@@ -112,6 +122,11 @@ int main()
     Hoggy.Withdraw(4200.00);//使用BrassPlus类的Withdraw方法，支持透支
     Hoggy.ViewAcct();
     // std::cin.get();
+    cout.put('\n');
+    fv(Piggy);//Brass对象传递给BrassPlus类型的形参的函数，会先调用派生类构造函数进行类型转换，再使用fv()函数
+    cout.put('\n');
+    fv_1(&Hoggy);
+
     return 0;
 }
 #endif
@@ -119,7 +134,7 @@ int main()
 
 //程序清单13.10 类的多态(同一个方法在派生类和基类中的行为不同)——虚函数
 //链接cxqd13.8.cpp
-#if 1
+#if 0
 #include "cxqd13.7.h"
 #include <string>
 
