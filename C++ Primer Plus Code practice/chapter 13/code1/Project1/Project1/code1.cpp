@@ -85,7 +85,7 @@ int main(void)
 
 //程序清单13.9 测试含虚函数的基类和派生类(但不使用虚方法的特性)
 //链接cxqd13.8.cpp
-#if 1
+#if 0
 #include "cxqd13.7.h"
 
 void fv(BrassPlus b)
@@ -146,7 +146,7 @@ int main()
     using std::cout;
     using std::endl;
 
-    Brass* p_clients[CLIENTS];//声明一个数组，每个元素都是指向Brass的指针
+    Brass* p_clients[CLIENTS];//声明一个数组，每个元素都是指向Brass类的指针
     std::string temp;
     long tempnum;
     double tempbal;
@@ -211,4 +211,72 @@ int main()
    */
     return 0;
 }
+#endif
+
+
+//程序清单13.13 关键字protected，纯虚函数，抽象基类ABC
+//链接cxqd13.12.cpp
+#if 1
+#include <string>
+#include "cxqd13.11.h"
+const int CLIENTS = 4;
+
+int main()
+{
+    using std::cin;
+    using std::cout;
+    using std::endl;
+
+    AcctABC* p_clients[CLIENTS];
+    std::string temp;
+    long tempnum;
+    double tempbal;
+    char kind;
+
+    for (int i = 0; i < CLIENTS; i++)
+    {
+        cout << "Enter client's name: ";
+        getline(cin, temp);
+        cout << "Enter client's account number: ";
+        cin >> tempnum;
+        cout << "Enter opening balance: $";
+        cin >> tempbal;
+        cout << "Enter 1 for Brass Account or "
+            << "2 for BrassPlus Account: ";
+        while (cin >> kind && (kind != '1' && kind != '2'))
+            cout << "Enter either 1 or 2: ";
+        if (kind == '1')
+            p_clients[i] = new Brass(temp, tempnum, tempbal);
+        else
+        {
+            double tmax, trate;
+            cout << "Enter the overdraft limit: $";
+            cin >> tmax;
+            cout << "Enter the interest rate "
+                << "as a decimal fraction: ";
+            cin >> trate;
+            p_clients[i] = new BrassPlus(temp, tempnum, tempbal,
+                tmax, trate);
+        }
+
+        while (cin.get() != '\n')
+            continue;
+    }
+
+    cout << endl;
+    for (int i = 0; i < CLIENTS; i++)
+    {
+        p_clients[i]->ViewAcct();
+        cout << endl;
+    }
+
+    for (int i = 0; i < CLIENTS; i++)
+    {
+        delete p_clients[i];  // free memory
+    }
+    cout << "Done.\n";
+    // cin.get();
+    return 0;
+}
+
 #endif
