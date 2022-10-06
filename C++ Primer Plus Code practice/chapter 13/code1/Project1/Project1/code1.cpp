@@ -216,7 +216,7 @@ int main()
 
 //程序清单13.13 关键字protected，纯虚函数，抽象基类ABC
 //链接cxqd13.12.cpp
-#if 1
+#if 0
 #include <string>
 #include "cxqd13.11.h"
 const int CLIENTS = 4;
@@ -278,5 +278,12 @@ int main()
     // cin.get();
     return 0;
 }
+
+#endif
+
+
+//程序清单 
+//链接cxqd13.15.cpp
+#if 1
 
 #endif
