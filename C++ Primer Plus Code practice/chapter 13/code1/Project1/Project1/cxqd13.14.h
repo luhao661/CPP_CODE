@@ -5,7 +5,8 @@
 #define DMA_H_
 #include <iostream>
 
-//  Base Class Using DMA
+// 基类
+// Base Class Using DMA
 class baseDMA
 {
 private:
@@ -21,9 +22,13 @@ public:
         const baseDMA& rs);
 };
 
-// derived class without DMA
+// 派生类的实现不使用new的情况
+// derived class without DMA 
+// 不显式声明析构函数(使用默认的析构函数和自动使用基类的析构函数)
 // no destructor needed
-// uses implicit copy constructor
+// 使用默认的复制构造函数和和在默认的复制构造函数的函数头显式使用基类的复制构造函数
+// uses implicit copy constructor 
+// 使用默认的赋值运算符重载函数和自动使用基类的赋值运算符重载函数
 // uses implicit assignment operator
 class lacksDMA :public baseDMA
 {
@@ -38,6 +43,7 @@ public:
         const lacksDMA& rs);
 };
 
+// 派生类的实现使用new的情况
 // derived class with DMA
 class hasDMA :public baseDMA
 {
@@ -45,11 +51,11 @@ private:
     char* style;
 public:
     hasDMA(const char* s = "none", const char* l = "null",
-        int r = 0);
-    hasDMA(const char* s, const baseDMA& rs);
-    hasDMA(const hasDMA& hs);
-    ~hasDMA();
-    hasDMA& operator=(const hasDMA& rs);
+        int r = 0);//构造函数
+    hasDMA(const char* s, const baseDMA& rs);//构造函数
+    ~hasDMA();//定义显式的析构函数
+    hasDMA(const hasDMA& hs);//定义显式的复制构造函数
+    hasDMA& operator=(const hasDMA& rs);//定义显式的赋值运算符重载函数
     friend std::ostream& operator<<(std::ostream& os,
         const hasDMA& rs);
 };

@@ -6,6 +6,8 @@
 #include "cxqd13.14.h"
 #include <cstring>
 
+/***********************************************************************************/
+
 // baseDMA methods
 baseDMA::baseDMA(const char* l, int r)
 {
@@ -47,6 +49,8 @@ std::ostream& operator<<(std::ostream& os, const baseDMA& rs)
     return os;
 }
 
+/***********************************************************************************/
+
 // lacksDMA methods
 lacksDMA::lacksDMA(const char* c, const char* l, int r)
     : baseDMA(l, r)
@@ -69,6 +73,8 @@ std::ostream& operator<<(std::ostream& os, const lacksDMA& ls)
     return os;
 }
 
+/***********************************************************************************/
+
 // hasDMA methods
 hasDMA::hasDMA(const char* s, const char* l, int r)
     : baseDMA(l, r)
@@ -84,16 +90,16 @@ hasDMA::hasDMA(const char* s, const baseDMA& rs)
     std::strcpy(style, s);
 }
 
-hasDMA::hasDMA(const hasDMA& hs)
-    : baseDMA(hs)  // invoke base class copy constructor
-{
-    style = new char[std::strlen(hs.style) + 1];
-    std::strcpy(style, hs.style);
-}
-
 hasDMA::~hasDMA()
 {
     delete[] style;
+}
+
+hasDMA::hasDMA(const hasDMA& hs)
+    : baseDMA(hs)  //显式使用基类复制构造函数
+{
+    style = new char[std::strlen(hs.style) + 1];
+    std::strcpy(style, hs.style);
 }
 
 hasDMA& hasDMA::operator=(const hasDMA& hs)
@@ -101,10 +107,10 @@ hasDMA& hasDMA::operator=(const hasDMA& hs)
     if (this == &hs)
         return *this;
 
-    baseDMA::operator=(hs);  // copy base portion
+    baseDMA::operator=(hs);  //显式调用基类赋值运算符的函数表示法
     
     //***注***
-    //不能写成
+    //不能写成运算符表示法
     //*this = hs;    //因为这样写调用的是hasDMA::operator=()，会形成递归调用
 
     delete[] style;         // prepare for new style

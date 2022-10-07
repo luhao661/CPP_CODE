@@ -282,8 +282,38 @@ int main()
 #endif
 
 
-//程序清单 
+//程序清单13.16 派生类使用动态内存分配和派生类如何访问基类的友元
 //链接cxqd13.15.cpp
 #if 1
+#include "cxqd13.14.h"
 
+int main()
+{
+    using std::cout;
+    using std::endl;
+
+    baseDMA shirt("Portabelly", 8);
+    cout << "Displaying baseDMA object:\n";
+    cout << shirt << endl;
+
+    lacksDMA balloon("red", "Blimpo", 4);
+    cout << "Displaying lacksDMA object:\n";
+    cout << balloon << endl;
+
+    hasDMA map("Mercator", "Buffalo Keys", 5);
+    cout << "Displaying hasDMA object:\n";
+    cout << map << endl;
+
+    lacksDMA balloon2(balloon);//使用默认的复制构造函数
+    cout << "Result of lacksDMA copy:\n";
+    cout << balloon2 << endl;
+
+    hasDMA map2;
+    map2 = map;//使用显式的赋值运算符重载函数
+    cout << "Result of hasDMA assignment:\n";
+    cout << map2 << endl;
+
+    // std::cin.get();
+    return 0;
+}
 #endif
