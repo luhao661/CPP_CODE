@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 // dma.cpp --dma class methods
 
 #include "cxqd13.14.h"
@@ -96,7 +96,7 @@ hasDMA::~hasDMA()
 }
 
 hasDMA::hasDMA(const hasDMA& hs)
-    : baseDMA(hs)  //显式使用基类复制构造函数
+   : baseDMA(hs)  //显式使用基类复制构造函数(指向基类的引用可以指向派生类型)
 {
     style = new char[std::strlen(hs.style) + 1];
     std::strcpy(style, hs.style);
