@@ -95,10 +95,11 @@ void Bravo(const Cd& disk)//可以进行动态联编(程序将使用对象所属的类的方法)
 //3.
 //链接13.11.3.cpp
 #if 1
-#include "cxqd13.7.h"
+#include "13.11.3.h"
 #include <string>
 
-const int CLIENTS = 4;
+const int SIZE = 4;
+char* getlabel(void);        //对字符串所占的内存进行动态分配
 
 int main()
 {
@@ -106,22 +107,21 @@ int main()
     using std::cout;
     using std::endl;
 
-    Brass* p_clients[CLIENTS];//声明一个数组，每个元素都是指向Brass类的指针
-    std::string temp;
-    long tempnum;
+    DmaABC* p_dma[SIZE];//声明一个数组，每个元素都是指向抽象基类的指针
+    char* p_data;
+    int rating;
     double tempbal;
     char kind;
 
-    for (int i = 0; i < CLIENTS; i++)
+    for (int i = 0; i < SIZE; i++)
     {
-        cout << "Enter client's name: ";
-        getline(cin, temp);
-        cout << "Enter client's account number: ";
-        cin >> tempnum;
-        cout << "Enter opening balance: $";
-        cin >> tempbal;
-        cout << "Enter 1 for Brass Account or "
-            << "2 for BrassPlus Account: ";
+        cout << "Enter the label name: ";
+        p_data = getlabel();
+        cout << "Enter the number of rating: ";
+        cin >> rating;
+        
+        cout << "Enter 1 for baseDMA or "
+            << "2 for lacksDMA or "<<"3 for hasDMA:";
 
         while (!(cin >> kind) || (kind != '1' && kind != '2'))
         {
@@ -135,7 +135,7 @@ int main()
         //    cout << "Enter either 1 or 2: ";
 
         if (kind == '1')
-            p_clients[i] = new Brass(temp, tempnum, tempbal);
+            p_dma[i] = new baseDMA(p_data,rating);
         else
         {
             double tmax, trate;
@@ -147,6 +147,8 @@ int main()
             p_clients[i] = new BrassPlus(temp, tempnum, tempbal,
                 tmax, trate);
         }
+
+        delete p_data;
         while (cin.get() != '\n')//消耗掉换行符，否则getline()将读取不到第二次及之后的输入
             continue;
     }
@@ -171,4 +173,22 @@ int main()
    */
     return 0;
 }
+
+char* getlabel(void)        // return pointer to new string
+{
+    using std::cout;
+    using std::cin;
+
+    char temp[80];      // temporary storage 块作用域，无链接，自动存储期
+
+    cout << "Enter the label : ";
+    cin >> temp;        //temp数组暂存输入的内容
+
+    char* pn = new char[strlen(temp) + 1];//计算输入的字符数量并动态分配一个内存空间
+
+    strcpy(pn, temp); // copy string into smaller space 
+                                 //***注***strcpy()检测到temp中的'\0'后把'\0'也拷贝入pn指向的内存空间的相应位置，然后停止拷贝
+    return pn;          // temp lost when function ends
+}//函数结束时，pn会销毁，但其指向的内存区域(堆)不会销毁
+
 #endif
