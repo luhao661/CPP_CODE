@@ -1,5 +1,2 @@
-﻿  13.11.2.cpp
-D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 13\code3\Project3\Project3\13.11.2.cpp(35,32): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
-D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 13\code3\Project3\Project3\13.11.2.cpp(41,24): warning C4244: “=”: 从“double”转换到“int”，可能丢失数据
-D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 13\code3\Project3\Project3\13.11.2.cpp(121): warning C4715: “Classic::operator=”: 不是所有的控件路径都返回值
+﻿  code3.cpp
   Project3.vcxproj -> D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 13\code3\Project3\x64\Debug\Project3.exe

@@ -1,14 +1,13 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 #include "13.11.3.h"
-
 #include <cstring>
 
 /***********************************************************************************/
 
 // DmaABC methods
-DmaABC::DmaABC(const char* s = "no data", int r = 0)
+DmaABC::DmaABC(const char* s, int r)
 {
     label = new char[std::strlen(s) + 1];
     std::strcpy(label, s);
@@ -27,8 +26,29 @@ DmaABC::~DmaABC()
     delete[]label;
 }
 
-void DmaABC::View()const
-{}
+DmaABC& DmaABC::operator=(const DmaABC& d)
+{
+    if (this == &d)
+        return *this;
+
+    delete[] label;
+    label = new char[std::strlen(d.label) + 1];
+    std::strcpy(label, d.label);
+
+    rating = d.rating;
+
+    return *this;
+}
+
+char* DmaABC::See_label()const
+{
+    return label;
+}
+
+int DmaABC::See_rating()const
+{
+    return rating;
+}
 
 /***********************************************************************************/
 
@@ -39,66 +59,61 @@ baseDMA::baseDMA(const char* l, int r):DmaABC(l,r)
 baseDMA::baseDMA(const baseDMA& rs):DmaABC(rs)
 {}
 
-baseDMA::~baseDMA()
-{}
+baseDMA::~baseDMA()//***注***由于baseDMA类中没有用new动态分配的内存
+{}                                      //所以可以不用delete
     
 baseDMA& baseDMA::operator=(const baseDMA& rs)
 {
     if (this == &rs)
         return *this;
 
-    delete[] label;
-    label = new char[std::strlen(rs.label) + 1];
-    std::strcpy(label, rs.label);
-
-    rating = rs.rating;
+    DmaABC::operator=(rs);
 
     return *this;
 }
 
-std::ostream& operator<<(std::ostream& os, const baseDMA& rs)
+void baseDMA::View(void)const
 {
-    os << "Label: " << rs.label << std::endl;
-    os << "Rating: " << rs.rating << std::endl;
-    return os;
+    std::cout << "Label: " <<See_label() << std::endl;
+    std::cout<< "Rating: " << See_rating() << std::endl;
 }
 
 /***********************************************************************************/
 
 // lacksDMA methods
 lacksDMA::lacksDMA(const char* c, const char* l, int r)
-    : baseDMA(l, r)
+    : DmaABC(l, r)
 {
     std::strncpy(color, c, 39);
     color[39] = '\0';
 }
 
 lacksDMA::lacksDMA(const char* c, const baseDMA& rs)
-    : baseDMA(rs)
+    : DmaABC(rs)
 {
     std::strncpy(color, c, COL_LEN - 1);
     color[COL_LEN - 1] = '\0';
 }
 
-std::ostream& operator<<(std::ostream& os, const lacksDMA& ls)
+void lacksDMA::View(void) const
 {
-    os << (const baseDMA&)ls;
-    os << "Color: " << ls.color << std::endl;
-    return os;
+    std::cout << "Label: " << See_label() << std::endl;
+    std::cout << "Rating: " << See_rating() << std::endl;
+    std::cout << "Color: " << color << std::endl;
 }
 
 /***********************************************************************************/
 
 // hasDMA methods
 hasDMA::hasDMA(const char* s, const char* l, int r)
-    : baseDMA(l, r)
+    : DmaABC(l, r)
 {
     style = new char[std::strlen(s) + 1];
     std::strcpy(style, s);
 }
 
 hasDMA::hasDMA(const char* s, const baseDMA& rs)
-    : baseDMA(rs)
+    : DmaABC(rs)
 {
     style = new char[std::strlen(s) + 1];
     std::strcpy(style, s);
@@ -110,7 +125,7 @@ hasDMA::~hasDMA()
 }
 
 hasDMA::hasDMA(const hasDMA& hs)
-    : baseDMA(hs)  //显式使用基类复制构造函数(指向基类的引用可以指向派生类型)
+    : DmaABC(hs)  //显式使用基类复制构造函数(指向基类的引用可以指向派生类型)
 {
     style = new char[std::strlen(hs.style) + 1];
     std::strcpy(style, hs.style);
@@ -121,7 +136,7 @@ hasDMA& hasDMA::operator=(const hasDMA& hs)
     if (this == &hs)
         return *this;
 
-    baseDMA::operator=(hs);  //显式调用基类赋值运算符的函数表示法
+    DmaABC::operator=(hs);  //显式调用基类赋值运算符的函数表示法
 
     //***注***
     //不能写成运算符表示法
@@ -133,11 +148,11 @@ hasDMA& hasDMA::operator=(const hasDMA& hs)
     return *this;
 }
 
-std::ostream& operator<<(std::ostream& os, const hasDMA& hs)
+void hasDMA::View()const
 {
-    os << (const baseDMA&)hs;
-    os << "Style: " << hs.style << std::endl;
-    return os;
+    std::cout << "Label: " << See_label() << std::endl;
+    std::cout << "Rating: " << See_rating() << std::endl;
+    std::cout << "Style: " << style << std::endl;
 }
 
 #endif

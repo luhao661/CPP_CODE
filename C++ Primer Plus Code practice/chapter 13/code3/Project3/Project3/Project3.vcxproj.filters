@@ -27,6 +27,9 @@
     <ClCompile Include="13.11.3.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="13.11.4.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="13.11.1.h">
@@ -36,6 +39,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="13.11.3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="13.11.4.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

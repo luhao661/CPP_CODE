@@ -94,11 +94,10 @@ void Bravo(const Cd& disk)//可以进行动态联编(程序将使用对象所属的类的方法)
 
 //3.
 //链接13.11.3.cpp
-#if 1
+#if 0
 #include "13.11.3.h"
-#include <string>
 
-const int SIZE = 4;
+const int SIZE = 3;
 char* getlabel(void);        //对字符串所占的内存进行动态分配
 
 int main()
@@ -108,61 +107,65 @@ int main()
     using std::endl;
 
     DmaABC* p_dma[SIZE];//声明一个数组，每个元素都是指向抽象基类的指针
-    char* p_data;
+    char* p_label_data;
     int rating;
-    double tempbal;
     char kind;
+    char color_data[40];
+    char style[40];
 
     for (int i = 0; i < SIZE; i++)
     {
         cout << "Enter the label name: ";
-        p_data = getlabel();
+        p_label_data = getlabel();
         cout << "Enter the number of rating: ";
         cin >> rating;
         
         cout << "Enter 1 for baseDMA or "
             << "2 for lacksDMA or "<<"3 for hasDMA:";
 
-        while (!(cin >> kind) || (kind != '1' && kind != '2'))
+        while (!(cin >> kind) || (kind != '1' && kind != '2'&&kind!='3'))
         {
             cin.clear();
             while (cin.get() != '\n')
                 continue;
-            cout << "Bad input; Please enter 1 or 2 : ";
+            cout << "Bad input; Please enter 1 or 2 or 3 : ";
         }
 
         //while (cin>>kind&&(kind != '1' && kind != '2'))
         //    cout << "Enter either 1 or 2: ";
 
+        cin.get();//消耗掉换行符
+
         if (kind == '1')
-            p_dma[i] = new baseDMA(p_data,rating);
+            p_dma[i] = new baseDMA(p_label_data,rating);
+        else if(kind=='2')
+        {
+            cout << "Enter the color: ";
+            cin.getline(color_data,40);
+            p_dma[i] = new lacksDMA(color_data, p_label_data, rating);
+        }
         else
         {
-            double tmax, trate;
-            cout << "Enter the overdraft limit: $";
-            cin >> tmax;
-            cout << "Enter the interest rate "
-                << "as a decimal fraction: ";
-            cin >> trate;
-            p_clients[i] = new BrassPlus(temp, tempnum, tempbal,
-                tmax, trate);
+            cout << "Enter the style: ";
+            cin.getline(style, 40);
+            p_dma[i] = new hasDMA(style, p_label_data, rating);
         }
 
-        delete p_data;
-        while (cin.get() != '\n')//消耗掉换行符，否则getline()将读取不到第二次及之后的输入
-            continue;
+        delete p_label_data;
+        //while (cin.get() != '\n')//消耗掉换行符，否则getline()将读取不到第二次及之后的输入
+        //    continue;//不需要，因为getline会把换行符替换成'\0'
     }
 
     cout << endl;
-    for (int i = 0; i < CLIENTS; i++)
+    for (int i = 0; i < SIZE; i++)
     {
-        p_clients[i]->ViewAcct();
+        p_dma[i]->View();
         cout << endl;
     }
 
-    for (int i = 0; i < CLIENTS; i++)
+    for (int i = 0; i < SIZE; i++)
     {
-        delete p_clients[i];  // free memory
+        delete p_dma[i];  // free memory
     }
     cout << "Done.\n";
     /* code to keep window open
@@ -181,7 +184,6 @@ char* getlabel(void)        // return pointer to new string
 
     char temp[80];      // temporary storage 块作用域，无链接，自动存储期
 
-    cout << "Enter the label : ";
     cin >> temp;        //temp数组暂存输入的内容
 
     char* pn = new char[strlen(temp) + 1];//计算输入的字符数量并动态分配一个内存空间
@@ -190,5 +192,12 @@ char* getlabel(void)        // return pointer to new string
                                  //***注***strcpy()检测到temp中的'\0'后把'\0'也拷贝入pn指向的内存空间的相应位置，然后停止拷贝
     return pn;          // temp lost when function ends
 }//函数结束时，pn会销毁，但其指向的内存区域(堆)不会销毁
+
+#endif
+
+
+//4.
+//链接13.11.4.cpp
+#if 1
 
 #endif
