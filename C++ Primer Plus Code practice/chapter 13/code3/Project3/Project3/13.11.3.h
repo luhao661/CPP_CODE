@@ -24,7 +24,7 @@ public:
 	virtual ~DmaABC();
     DmaABC& operator=(const DmaABC& d);
     //friend std::ostream& operator<<(std::ostream& os,
-    //    const baseDMA& rs);//***注***不生成对象，不需要使用
+    //    const baseDMA& rs);//***注***不生成对象，可以不使用
 	virtual void View()const=0;
 
 protected://***注***由于派生类不能直接访问抽象基类的私有成员，

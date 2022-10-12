@@ -199,5 +199,10 @@ char* getlabel(void)        // return pointer to new string
 //4.
 //Á´½Ó13.11.4.cpp
 #if 1
+int main()
+{
 
+
+    return 0;
+}
 #endif
