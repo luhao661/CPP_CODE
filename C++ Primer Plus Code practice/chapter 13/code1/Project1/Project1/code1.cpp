@@ -50,6 +50,9 @@ int main(void)
     //声明并初始化派生类对象
     RatedPlayer rplayer1(1140, "Mallory", "Duck", true);
     rplayer1.Name();          // 派生类对象使用基类的方法
+    //写法二：
+    //rplayer1.TableTennisPlayer::Name();
+
     if (rplayer1.HasTable())
         cout << ": has a table.\n";
     else

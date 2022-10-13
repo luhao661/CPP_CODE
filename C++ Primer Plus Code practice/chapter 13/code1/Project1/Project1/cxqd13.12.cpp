@@ -93,8 +93,8 @@ BrassPlus::BrassPlus(const string& s, long an, double bal,
 }
 
 BrassPlus::BrassPlus(const Brass& ba, double ml, double r)
-    : AcctABC(ba)   // uses implicit copy constructor
-{
+    : AcctABC(ba)   // uses implicit copy constructor 使用抽象基类的
+{                             //默认的复制构造函数
     maxLoan = ml;
     owesBank = 0.0;
     rate = r;

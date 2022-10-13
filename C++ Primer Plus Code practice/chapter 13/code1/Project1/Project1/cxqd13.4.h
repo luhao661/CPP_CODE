@@ -4,8 +4,10 @@
 #ifndef TABTENN1_H_
 #define TABTENN1_H_
 
+#include <iostream>
 #include <string>
 using std::string;
+
 // simple base class »ùÀà
 class TableTennisPlayer
 {
@@ -32,6 +34,7 @@ public:
     RatedPlayer(unsigned int r, const TableTennisPlayer& tp);
     unsigned int Rating() const { return rating; }
     void ResetRating(unsigned int r) { rating = r; }
+    //void Name() const { std::cout << "???"; }
 };
 
 #endif

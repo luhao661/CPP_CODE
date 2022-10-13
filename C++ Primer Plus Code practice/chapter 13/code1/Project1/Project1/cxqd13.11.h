@@ -13,6 +13,7 @@ private:
     std::string fullName;
     long acctNum;
     double balance;
+
 protected://派生类的成员可以直接访问基类的保护成员，但不能直接访问基类的私有成员
     struct Formatting
     {
@@ -29,6 +30,7 @@ protected://派生类的成员可以直接访问基类的保护成员，但不能直接访问基类的私有成员
         return acctNum; 
     }
     void Restore(Formatting& f) const;
+
 public:
     AcctABC(const std::string& s = "Nullbody", long an = -1,
         double bal = 0.0);

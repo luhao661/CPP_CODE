@@ -1,4 +1,5 @@
 ﻿  code1.cpp
   cxqd13.8.cpp
   正在生成代码...
-  Project1.vcxproj -> D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 13\code1\Project1\x64\Debug\Project1.exe
+MSVCRTD.lib(exe_main.obj) : error LNK2019: 无法解析的外部符号 main，函数 "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ) 中引用了该符号
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 13\code1\Project1\x64\Debug\Project1.exe : fatal error LNK1120: 1 个无法解析的外部命令
