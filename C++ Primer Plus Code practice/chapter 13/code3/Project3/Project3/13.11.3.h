@@ -21,16 +21,16 @@ public:
     //成员初始化列表调用抽象基类的复制构造函数
     //而且此类使用了new，所以必须显式地定义三大函数
     DmaABC(const DmaABC& d);
-	virtual ~DmaABC();
+	virtual ~DmaABC()=0;
     DmaABC& operator=(const DmaABC& d);
+	virtual void View()const=0;
     //friend std::ostream& operator<<(std::ostream& os,
     //    const baseDMA& rs);//***注***不生成对象，可以不使用
-	virtual void View()const=0;
 
 protected://***注***由于派生类不能直接访问抽象基类的私有成员，
     char* See_label(void)const;//所以仅服务器可以通过protected成员来访问抽象基类的私有成员
     int See_rating(void)const;//若将这两个函数放入public的话，则客户和服务器都能访问了，
-};                                     //所以使用protected更好
+};                                             //所以使用protected更好
 
 class baseDMA:public DmaABC
 {

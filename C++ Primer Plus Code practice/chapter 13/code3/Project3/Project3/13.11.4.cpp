@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 #include "13.11.4.h"
 #include <cstring>
 
@@ -81,14 +81,20 @@ ostream& operator<<(ostream& os, const Port& p)
 
 /**************************************************************************************/
 
-VintagePort::VintagePort():Port()
-{}
+VintagePort::VintagePort():Port()//使用基类自动提供的的默认构造函数
+{
+	nickname = new char[1];
+	nickname[0] = '\0';
+
+	year = 0;
+}
 
 VintagePort::VintagePort(const char* br, int b, const char* nn
 	, int y):Port(br,"vintage",b)
 {
 	nickname = new char[strlen(nn)+1];
 	strcpy(nickname,nn);
+
 	year = y;
 }
 
@@ -96,6 +102,7 @@ VintagePort::VintagePort(const VintagePort& vp):Port(vp)
 {//***注***此处用成员初始化列表，是基于动态联编的向上强制转换
 	nickname = new char[strlen(vp.nickname) + 1];
 	strcpy(nickname, vp.nickname);
+
 	year = vp.year;
 }
 
@@ -110,6 +117,8 @@ VintagePort& VintagePort::operator=(const VintagePort& vp)
 	nickname = new char[strlen(vp.nickname) + 1];
 	strcpy(nickname, vp.nickname);
 	year = vp.year;
+
+	return *this;
 }
 
 void VintagePort::Show() const
@@ -123,7 +132,7 @@ void VintagePort::Show() const
 ostream& operator<<(ostream& os, const VintagePort& vp)
 {
 	os << (const Port&)vp;
-	std::cout << vp.nickname << ", " << vp.year;
+	std::cout <<", "<< vp.nickname << ", " << vp.year;
 
 	return os;
 }

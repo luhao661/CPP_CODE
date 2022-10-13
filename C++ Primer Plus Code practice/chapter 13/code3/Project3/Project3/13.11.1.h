@@ -33,7 +33,7 @@ public:
 	virtual void Report() const;// reports all CD data
 	//Classic& operator=(const Classic&d);
 	//***注***若使用派生类默认的赋值运算符重载函数Classic & operator=(const Classic&);
-	//也没有关系，因为派生类没有用new进行动态内存分配，也就不需要再重新定义析构函数、赋值运算符重载函数了
+	//也没有关系，因为派生类没有用new进行动态内存分配，也就不需要再重新定义析构函数、复制构造函数、赋值运算符重载函数了
 };
 
 #endif

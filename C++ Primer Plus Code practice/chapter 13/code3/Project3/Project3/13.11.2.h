@@ -30,6 +30,7 @@ public:
 	Classic(const char* s1, const char* s2, const char* s3,
 		int n, double x);
 	virtual ~Classic();
+	Classic(const Classic& c);
 	virtual void Report() const;// reports all CD data
 	Classic& operator=(const Classic&d);
 	//***注***若使用派生类默认的赋值运算符重载函数Classic & operator=(const Classic&);

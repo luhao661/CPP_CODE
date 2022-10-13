@@ -25,7 +25,7 @@ Cd::Cd(const Cd& d)
 	
 	selections = d.selections;
 
-	playtime = d.selections;
+	playtime = d.playtime;
 }
 
 Cd::Cd()
@@ -58,7 +58,7 @@ Cd& Cd::operator= (const Cd& d)
 	strcpy(label, d.label);
 
 	selections = d.selections;
-	playtime = d.selections;
+	playtime = d.playtime;
 
 	return *this;
 }

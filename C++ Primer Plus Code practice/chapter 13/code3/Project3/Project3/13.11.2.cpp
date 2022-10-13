@@ -27,7 +27,7 @@ Cd::Cd(const Cd& d)
 
 	selections = d.selections;
 
-	playtime = d.selections;
+	playtime = d.playtime;
 }
 
 Cd::Cd()
@@ -72,7 +72,7 @@ Cd& Cd::operator= (const Cd& d)
 	strcpy(label, d.label);
 
 	selections = d.selections;
-	playtime = d.selections;
+	playtime = d.playtime;
 
 	return *this;
 }
@@ -102,22 +102,30 @@ Classic::~Classic()
 	delete[]composition;
 }//执行顺序是先调用派生类的析构函数，再自动调用基类的析构函数(与构造函数的调用顺序正好相反)
 
+Classic::Classic(const Classic& c):Cd(c)
+{
+	composition = new char[strlen(c.composition) + 1];
+	strcpy(composition, c.composition);
+}
+
 void Classic::Report() const// reports all CD data
 {
 	Cd::Report();
 	std::cout << "Composition : " << composition << std::endl;
 }
 
-Classic& Classic::operator=(const Classic& d)
+Classic& Classic::operator=(const Classic& c)
 {
-	if (this == &d)
+	if (this == &c)
 		return *this;
 
-	Cd::operator=(d);
+	Cd::operator=(c);
 	delete[]composition;
 
-	composition = new char[strlen(d.composition)+1];
-	strcpy(composition,d.composition);
+	composition = new char[strlen(c.composition)+1];
+	strcpy(composition,c.composition);
+
+	return* this;
 }
 
 #endif
