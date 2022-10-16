@@ -10,7 +10,7 @@
                         //多重继承(此处使用了两个基类)
 class Student : private std::string, private std::valarray<double>
 {                       //私有继承提供了两个无名称的子对象成员
-private:            //因此派生类不需要私有数据成员
+private:            //因此派生类不需要额外的私有数据成员
     typedef std::valarray<double> ArrayDb;
     // private method for scores output
     std::ostream& arr_out(std::ostream& os) const;

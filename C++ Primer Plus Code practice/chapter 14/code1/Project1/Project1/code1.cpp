@@ -107,3 +107,99 @@ void set(Student& sa, int n)
         continue;
 }
 #endif
+
+
+//程序清单14.9 使用公有单重继承
+//链接cxqd14.8.cpp
+#if 0
+#include "cxqd14.7.h"
+const int LIM = 4;
+
+int main()
+{
+    Waiter bob("Bob Apple", 314L, 5);
+    Singer bev("Beverly Hills", 522L, 3);
+    Waiter w_temp;
+    Singer s_temp;
+
+    Worker* pw[LIM] = { &bob, &bev, &w_temp, &s_temp };
+
+    int i;
+    for (i = 2; i < LIM; i++)
+        pw[i]->Set();
+
+    for (i = 0; i < LIM; i++)
+    {
+        pw[i]->Show();
+        std::cout << std::endl;
+    }
+    // std::cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单14.12 使用公有多重继承(公有MI)
+//链接cxqd14.11.cpp
+#if 1
+#include <cstring>
+#include "cxqd14.10.h"
+const int SIZE = 5;
+
+int main()
+{
+    using std::cin;
+    using std::cout;
+    using std::endl;
+    using std::strchr;
+
+    Worker* lolas[SIZE];
+
+    int ct;
+    for (ct = 0; ct < SIZE; ct++)
+    {
+        char choice;
+        cout << "Enter the employee category:\n"
+            << "w: waiter  s: singer  "
+            << "t: singing waiter  q: quit\n";
+
+        cin >> choice;
+        while (strchr("wstq", choice) == NULL)
+        {
+            cout << "Please enter a w, s, t, or q: ";
+            cin >> choice;
+        }
+
+        if (choice == 'q')
+            break;
+        switch (choice)
+        {
+        case 'w':   lolas[ct] = new Waiter;
+            break;
+        case 's':   lolas[ct] = new Singer;
+            break;
+        case 't':   lolas[ct] = new SingingWaiter;
+            break;
+        }
+
+        cin.get();
+        lolas[ct]->Set();
+    }
+
+    cout << "\nHere is your staff:\n";
+    int i;
+    for (i = 0; i < ct; i++)
+    {
+        cout << endl;
+        lolas[i]->Show();
+    }
+
+    for (i = 0; i < ct; i++)
+        delete lolas[i];
+
+    cout << "Bye.\n";
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+#endif
