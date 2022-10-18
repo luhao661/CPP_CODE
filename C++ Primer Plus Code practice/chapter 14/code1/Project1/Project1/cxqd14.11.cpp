@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 
 // workermi.cpp -- working class methods with MI
 #include "cxqd14.10.h"

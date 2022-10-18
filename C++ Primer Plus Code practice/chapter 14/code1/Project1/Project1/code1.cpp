@@ -141,7 +141,7 @@ int main()
 
 //程序清单14.12 使用公有多重继承(公有MI)
 //链接cxqd14.11.cpp
-#if 1
+#if 0
 #include <cstring>
 #include "cxqd14.10.h"
 const int SIZE = 5;
@@ -202,4 +202,123 @@ int main()
     // cin.get();
     return 0;
 }
+#endif
+
+
+//程序清单14.15 使用类模板，使用模板生成string栈
+//链接cxqd14.14.cpp
+#if 0
+#include "cxqd14.13.h"
+#include <string>
+#include <cctype>
+
+using std::cin;
+using std::cout;
+
+int main()
+{                                          //模板的显式实例化
+    Stack<std::string> st;   // create an empty stack 创建并用默认构造函数初始化一个空栈
+                                           //***注***必须显式地提供所需的类型
+    std::string po;
+
+    cout << "Please enter A to add a purchase order,\n"
+        << "P to process a PO, or Q to quit.\n";
+    char ch;
+    while (cin >> ch && std::toupper(ch) != 'Q')
+    {
+        while (cin.get() != '\n')
+            continue;
+
+        if (!std::isalpha(ch))
+        {
+            cout << '\a';
+            continue;
+        }
+
+        switch (ch)
+        {
+        case 'A':
+        case 'a': 
+            cout << "Enter a PO number to add: ";
+            cin >> po;
+            if (st.isfull())
+                cout << "stack already full\n";
+            else
+                st.push(po);
+            break;
+        case 'P':
+        case 'p':
+            if (st.isempty())
+            cout << "stack already empty\n";
+            else
+            {
+                st.pop(po);
+                cout << "PO #" << po << " popped\n";
+                break;
+             }
+        }
+
+        cout << "Please enter A to add a purchase order,\n"
+            << "P to process a PO, or Q to quit.\n";
+    }
+    cout << "Bye\n";
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单14.17 使用类模板，使用模板生成指针栈
+//链接无
+#if 1
+#include <cstdlib>     // for rand(), srand()
+#include <ctime>       // for time()
+#include "cxqd14.16.h"
+
+const int Num = 10;
+
+int main()
+{
+    std::cout << "Please enter stack size: ";
+    int stacksize;
+    std::cin >> stacksize;
+    // create an empty stack with stacksize slots
+    Stack<const char*> st(stacksize);//创建一个动态内存分配的指针栈
+
+    // in basket                                                   //生成指针数组
+    const char* in[Num] = {
+            " 1: Hank Gilgamesh", " 2: Kiki Ishtar",
+            " 3: Betty Rocker", " 4: Ian Flagranti",
+            " 5: Wolfgang Kibble", " 6: Portia Koop",
+            " 7: Joy Almondo", " 8: Xaverie Paprika",
+            " 9: Juan Moore", "10: Misha Mache"
+    };
+    // out basket
+    const char* out[Num];
+
+    std::srand(std::time(0)); // randomize rand()
+    int processed = 0;
+    int nextin = 0;
+    while (processed < Num)
+    {
+        if (st.isempty())
+            st.push(in[nextin++]);
+        else if (st.isfull())
+            st.pop(out[processed++]);
+        else if (std::rand() % 2 && nextin < Num)   // 50-50 chance
+            st.push(in[nextin++]);
+        else
+            st.pop(out[processed++]);
+    }
+
+    for (int i = 0; i < Num; i++)
+        std::cout << out[i] << std::endl;
+
+    std::cout << "Bye\n";
+    // std::cin.get();
+    // std::cin.get();
+    return 0;
+}
+
 #endif

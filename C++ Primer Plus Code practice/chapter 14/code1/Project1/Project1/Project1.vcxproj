@@ -141,12 +141,15 @@
   <ItemGroup>
     <ClInclude Include="cxqd14.1.h" />
     <ClInclude Include="cxqd14.10.h" />
+    <ClInclude Include="cxqd14.13.h" />
+    <ClInclude Include="cxqd14.16.h" />
     <ClInclude Include="cxqd14.4.h" />
     <ClInclude Include="cxqd14.7.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code1.cpp" />
     <ClCompile Include="cxqd14.11.cpp" />
+    <ClCompile Include="cxqd14.14.cpp" />
     <ClCompile Include="cxqd14.2.cpp" />
     <ClCompile Include="cxqd14.5.cpp" />
     <ClCompile Include="cxqd14.8.cpp" />
