@@ -205,8 +205,8 @@ int main()
 #endif
 
 
-//程序清单14.15 使用类模板，使用模板生成string栈
-//链接cxqd14.14.cpp
+//程序清单14.14 使用类模板，使用模板生成string栈
+//链接无
 #if 0
 #include "cxqd14.13.h"
 #include <string>
@@ -269,12 +269,12 @@ int main()
 #endif
 
 
-//程序清单14.17 使用类模板，使用模板生成指针栈
+//程序清单14.16 使用类模板，使用模板用动态内存分配生成指针栈
 //链接无
-#if 1
+#if 0
 #include <cstdlib>     // for rand(), srand()
 #include <ctime>       // for time()
-#include "cxqd14.16.h"
+#include "cxqd14.15.h"
 
 const int Num = 10;
 
@@ -320,5 +320,123 @@ int main()
     // std::cin.get();
     return 0;
 }
+#endif
 
+
+//程序清单14.18 使用类模板，使用非类型参数来提供常规数组的大小
+//并实现递归调用模板，生成二维数组
+//链接无
+#if 0
+#include "cxqd14.17.h"
+
+int main(void)
+{
+    using std::cout;
+    using std::endl;
+    ArrayTP<int, 10> sums;//创建int sums[10]
+    ArrayTP<double, 10> aves;//创建double aves[10]
+    ArrayTP< ArrayTP<int, 5>, 10> twodee;//创建int twodee[10][5]
+
+
+    int i, j;
+
+    for (i = 0; i < 10; i++)
+    {
+        sums[i] = 0;
+        for (j = 0; j < 5; j++)
+        {
+            twodee[i][j] = (i + 1) * (j + 1);
+            sums[i] += twodee[i][j];
+        }
+        aves[i] = (double)sums[i] / 5;
+    }
+
+    for (i = 0; i < 10; i++)
+    {
+        for (j = 0; j < 5; j++)
+        {
+            cout.width(2);
+            cout << twodee[i][j] << ' ';
+        }
+        cout << ": sum = ";
+        cout.width(3);
+        cout << sums[i] << ", average = " << aves[i] << endl;
+    }
+
+    cout << "Done.\n";
+    // std::cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单14.19 使用类模板，使用多个类型参数
+//链接无
+#if 1
+#include <string>
+
+template <class T1, class T2=int>//可以为类型参数提供默认值
+class Pair
+{
+private:
+    T1 a;
+    T2 b;
+
+public:
+    Pair(const T1& aval, const T2& bval) : a(aval), b(bval) 
+    { }
+    Pair()
+    {}
+    T1& first();//用于修改a
+    T2& second();
+    T1 first() const//用于只读取a
+    {
+        return a; 
+    }
+    T2 second() const 
+    {
+        return b;
+    }
+};
+
+template<class T1, class T2>
+T1& Pair<T1, T2>::first()
+{
+    return a;
+}
+template<class T1, class T2>
+T2& Pair<T1, T2>::second()
+{
+    return b;
+}
+
+int main()
+{
+    using std::cout;
+    using std::endl;
+    using std::string;
+
+    Pair<string, int> ratings[4] =
+    {
+        Pair<string, int>("The Purpled Duck", 5),
+        Pair<string, int>("Jaquie's Frisco Al Fresco", 4),
+        Pair<string, int>("Cafe Souffle", 5),
+        Pair<string, int>("Bertie's Eats", 3)
+    };
+
+    int joints = sizeof(ratings) / sizeof(Pair<string, int>);
+
+    cout << "Rating:\t Eatery\n";
+    for (int i = 0; i < joints; i++)
+        cout << ratings[i].second() << ":\t "
+        << ratings[i].first() << endl;
+
+    cout << "Oops! Revised rating:\n";
+    ratings[3].first() = "Bertie's Fab Eats";
+    ratings[3].second() = 6;
+    cout << ratings[3].second() << ":\t "
+        << ratings[3].first() << endl;
+    // std::cin.get();
+    return 0;
+}
 #endif
