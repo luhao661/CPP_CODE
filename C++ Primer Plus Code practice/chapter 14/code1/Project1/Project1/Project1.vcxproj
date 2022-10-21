@@ -144,6 +144,7 @@
     <ClInclude Include="cxqd14.13.h" />
     <ClInclude Include="cxqd14.15.h" />
     <ClInclude Include="cxqd14.17.h" />
+    <ClInclude Include="cxqd14.21.h" />
     <ClInclude Include="cxqd14.4.h" />
     <ClInclude Include="cxqd14.7.h" />
   </ItemGroup>

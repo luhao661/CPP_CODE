@@ -323,7 +323,7 @@ int main()
 #endif
 
 
-//程序清单14.18 使用类模板，使用非类型参数来提供常规数组的大小
+//程序清单14.18 使用类模板，使用非模板类型参数来提供常规数组的大小
 //并实现递归调用模板，生成二维数组
 //链接无
 #if 0
@@ -443,16 +443,16 @@ int main()
 
 
 //程序清单14.20 使用成员模板
-//一个模板类将另一个模板类和模板函数作为其成员
+//一个模板类将另一个模板类和模板函数作为其成员(在模板内定义)
 //链接无
-#if 1
+#if 0
 using std::cout;
 using std::endl;
 
 template <typename T>
 class beta
 {
-private:
+private:                                    //嵌套模板类成员
     template <typename V>  // nested template class member
     class hold
     {
@@ -464,7 +464,7 @@ private:
         V Value() const { return val; }
     };
 
-    hold<T> q;             // template object
+    hold<T> q;             // template object 创建基于T类型的hold对象
     hold<int> n;           // template object
 
 public:
@@ -486,17 +486,347 @@ int main()
 {
     beta<double> guy(3.5, 3);
 
-    cout << "T was set to double\n";
+    cout << " beta<double> guy(3.5, 3);"<<endl;
+    cout << "T was set to double\n\n";
+
     guy.Show();
+    cout << "V was set to T, which is double, then V was set to int\n\n";
 
-    cout << "V was set to T, which is double, then V was set to int\n";
     cout << guy.blab(10, 2.3) << endl;
+    cout << "U was set to int\n\n";
 
-    cout << "U was set to int\n";
     cout << guy.blab(10.0, 2.3) << endl;
-
-    cout << "U was set to double\n";
+    cout << "U was set to double\n\n";
     cout << "Done\n";
+    // std::cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单14.20 使用成员模板
+//一个模板类将另一个模板类和模板函数作为其成员(在模板外定义，此编译器不支持)
+//链接无
+#if 0
+using std::cout;
+using std::endl;
+
+template <typename T>
+class beta
+{
+private:                                    //嵌套模板类成员声明
+    template <typename V>  
+    class hold;
+    /* {
+    private:
+        V val;
+    public:
+        hold(V v = 0) : val(v) {}
+        void show() const { cout << val << endl; }
+        V Value() const { return val; }
+    }; */
+
+    hold<T> q;             // template object 创建基于T类型的hold对象
+    hold<int> n;           // template object
+
+public:
+    beta(T t, int i) : q(t), n(i) {}
+
+    template<typename U>   // template method
+    U blab(U u, T t);
+    /*{
+        return (n.Value() + q.Value()) * u / t;
+    }*/
+
+    void Show() const
+    {
+        q.show(); n.show();
+    }
+};
+
+int main()
+{
+    beta<double> guy(3.5, 3);
+
+    cout << " beta<double> guy(3.5, 3);" << endl;
+    cout << "T was set to double\n\n";
+
+    guy.Show();
+    cout << "V was set to T, which is double, then V was set to int\n\n";
+
+    cout << guy.blab(10, 2.3) << endl;
+    cout << "U was set to int\n\n";
+
+    cout << guy.blab(10.0, 2.3) << endl;
+    cout << "U was set to double\n\n";
+    cout << "Done\n";
+    // std::cin.get();
+    return 0;
+}
+
+template <typename T>
+template<typename V>
+class beta<T>::hold//写全类名和作用域解析运算符
+ {
+private:
+    V val;
+public:
+    hold(V v = 0) : val(v) 
+    {}
+    void show() const 
+    { 
+        cout << val << endl;
+    }
+    V Value() const 
+    {
+        return val; 
+    }
+}; 
+
+template <typename T>
+template <typename U>
+U beta<T>:: blab(U u, T t)
+{
+    return (n.Value() + q.Value()) * u / t;
+}
+#endif
+
+
+//程序清单14.21 使用类模板，使用模板作为类型参数
+//链接无
+#if 0
+#include "cxqd14.21.h"
+
+template <template <typename T> class Thing>//***注***
+class Crab                                                  //此处的Thing是通用类型说明符
+{                                                                  //此处的类型是一个模板类
+private:
+    Thing<int> s1;
+    Thing<double> s2;
+
+public:
+    Crab() {};
+
+    // assumes the thing class has push() and pop() members
+    bool push(int a, double x) 
+    {
+        return s1.push(a) && s2.push(x); 
+    }
+    bool pop(int& a, double& x) 
+    { 
+        return s1.pop(a) && s2.pop(x);
+    }
+};
+
+int main()
+{
+    using std::cout;
+    using std::cin;
+    using std::endl;
+
+    Crab<Stack> nebula;
+    // Stack must match template <typename T> class thing   
+    //Stack 替换了 Thing
+
+    int ni;
+    double nb;
+    cout << "Enter int double pairs, such as 4 3.5 (0 0 to end):\n";
+    while (cin >> ni >> nb && ni > 0 && nb > 0)
+    {
+        if (!nebula.push(ni, nb))
+            break;
+    }
+
+    while (nebula.pop(ni, nb))
+        cout << ni << ", " << nb << endl;
+
+    cout << "Done.\n";
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单14.22 模板类的非模板友元函数
+//链接无
+#if 0
+using std::cout;
+using std::endl;
+
+template <typename T>
+class HasFriend
+{
+private:
+    T item;
+    static int ct;
+
+public:
+    HasFriend(const T& i) : item(i)
+    {
+        ct++; 
+    }
+    ~HasFriend() 
+    {
+        ct--; 
+    }
+    friend void counts();//成为模板所有实例化的友元
+    friend void reports(HasFriend<T>&); // template parameter
+    //***注***
+    //不能写成friend void report (HasFriend& );
+    //若要提供模板类参数，必须指明具体化
+};
+
+//每个具体化都有自己的静态成员
+// each specialization has its own static data member
+template <typename T>
+int HasFriend<T>::ct = 0;
+
+// non-template friend to all HasFriend<T> classes
+void counts()
+{
+    cout << "int count: " << HasFriend<int>::ct << "; ";
+    cout << "double count: " << HasFriend<double>::ct << endl;
+}
+
+// non-template friend to the HasFriend<int> class
+void reports(HasFriend<int>& hf)
+{
+    cout << "HasFriend<int>: " << hf.item << endl;
+}
+
+// non-template friend to the HasFriend<double> class
+void reports(HasFriend<double>& hf)
+{
+    cout << "HasFriend<double>: " << hf.item << endl;
+}
+
+int main()
+{
+    cout << "No objects declared: ";
+    counts();
+
+    HasFriend<int> hfi1(10);
+    cout << "After hfi1 declared: ";
+    counts();
+    
+    HasFriend<int> hfi2(20);
+    cout << "After hfi2 declared: ";
+    counts();
+
+    HasFriend<double> hfdb(10.5);
+    cout << "After hfdb declared: ";
+    counts();
+
+    reports(hfi1);
+    reports(hfi2);
+    reports(hfdb);
+    // std::cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单14.23 模板类的约束模板友元函数
+//链接无
+#if 0
+using std::cout;
+using std::endl;
+
+//第一步：在类声明前声明每个模板函数
+// template prototypes
+template <typename T> void counts();
+template <typename T> void report(T&);
+
+// template class
+template <typename TT>
+class HasFriendT
+{
+private:
+    TT item;
+    static int ct;
+public:
+    HasFriendT(const TT& i) : item(i) { ct++; }
+    ~HasFriendT() { ct--; }
+
+    //第二步：在类声明中再次将函数模板声明为友元
+    friend void counts<TT>();
+    friend void report<>(HasFriendT<TT>&);//模板具体化
+};
+
+template <typename T>
+int HasFriendT<T>::ct = 0;
+
+//第三步：为友元写模板函数的定义
+// template friend functions definitions
+template <typename T>
+void counts()
+{
+    cout << "template size: " << sizeof(HasFriendT<T>) << "; ";
+    cout << "template counts(): " << HasFriendT<T>::ct << endl;
+}
+
+template <typename T>
+void report(T& hf)
+{
+    cout << hf.item << endl;
+}
+
+int main()
+{
+    counts<int>();
+
+    HasFriendT<int> hfi1(10);
+    HasFriendT<int> hfi2(20);
+    HasFriendT<double> hfdb(10.5);
+
+    report(hfi1);  // generate report(HasFriendT<int> &)
+    report(hfi2);  // generate report(HasFriendT<int> &)
+    report(hfdb);  // generate report(HasFriendT<double> &)
+
+    cout << "counts<int>() output:\n";//每种T类型都有自己的友元函数count()
+    counts<int>();
+    cout << "counts<double>() output:\n";
+    counts<double>();
+    // std::cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单14.24 模板类的非约束模板友元函数
+//链接无
+#if 0
+using std::cout;
+using std::endl;
+
+template <typename T>
+class ManyFriend
+{
+private:
+    T item;
+
+public:
+    ManyFriend(const T& i) : item(i)
+    {}
+    template <typename C, typename D> friend void show2(C&, D&);
+};
+
+template <typename C, typename D> void show2(C& c, D& d)
+{
+    cout << c.item << ", " << d.item << endl;
+}
+
+int main()
+{
+    ManyFriend<int> hfi1(10);
+    ManyFriend<int> hfi2(20);
+    ManyFriend<double> hfdb(10.5);
+
+    cout << "hfi1, hfi2: ";
+    show2(hfi1, hfi2);
+    cout << "hfdb, hfi2: ";
+    show2(hfdb, hfi2);
     // std::cin.get();
     return 0;
 }

@@ -36,6 +36,9 @@
     <ClInclude Include="cxqd14.17.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="cxqd14.21.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code1.cpp">
