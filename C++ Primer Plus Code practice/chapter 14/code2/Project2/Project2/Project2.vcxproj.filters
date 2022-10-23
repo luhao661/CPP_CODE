@@ -18,5 +18,25 @@
     <ClCompile Include="code2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="14.6.2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="14.6.3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="14.6.2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="14.6.3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="14.6.4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="14.6.5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
