@@ -33,6 +33,8 @@ public:
     {
         return b;
     }
+    //PairArrayT1,T2>& operator=(PairArray<T1,T2>(T1 x, T2 y));
+    PairArray & operator=(PairArray(T1 x, T2 y));
 };
 
 template<class T1, class T2>

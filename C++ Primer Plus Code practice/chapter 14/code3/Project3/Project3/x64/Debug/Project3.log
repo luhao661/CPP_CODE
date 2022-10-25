@@ -1,2 +1,14 @@
-﻿  code3.cpp
-  Project3.vcxproj -> D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 14\code3\Project3\x64\Debug\Project3.exe
+﻿  14.7.2.cpp
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 14\code3\Project3\Project3\14.7.2.cpp(11,28): error C2664: “Pair<ArrayInt,ArrayInt>::Pair(T1 &,T2 &,int)”: 无法将参数 1 从“int *”转换为“T1 &”
+          with
+          [
+              T1=ArrayInt,
+              T2=ArrayInt
+          ]
+          and
+          [
+              T1=ArrayInt
+          ]
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 14\code3\Project3\Project3\14.7.2.h(22,5): message : 参见“Pair<ArrayInt,ArrayInt>::Pair”的声明
+  code3.cpp
+  正在生成代码...
