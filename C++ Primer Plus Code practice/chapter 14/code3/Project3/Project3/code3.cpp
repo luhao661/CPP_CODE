@@ -156,9 +156,10 @@ int main()
 
 //4.
 //Á´½Ó14.7.4.cpp
-#if 0
+#if 1
 #include <cstring>
-#include "cxqd14.10.h"
+#include "14.7.4.h"
+
 const int SIZE = 5;
 
 int main()
@@ -168,20 +169,20 @@ int main()
 	using std::endl;
 	using std::strchr;
 
-	Worker* lolas[SIZE];
+	Person* lolas[SIZE];
 
 	int ct;
 	for (ct = 0; ct < SIZE; ct++)
 	{
 		char choice;
 		cout << "Enter the employee category:\n"
-			<< "w: waiter  s: singer  "
-			<< "t: singing waiter  q: quit\n";
+			<< "g: Gunslinger  p: PokerPlayer  "
+			<< "b: BadDude q: quit\n";
 
 		cin >> choice;
-		while (strchr("wstq", choice) == NULL)
+		while (strchr("gpbq", choice) == NULL)
 		{
-			cout << "Please enter a w, s, t, or q: ";
+			cout << "Please enter a g, p, b, or q: ";
 			cin >> choice;
 		}
 
@@ -189,11 +190,11 @@ int main()
 			break;
 		switch (choice)
 		{
-		case 'w':   lolas[ct] = new Waiter;
+		case 'g':   lolas[ct] = new Gunslinger;
 			break;
-		case 's':   lolas[ct] = new Singer;
+		case 'p':   lolas[ct] = new PokerPlayer;
 			break;
-		case 't':   lolas[ct] = new SingingWaiter;
+		case 'b':   lolas[ct] = new BadDude;
 			break;
 		}
 
