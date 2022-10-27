@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 
 #include <iostream>
 #include "14.7.4.h"
@@ -185,6 +185,7 @@ PokerPlayer::~PokerPlayer()
 	 Person::Get();
 	 Gunslinger::Get();
 	 PokerPlayer::Get();
+	 Get();
  }
 
  void BadDude::Data()const

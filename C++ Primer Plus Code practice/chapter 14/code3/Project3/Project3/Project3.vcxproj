@@ -143,6 +143,7 @@
     <ClCompile Include="14.7.2.cpp" />
     <ClCompile Include="14.7.3.cpp" />
     <ClCompile Include="14.7.4.cpp" />
+    <ClCompile Include="14.7.5.cpp" />
     <ClCompile Include="code3.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +151,7 @@
     <ClInclude Include="14.7.2.h" />
     <ClInclude Include="14.7.3.h" />
     <ClInclude Include="14.7.4.h" />
+    <ClInclude Include="14.7.5.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
