@@ -223,7 +223,7 @@ int main()
 
 //5.
 //链接14.7.5.cpp
-#if 1
+#if 0
 using namespace std;
 #include "14.7.5.h"
 
@@ -232,29 +232,38 @@ int main(void)
 	employee em("Trip", "Harris", "Thumper");
 	cout << em << endl;//***注***若派生类中没有重定义<<运算符重载函数，则会默认使用基类的<<运算符重载函数
 	em.ShowAll();
+	cout.put('\n');
 
 	manager ma("Amorphia", "Spindragon", "Nuancer", 5);
 	cout << ma << endl;
 	ma.ShowAll();
+	cout.put('\n');
 
 	fink fi("Matt", "Oggs", "Oiler", "Juno Barr");
 	cout << fi << endl;
 	fi.ShowAll();
+	cout.put('\n');
 
 	highfink hf(ma, "Curly Kew"); // recruitment?
 	hf.ShowAll();
-	
+	cout.put('\n');
+
 	cout << "Press a key for next phase:\n";
 	cin.get();
 	
 	highfink hf2;
 	hf2.SetAll();
-	
+	cout.put('\n');
+
 	cout << "Using an abstr_emp * pointer:\n";
 	abstr_emp* tri[4] = { &em,&fi,&hf,&hf2 };
 
 	for (int i = 0; i < 4; i++)
 		tri[i]->ShowAll();
+
+	/*abstr_emp tri[4] = {em,fi,hf,hf2};
+	for (int i = 0; i < 4; i++)
+		tri[i].ShowAll();*/
 
 	return 0;
 }

@@ -22,7 +22,7 @@ public:
 	friend std::ostream&
 		operator<<(std::ostream& os, const abstr_emp& e);
 	//just displays first and last name
-	virtual ~abstr_emp() = 0; // virtual base class 纯虚函数
+	virtual ~abstr_emp()=0 ; // virtual base class 纯虚函数
 };
 
 class employee : public abstr_emp
@@ -33,6 +33,8 @@ public:
 		const std::string& j);
 	virtual void ShowAll() const;
 	virtual void SetAll();
+	/*~employee()		//可以不写，直接使用默认的析构函数
+	{}*/
 };
 
 class manager : virtual public abstr_emp//虚基类
@@ -52,15 +54,19 @@ public:
 	manager(const manager& m);
 	virtual void ShowAll() const;
 	virtual void SetAll();
+	~manager()
+	{}
 };
 
 class fink : virtual public abstr_emp
 {
 private:
 	std::string reportsto; // to whom fink reports
+
 protected:
 	const std::string ReportsTo()const { return reportsto; }
 	std::string& ReportsTo() { return reportsto; }
+
 public:
 	fink();
 	fink(const std::string& fn, const std::string& ln,
@@ -69,6 +75,8 @@ public:
 	fink(const fink& e);
 	virtual void ShowAll() const;
 	virtual void SetAll();
+	~fink()
+	{}
 };
 
 class highfink : public manager, public fink // management fink
@@ -84,5 +92,7 @@ public:
 	highfink(const highfink& h);
 	virtual void ShowAll() const;
 	virtual void SetAll();
+	~highfink()
+	{}
 };
 #endif
