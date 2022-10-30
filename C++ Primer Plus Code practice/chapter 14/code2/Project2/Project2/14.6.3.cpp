@@ -9,11 +9,11 @@ using std::endl;
 
 Gloam::Gloam(int g, const char* s) :Frabjous(s)//构造函数，默认构造函数
 {
-	glip = 0;
+	glip = g;
 }
 Gloam::Gloam(int g, const Frabjous& f) : Frabjous(f)//复制构造函数
 {
-	glip = 0;
+	glip = g;
 }
 void Gloam::tel1()
 {
