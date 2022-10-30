@@ -17,10 +17,24 @@ private:
 public:
     //Pair(const T1& aval, const T2& bval) : a(aval), b(bval)//调用valarray类的复制构造函数
     //{}//***注***使用此构造函数的话，会报错：形参与实参类型不匹配
-    Pair(int* aval,  int* bval,int y) : a(aval,y), b(bval,y)
+    //***注***以上描述没错，但若真要这么写，看法二
+
+    //法一：
+#if 0
+    Pair(const int* aval,const int* bval,int y) : a(aval,y), b(bval,y)
     {}
     Pair(int a, int b) : a(a), b(b)//生成一个含a个int类型值的数组，和一个含b个int类型值的数组
     {}
+#endif
+    //法二：
+#if 1
+    //***注***
+    //以上两个方法可以改为，需要调整Wine类的构造函数定义部分的编写
+    Pair(const T1& aval, const T2& bval) : a(aval), b(bval)
+    {}
+    //Pair(int a, int b) : a(a), b(b)//生成一个含a个int类型值的数组，和一个含b个int类型值的数组
+    //{}   此方法不写
+#endif
     Pair()
     {}
     T1& first();//用于修改a

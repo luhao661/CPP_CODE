@@ -4,7 +4,7 @@
 //14.7 ±‡≥Ã¡∑œ∞
 //1.
 //¡¥Ω”14.7.1.cpp
-#if 0
+#if 1
 #include "14.7.1.h"
 
 int main(void)
