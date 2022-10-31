@@ -4,7 +4,7 @@
 //14.7 编程练习
 //1.
 //链接14.7.1.cpp
-#if 1
+#if 0
 #include "14.7.1.h"
 
 int main(void)
@@ -97,7 +97,7 @@ int main()
 	//***注***原来的方法是用指针数组存指向Worker的指针，
 	//现在仅需声明一个指针，并用指针队列来存
 	Worker* lolas=(Worker* )0x00;
-	QueueTp<Worker*>lolas_stack;
+	QueueTp<Worker*>lolas_stack;//模板隐式实例化P464
 
 	int ct;
 	for (ct = 0; ct < SIZE; ct++)
@@ -119,7 +119,7 @@ int main()
 			break;
 		switch (choice)
 		{
-		case 'w':  lolas = new Waiter;
+		case 'w':  lolas = new Waiter;//***注***虽然lolas的地址不变，但其每次循环中存的地址都会改变
 			break;
 		case 's':   lolas = new Singer;
 			break;

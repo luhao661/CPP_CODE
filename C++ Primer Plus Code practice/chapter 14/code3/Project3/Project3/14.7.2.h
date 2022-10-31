@@ -17,6 +17,8 @@ private:
 public:
     //Pair(const T1& aval, const T2& bval) : a(aval), b(bval)//调用valarray类的复制构造函数
     //{}//***注***使用此构造函数的话，会报错：形参与实参类型不匹配
+    //***注***法二见14.7.1.h
+
     Pair(int* aval, int* bval, int y) : a(aval, y), b(bval, y)
     {}
     Pair(int a, int b) : a(a), b(b)//生成一个含a个int类型值的数组，和一个含b个int类型值的数组
@@ -34,7 +36,7 @@ public:
         return b;
     }
     //PairArrayT1,T2>& operator=(PairArray<T1,T2>(T1 x, T2 y));
-    PairArray & operator=(PairArray(T1 x, T2 y));
+    //PairArray & operator=(PairArray(T1 x, T2 y));
 };
 
 template<class T1, class T2>

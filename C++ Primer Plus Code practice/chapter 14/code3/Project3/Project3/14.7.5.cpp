@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 
 #include "14.7.5.h"
 
@@ -131,7 +131,7 @@ void fink::SetAll()
 /****************************************************************************/
 
 highfink::highfink()
-	:manager(),fink(),abstr_emp()
+	:manager(),fink(),abstr_emp()//或不写，则调用默认的构造函数
 {}
 
 highfink::highfink(const std::string& fn, const std::string& ln,

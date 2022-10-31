@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 
 #include "14.7.3.h"
 #include <cstdlib>         // (or stdlib.h) for rand(), NULL
@@ -12,7 +12,7 @@ using std::endl;
 /**********************************************************************/
 
 // Worker methods
-Worker::~Worker() { }
+Worker::~Worker() { }//***×¢***±ØÐëÒªÐ´
 
 // protected methods
 void Worker::Data() const

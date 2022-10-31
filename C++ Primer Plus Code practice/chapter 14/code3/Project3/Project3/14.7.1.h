@@ -26,10 +26,11 @@ public:
     Pair(int a, int b) : a(a), b(b)//生成一个含a个int类型值的数组，和一个含b个int类型值的数组
     {}
 #endif
+
     //法二：
 #if 1
     //***注***
-    //以上两个方法可以改为，需要调整Wine类的构造函数定义部分的编写
+    //以上两个方法可以改为如下所示的方法，但需要调整Wine类的构造函数定义部分的编写
     Pair(const T1& aval, const T2& bval) : a(aval), b(bval)
     {}
     //Pair(int a, int b) : a(a), b(b)//生成一个含a个int类型值的数组，和一个含b个int类型值的数组
