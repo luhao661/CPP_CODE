@@ -1,0 +1,6 @@
+﻿  code1.cpp
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 15\code1\Project1\Project1\cxqd15.4.h(19,25): error C2027: 使用了未定义类型“Remote”
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 15\code1\Project1\Project1\cxqd15.4.h(7): message : 参见“Remote”的声明
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 15\code1\Project1\Project1\cxqd15.4.h(70,47): error C2248: “Tv::channel”: 无法访问 private 成员(在“Tv”类中声明)
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 15\code1\Project1\Project1\cxqd15.4.h(15): message : 参见“Tv::channel”的声明
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 15\code1\Project1\Project1\cxqd15.4.h(9): message : 参见“Tv”的声明
