@@ -5,8 +5,8 @@
 #define TVFM_H_
 
 class Tv;                       // forward declaration 前向声明
-                                     //因为Remote方法提到了Tv对象，所以Tv定义应该在Remote定义之前
-class Remote
+                                     //因为Remote方法提到了Tv类，所以应该在Remote定义之前
+class Remote              //声明Tv是个类
 {
 public:
     enum State { Off, On };

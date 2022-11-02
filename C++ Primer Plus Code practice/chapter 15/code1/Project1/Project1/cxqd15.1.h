@@ -27,9 +27,9 @@ public:
     {}
     void onoff()
     {
-        state = (state == On) ? Off : On; 
+        //state = (state == On) ? Off : On; 
         //Ð´·¨¶þ£º
-        //state ^= 1;
+        state ^= 1;
     }
     bool ison() const
     {

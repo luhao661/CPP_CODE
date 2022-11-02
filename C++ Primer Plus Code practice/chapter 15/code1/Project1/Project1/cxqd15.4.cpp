@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 1
+#if 0
 
 // tv.cpp -- methods for the Tv class (Remote methods are inline)
 #include <iostream>
