@@ -35,5 +35,11 @@
     <ClInclude Include="cxqd15.5.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="cxqd15.10.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="cxqd15.12.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

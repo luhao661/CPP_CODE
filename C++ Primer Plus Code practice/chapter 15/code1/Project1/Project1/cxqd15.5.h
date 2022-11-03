@@ -9,6 +9,7 @@ class QueueTP
 {
 private:
     enum { Q_SIZE = 10 };
+
     // Node is a nested class definition
     class Node
     {
@@ -18,10 +19,13 @@ private:
         Node(const Item& i) :item(i), next(nullptr)//构造函数
         {}
     };
+
     Node* front;       // pointer to front of Queue
     Node* rear;        // pointer to rear of Queue
     int items;          // current number of items in Queue
     const int qsize;    // maximum number of items in Queue
+
+    //P382伪私有方法
     QueueTP(const QueueTP& q) : qsize(0) {}
     QueueTP& operator=(const QueueTP& q) { return *this; }
 
