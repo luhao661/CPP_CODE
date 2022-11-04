@@ -81,7 +81,7 @@ public:
     }
     void set_chan(Tv& t, int c) 
     {
-        t.channel = c; 
+        t.channel = c; //***注***友元类方法可以访问原始类的私有成员和保护成员
     }
     void set_mode(Tv& t)
     {

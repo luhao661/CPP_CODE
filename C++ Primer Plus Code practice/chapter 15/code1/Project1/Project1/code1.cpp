@@ -298,7 +298,7 @@ double gmean(double a, double b)
 
 //程序清单15.12 栈解退
 //链接无
-#if 1
+#if 0
 #include "cxqd15.12.h"
 
 // function prototypes
@@ -384,4 +384,165 @@ double means(double a, double b)
     
     return (am + hm + gm) / 3.0;
 }
+#endif
+
+
+//程序清单15.12.1 使用exception类
+//链接无
+#if 0
+#include <cmath> // or math.h, unix users may need -lm flag
+
+#include "cxqd15.12.1.h"
+// function prototypes
+double hmean(double a, double b);
+double gmean(double a, double b);
+
+int main()
+{
+    using std::cout;
+    using std::cin;
+    using std::endl;
+
+    double x, y, z;
+
+    cout << "Enter two numbers: ";
+    while (cin >> x >> y)
+    {
+        try
+        {                  // start of try block
+            z = hmean(x, y);
+            cout << "Harmonic mean of " << x << " and " << y
+                << " is " << z << endl;
+            cout << "Geometric mean of " << x << " and " << y
+                << " is " << gmean(x, y) << endl;
+            cout << "Enter next set of numbers <q to quit>: ";
+        }// end of try block
+        catch (bad_hmean& bg)    // start of catch block
+        {
+            cout<<bg.what();
+            cout << "Try again.\n";
+            continue;
+        }
+        catch (bad_gmean& hg)
+        {
+            cout << hg.what();
+            cout << "Sorry, you don't get to play any more.\n";
+            break;
+        } // end of catch block
+        //***注***
+        //也可以选择在同一个基类处理程序中捕获它们
+        //catch(std::exception &e) {...}
+    }
+    cout << "Bye!\n";
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+
+double hmean(double a, double b)
+{
+    if (a == -b)
+        throw bad_hmean();//调用bad_hmean类的默认构造函数以创建对象
+    return 2.0 * a * b / (a + b);
+}
+
+double gmean(double a, double b)
+{
+    if (a < 0 || b < 0)
+        throw bad_gmean();
+    return std::sqrt(a * b);
+}
+#endif
+
+
+//程序清单15.13 new引发bad_alloc异常
+//链接无
+#if 0
+#include <new> //包含bad_alloc类声明
+#include <cstdlib>  // for exit(), EXIT_FAILURE
+
+using namespace std;
+
+struct Big
+{
+    double stuff[200000000];
+};
+
+int main()
+{
+    Big* pb;
+
+    try {
+        cout << "Trying to get a big block of memory:\n";
+        pb = new Big[10000]; // 1,600,000,000 bytes 声明结构数组
+        cout << "Got past the new request:\n";
+    }
+    catch (bad_alloc& ba)
+    {
+        cout << "Caught the exception!\n";
+        cout << ba.what() << endl;
+        exit(EXIT_FAILURE);
+    }
+
+    cout << "Memory successfully allocated\n";
+    pb[0].stuff[0] = 4;
+    cout << pb[0].stuff[0] << endl;
+
+    delete[] pb;
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单15.13.1 关闭new引发的bad_alloc异常，即new失败时返回空指针
+//链接无
+#if 0
+#include <new> //包含bad_alloc类声明
+#include <cstdlib>  // for exit(), EXIT_FAILURE
+
+using namespace std;
+
+struct Big
+{
+    double stuff[200000000];
+};
+
+int main()
+{
+    Big* pb;
+
+    try {
+        cout << "Trying to get a big block of memory:\n";
+        pb = new (std::nothrow)Big[10000]; // 1,600,000,000 bytes 声明结构数组
+        cout << "Got past the new request:\n";
+    }
+    catch (bad_alloc& ba)
+    {
+        cout << "Caught the exception!\n";
+        cout << ba.what() << endl;
+        exit(EXIT_FAILURE);
+    }
+
+    if (pb == 0)
+    {
+        cout << "请求分配内存失败！\n";
+        exit(EXIT_FAILURE);
+    }
+
+    cout << "Memory successfully allocated\n";
+    pb[0].stuff[0] = 4;
+    cout << pb[0].stuff[0] << endl;
+
+    delete[] pb;
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//
+//链接cxqd15.15.cpp
+#if 1
+
 #endif

@@ -24,6 +24,9 @@
     <ClCompile Include="cxqd15.4.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="cxqd15.15.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cxqd15.1.h">
@@ -39,6 +42,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="cxqd15.12.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="cxqd15.12.1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="cxqd15.14.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
