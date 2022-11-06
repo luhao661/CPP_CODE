@@ -7,7 +7,7 @@
 using std::string;
 
 Sales::bad_index::bad_index(int ix, const string& s)
-    : std::logic_error(s), bi(ix)
+    : std::logic_error(s), bi(ix)//参数s提供了方法 what()以 C-风格字符串方式返回的字符数据。
 {
 }
 

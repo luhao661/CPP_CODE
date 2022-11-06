@@ -150,6 +150,7 @@
     <ClInclude Include="cxqd15.12.1.h" />
     <ClInclude Include="cxqd15.12.h" />
     <ClInclude Include="cxqd15.14.h" />
+    <ClInclude Include="cxqd15.17.h" />
     <ClInclude Include="cxqd15.4.h" />
     <ClInclude Include="cxqd15.5.h" />
   </ItemGroup>

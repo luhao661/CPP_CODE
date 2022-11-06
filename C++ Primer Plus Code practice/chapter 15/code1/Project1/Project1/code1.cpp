@@ -541,9 +541,9 @@ int main()
 #endif
 
 
-//程序清单15.16 类，异常，继承
+//程序清单15.16 类，异常，继承 (对嵌套类进行继承)
 //链接cxqd15.15.cpp
-#if 1
+#if 0
 #include "cxqd15.14.h"
 
 int main()
@@ -624,6 +624,169 @@ int main()
     }
     cout << "done\n";
     // std::cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单15.17 使用RTTI(运行阶段类型识别)——dynamic_cast()
+//更严格的类型转换运算符——dynamic_cast()
+//链接无
+#if 0
+#include "cxqd15.17.h"
+#include <cstdlib>//srand(), rand()
+#include <ctime>//time()
+
+Grand* GetOne(void);
+
+int main()
+{
+    std::srand(std::time(0));
+
+    Grand* pg;
+    Superb* ps;
+
+    for (int i = 0; i < 5; i++)
+    {
+        pg = GetOne();
+        pg->Speak();
+        if (ps = dynamic_cast<Superb*>(pg))//在运行阶段判断是否可以安全地
+            ps->Say();                                          //将对象的地址赋给特定类型的指针
+    }                           //***注***虚函数的功能保留                            
+    // std::cin.get();
+    return 0;
+}
+
+Grand* GetOne(void)    // generate one of three kinds of objects randomly
+{
+    Grand* p;
+    p = (Grand*)0;//***注***不能写成Grand* p＝(Grand*)0;
+
+    switch (std::rand() % 3)
+    {
+    case 0: p = new Grand(std::rand() % 100);
+        break;
+    case 1: p = new Superb(std::rand() % 100);
+        break;
+    case 2: p = new Magnificent(std::rand() % 100,
+        'A' + std::rand() % 26);
+        break;
+    }
+
+    return p;
+}
+#endif
+
+
+//程序清单15.18 使用RTTI(运行阶段类型识别)——typeid()
+//链接无
+#if 0
+#include "cxqd15.17.h"
+#include <cstdlib>//srand()
+#include <ctime>//time()
+#include <typeinfo>//type_info类
+
+Grand* GetOne();
+
+int main()
+{
+    srand(time(0));
+
+    Grand* pg;
+    Superb* ps;
+
+    for (int i = 0; i < 5; i++)
+    {
+        pg = GetOne();
+        cout << "Now processing type " << typeid(*pg).name() << ".\n";
+        pg->Speak();
+
+        if (ps = dynamic_cast<Superb*>(pg))
+            ps->Say();
+        if (typeid(Magnificent) == typeid(*pg))//typeid返回对type_info对象的引用
+            cout << "Yes, you're really magnificent.\n";
+    }
+    // std::cin.get();
+    return 0;
+}
+
+Grand* GetOne()
+{
+    Grand* p;
+    p = (Grand*)0;
+
+    switch (rand() % 3)
+    {
+    case 0: p = new Grand(rand() % 100);
+        break;
+    case 1: p = new Superb(rand() % 100);
+        break;
+    case 2: p = new Magnificent(rand() % 100, 'A' + rand() % 26);
+        break;
+    }
+
+    return p;
+}
+#endif
+
+
+//程序清单15.19 更严格的类型转换运算符——const_cast
+//链接无
+#if 0
+using std::cout;
+using std::endl;
+
+void change(const int* pt, int n);
+
+int main()
+{
+    int pop1 = 38383;
+    const int pop2 = 2000;
+
+    cout << "pop1, pop2: " << pop1 << ", " << pop2 << endl;
+    change(&pop1, -103);
+    change(&pop2, -103);//***注***const_cast可以修改指向一个值的指针
+                                         //但不能作用于声明为const的值
+                                         //若使用，则结果不确定
+    cout << "pop1, pop2: " << pop1 << ", " << pop2 << endl;
+    // std::cin.get();
+    return 0;
+}
+
+void change(const int* pt, int n)
+{
+    int* pc;
+
+    pc = const_cast<int*>(pt);
+    *pc += n;
+}
+#endif
+
+
+//程序清单15.9.1 更严格的类型转换运算符——static_cast、reinterpret_cast
+//链接无
+#if 0
+int main()
+{
+    enum meiju {a,b,c};
+
+    meiju y;
+    int x = 1;
+    y = static_cast<meiju>(x);
+
+    std::cout << y<<std::endl;
+
+    struct data
+    {
+        short a;
+        short b;
+    };
+
+    long value = 0xA224B118;
+    data* pd = reinterpret_cast<data*>(&value);
+
+    std::cout << pd->a<<std::endl;
+
     return 0;
 }
 #endif
