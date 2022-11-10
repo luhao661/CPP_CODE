@@ -3,6 +3,8 @@
 #ifndef BCLX_15_8_1_H
 #define BCLX_15_8_1_H
 
+//class Remote;   //此处可以不进行前向声明，因为friend class Remote;已经相当于前向声明
+
 class Tv
 {
     friend class Remote;   // Remote can access Tv private parts

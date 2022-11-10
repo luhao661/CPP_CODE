@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#if 0
+#if 1
 
 #include <iostream>
 #include "15.8.1.h"

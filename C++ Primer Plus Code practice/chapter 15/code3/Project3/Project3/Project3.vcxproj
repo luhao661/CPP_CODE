@@ -140,12 +140,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="15.8.1.cpp" />
+    <ClCompile Include="15.8.4.cpp" />
     <ClCompile Include="code3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="15.8.1.h" />
     <ClInclude Include="15.8.2.h" />
+    <ClInclude Include="15.8.3.1.h" />
     <ClInclude Include="15.8.3.h" />
+    <ClInclude Include="15.8.4.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
