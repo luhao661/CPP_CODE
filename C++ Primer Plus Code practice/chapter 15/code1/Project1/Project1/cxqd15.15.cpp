@@ -33,7 +33,7 @@ Sales::Sales(int yy, const double* gr, int n)
 double Sales::operator[](int i) const
 {
     if (i < 0 || i >= MONTHS)
-        throw bad_index(i);
+        throw bad_index(i);//bad_index对象仅限显式初始化
     return gross[i];
 }
 

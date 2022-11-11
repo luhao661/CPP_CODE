@@ -6,12 +6,13 @@
 #include <iostream>
 #include <cmath> // or math.h, unix users may need -lm flag
 #include <string>
-#include "cxqd15.10.h"
+#include "cxqd15.10.h"//包括bad_hmean类和bad_gmean类
 
 class demo
 {
 private:
     std::string word;
+
 public:
     demo(const std::string& str)
     {

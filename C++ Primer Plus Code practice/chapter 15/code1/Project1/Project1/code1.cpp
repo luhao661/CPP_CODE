@@ -298,7 +298,7 @@ double gmean(double a, double b)
 
 //程序清单15.12 栈解退
 //链接无
-#if 0
+#if 1
 #include "cxqd15.12.h"
 
 // function prototypes
@@ -347,20 +347,6 @@ int main()
     return 0;
 }
 
-double hmean(double a, double b)
-{
-    if (a == -b)
-        throw bad_hmean(a, b);
-    return 2.0 * a * b / (a + b);
-}
-
-double gmean(double a, double b)
-{
-    if (a < 0 || b < 0)
-        throw bad_gmean(a, b);
-    return std::sqrt(a * b);
-}
-
 double means(double a, double b)
 {
     double am, hm, gm;//算数平均数，调和平均数，几何平均数
@@ -377,12 +363,28 @@ double means(double a, double b)
     {
         bg.mesg();
         std::cout << "Caught in means()\n";
-        throw;             // rethrows the exception 
+        throw;             // rethrows the exception 相当于throw bad_hmean(a,b)
     }                           //重新引发异常，将向上把异常发送给main()
                                 //若main()中没有try-catch块，则程序异常终止
     d2.show();
     
     return (am + hm + gm) / 3.0;
+}
+
+double hmean(double a, double b)
+{
+    if (a == -b)
+        throw bad_hmean(a, b);
+
+    return 2.0 * a * b / (a + b);
+}
+
+double gmean(double a, double b)
+{
+    if (a < 0 || b < 0)
+        throw bad_gmean(a, b);
+
+    return std::sqrt(a * b);
 }
 #endif
 

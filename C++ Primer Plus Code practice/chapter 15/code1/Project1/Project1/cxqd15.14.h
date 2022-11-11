@@ -24,7 +24,7 @@ public:
         int bi;  // bad index value
 
     public:
-        explicit bad_index(int ix,
+        explicit bad_index(int ix,//***注***仅限显式初始化，目的是防止出现隐式类型转换
             const std::string& s = "Index error in Sales object\n");
         int bi_val() const
         {
