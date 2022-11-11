@@ -186,7 +186,7 @@ double gmean(double a, double b)
 #endif
 //3.改正
 //链接无
-#if 1
+#if 0
 #include <cmath> // or math.h, unix users may need -lm flag
 
 #include "15.8.3.1.h"
@@ -214,20 +214,25 @@ int main()
                 << " is " << gmean(x, y) << endl;
             cout << "Enter next set of numbers <q to quit>: ";
         }// end of try block
-        catch (bad_hmean& bg)    // start of catch block
-        {
-            cout << bg.what();
-            bg.report();
-            cout << "Sorry, you don't get to play any more.\n";
-            break;
+        catch (unexpected_mean& um)    // start of catch block
+        {                                   //um是unexpected_mean类对象的引用
+
+            //um.message();//***注***以下语句的实现效果与此语句相同
+            //以下语句与此语句的不同之处在第4题体现(体现在：基类指针或引用不能调用基类中没有的但派生类有的方法)
+
+            if (typeid(um) == typeid(bad_hmean))
+            {
+                bad_hmean* bh = dynamic_cast<bad_hmean*>(&um);//此处&um是bad_hmean类对象的地址
+                bh->message();                                                  //理解：传入给unexpected_mean类的引用um的内容是bad_hmean类对象
+                break;
+            }
+            else if (typeid(um) == typeid(bad_gmean))
+            {
+                bad_gmean* bg = dynamic_cast<bad_gmean*>(&um);//此处&um是unexpected_mean类对象的地址
+                bg->message();
+                break;
+            }
         }
-        catch (bad_gmean& hg)
-        {
-            cout << hg.what();
-            hg.report();
-            cout << "Sorry, you don't get to play any more.\n";
-            break;
-        } // end of catch block
     }
     cout << "Bye!\n";
     // cin.get();
@@ -249,6 +254,7 @@ double gmean(double a, double b)
     return std::sqrt(a * b);
 }
 #endif
+
 
 //4.
 //链接无
@@ -323,12 +329,14 @@ int main()
         //相当于要根据不同的异常，调用label_val()和bi_val() 或只调用bi_val()
         if(typeid(bad)==typeid(LabeledSales::nbad_index))
         {
-            LabeledSales::nbad_index bad1("chushihua",1);
-            bad1 = dynamic_cast<LabeledSales::nbad_index &>(bad);//只允许隐式向上强制转换，相当于只允许nbad_index到nbad_index
+            //LabeledSales::nbad_index bad1("chushihua",1);
+            //bad1 = dynamic_cast<LabeledSales::nbad_index &>(bad);//只允许隐式向上强制转换，相当于只允许nbad_index到nbad_index
 
-            cout << bad1.what();
-            cout << "Company: " << bad1.label_val() << endl;
-            cout << "bad index: " << bad1.bi_val() << endl;
+            //法二：dynamic_cast用于指针
+            LabeledSales::nbad_index *bad1= dynamic_cast<LabeledSales::nbad_index*>(&bad);
+            cout << bad1->what();
+            cout << "Company: " << bad1->label_val() << endl;
+            cout << "bad index: " << bad1->bi_val() << endl;
         }
         else
         {

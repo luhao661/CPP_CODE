@@ -20,7 +20,7 @@ public:
         const std::string& s = "计算调和平均数失败\n")
         :std::logic_error(s),m_a(a),m_b(b)
     {}
-    //***注***以下写法不完整，报错：logic_error类不存在默认构造函数
+    //***注***以下写法不完整，报错：logic_error类不存在默认构造函数，所以必须对其使用显式初始化
     /*bad_hmean():m_a(0),m_b(0)
     {}*/
     bad_hmean():m_a(0),m_b(0), std::logic_error("none")
