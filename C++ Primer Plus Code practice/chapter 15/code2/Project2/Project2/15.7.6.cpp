@@ -4,7 +4,7 @@
 //15.7 ∏¥œ∞Ã‚
 //6.
 //¡¥Ω”Œﬁ
-#if 1
+#if 0
 #include "15.7.6.h"
 #include <cstdlib>//srand(), rand()
 #include <ctime>//time()
