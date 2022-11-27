@@ -18,9 +18,21 @@
     <ClCompile Include="code1.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="cxqd16.8.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="cxqd16.9.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cxqd.h">
+    <ClInclude Include="cxqd16.5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="cxqd16.8.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="cxqd16.9.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
