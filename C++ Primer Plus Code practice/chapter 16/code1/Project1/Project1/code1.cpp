@@ -332,10 +332,10 @@ int main()
     pwin = films[2];   // films[2] loses ownership
 
     //***注***若使用unique_ptr，则会在编译阶段报错
-    //但unique_ptr允许unique_ptr类型的临时右值赋给unique_ptr指针
-    //或使用move()将一个unique_ptr赋给另一个(智能指针间的赋值)
     /*unique_ptr<string> pwin;
     pwin = films[2];   // films[2] loses ownership   */
+    //但unique_ptr允许unique_ptr类型的临时右值赋给unique_ptr指针
+    //或使用move()将一个unique_ptr赋给另一个(智能指针间的赋值)
 
     cout << "The nominees for best avian baseball film are\n";
     for (int i = 0; i < 5; i++)
@@ -358,7 +358,30 @@ int main()
     return 0;
 }
 #endif
+//使用move()，将一个unique_ptr赋给另一个
+#if 0
+#include <memory>
+#include <string>
+using std::string;
+using std::unique_ptr;
 
+unique_ptr <string> demo(const char* s)
+{
+    unique_ptr<string> temp(new string(s));
+    return temp;
+}
+
+int main()
+{
+    unique_ptr<string> ps1, ps2;
+    ps1 = demo("123abc");
+    ps2 = move(ps1);
+    ps1 = demo("456def");
+    std::cout << *ps2 << *ps1 << std::endl;
+
+    return 0;
+}
+#endif
 
 //程序清单16.7 泛型编程，使用vector模板类，创建vector模板对象
 //链接无
@@ -407,7 +430,8 @@ int main()
 
 
 //程序清单16.8 使用迭代器iterator 
-//使用STL容器的方法：size()，begin()，end()，swap()，push_back()
+//使用STL容器的方法：size()，begin()，end()，swap()
+//部分STL容器才有的方法：push_back()，erase()，insert()
 //链接cxqd16.8.cpp
 #if 0
 #include <string>
@@ -448,6 +472,10 @@ int main()
         for (pr = books.begin(); pr != books.end(); pr++)
             ShowReview(*pr);
 
+        //遍历元素法三：使用for_each();
+
+        //遍历元素法四：使用基于范围的for循环(还支持修改容器的内容)
+
         vector <Review> oldlist(books);// copy constructor used
 
         if (num > 3)
@@ -473,9 +501,10 @@ int main()
         }
 
         //books的元素与oldlist的元素进行交换
+        //***注***使用的是vector成员函数而不是STL提供的非成员函数swap()
         books.swap(oldlist);
         cout << "Swapping oldlist with books:\n";
-
+        
         cout << "books数组的内容:\n";
         for (pr = books.begin(); pr != books.end(); pr++)
             ShowReview(*pr);
@@ -491,12 +520,12 @@ int main()
 #endif
 
 
-//程序清单16.9 使用STL函数
+//程序清单16.9 使用STL函数(非成员函数) for_each()，sort()，random_shuffle()
 //链接cxqd16.9.cpp
-#if 1
+#if 0
 #include "cxqd16.9.h"
 #include <vector>
-#include <algorithm>//for_each()，sort()，random_shuffle()
+#include <algorithm>//for_each()，sort()，random_shuffle()，swap()
 
 int main()
 {
@@ -535,7 +564,114 @@ int main()
     }
     else
         cout << "No entries. ";
-    cout << "Bye.\n";
+    cout << "Bye.\n"; 
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//使用基于范围的for循环
+//链接无
+#if 0
+#include <vector>
+#include <algorithm>//for_each()
+
+void show(double);
+void alter(double&);
+
+int main()
+{
+    using std::vector;
+    using std::cout;
+    using std::endl;
+    //using std::iterator;  错误：应使用容器类中定义的迭代器
+    using std::for_each;
+
+    vector<double> data = {1.1, 2.2, 3.3, 4.4, 5.5, 6.6};
+
+    //遍历元素方法一：
+    for (int i = 0; i < data.size(); i++)
+    {
+        cout << data[i] << '\t';
+    }
+    cout.put('\n');
+
+    //遍历元素方法二：(使用迭代器)
+    //写法一：
+    /*vector<double>::iterator p;
+    for (p = data.begin(); p != data.end(); p++)
+    {
+        cout << *p << '\t';
+    }*/
+    //写法二：
+    for (auto p = data.begin(); p != data.end(); p++)
+    {
+        cout << *p << '\t';
+    }
+    cout.put('\n');
+
+    //遍历元素方法三：(使用STL函数)
+    for_each(data.begin(),data.end(),show);
+    cout.put('\n');
+
+    //遍历元素方法四：(基于范围的for循环)
+    for (auto x : data)
+        show(x);
+    cout.put('\n');
+
+    //使用遍历元素方法四修改元素的值：
+    for (auto &x : data)
+        alter(x);
+    for (auto x : data)
+        show(x);
+
+    return 0;
+}
+void show(double a)
+{
+    std::cout <<a<< '\t';
+}
+void alter(double &num)
+{
+    num++;
+}
+#endif
+
+
+//程序清单16.10 使用copy()，istream迭代器，反向迭代器
+//链接无
+#if 1
+#include <vector>
+#include <iterator>//ostream_iterator模板，是个适配器，可以将
+                                  //一些其他接口转换为STL使用的接口
+int main()
+{
+    using namespace std;
+
+    int casts[10] = { 6, 7, 2, 9 ,4 , 11, 8, 7, 10, 5 };
+    vector<int> dice(10);
+
+    // copy from array to vector
+    copy(casts, casts + 10, dice.begin());
+    cout << "Let the dice be cast!\n";
+
+    // create an ostream iterator
+    ostream_iterator<int, char> out_iter(cout, " ");
+
+    *(out_iter++) = 15;
+
+    // copy from vector to output
+    copy(dice.begin(), dice.end(), out_iter);
+    cout << endl;
+    cout << "Implicit use of reverse iterator.\n";
+    copy(dice.rbegin(), dice.rend(), out_iter);
+    cout << endl;
+    cout << "Explicit use of reverse iterator.\n";
+    // vector<int>::reverse_iterator ri;  // use if auto doesn't work
+    for (auto ri = dice.rbegin(); ri != dice.rend(); ++ri)
+        cout << *ri << ' ';
+    cout << endl;
     // cin.get();
     return 0;
 }
