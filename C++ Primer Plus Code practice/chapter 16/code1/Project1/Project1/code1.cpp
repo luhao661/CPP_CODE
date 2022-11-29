@@ -476,6 +476,8 @@ int main()
 
         //遍历元素法四：使用基于范围的for循环(还支持修改容器的内容)
 
+        //更多详见：遍历容器方法总结
+
         vector <Review> oldlist(books);// copy constructor used
 
         if (num > 3)
@@ -571,7 +573,7 @@ int main()
 #endif
 
 
-//使用基于范围的for循环
+//使用基于范围的for循环，遍历容器方法总结
 //链接无
 #if 0
 #include <vector>
@@ -616,6 +618,10 @@ int main()
     cout.put('\n');
 
     //遍历元素方法四：(基于范围的for循环)
+    //写法一：
+    /*for (double x : data)
+        show(x);*/
+    //写法二：
     for (auto x : data)
         show(x);
     cout.put('\n');
@@ -625,6 +631,12 @@ int main()
         alter(x);
     for (auto x : data)
         show(x);
+    cout.put('\n');
+
+    //遍历元素方法五：(将内容复制到输出流(使用输出迭代器输出))
+#include <iterator>
+    copy(data.begin(), data.end(),
+        std::ostream_iterator<double, char>(cout, "\t"));
 
     return 0;
 }
@@ -639,12 +651,14 @@ void alter(double &num)
 #endif
 
 
-//程序清单16.10 使用copy()，istream迭代器，反向迭代器
+//程序清单16.10 使用copy()，输出迭代器，反向迭代器，sort()
 //链接无
-#if 1
+#if 0
 #include <vector>
 #include <iterator>//ostream_iterator模板，是个适配器，可以将
                                   //一些其他接口转换为STL使用的接口
+#include <algorithm>//sort()
+
 int main()
 {
     using namespace std;
@@ -652,27 +666,100 @@ int main()
     int casts[10] = { 6, 7, 2, 9 ,4 , 11, 8, 7, 10, 5 };
     vector<int> dice(10);
 
-    // copy from array to vector
-    copy(casts, casts + 10, dice.begin());
-    cout << "Let the dice be cast!\n";
-
     // create an ostream iterator
+    //要将信息复制到显示器上，则要有一个输出迭代器
+    //可以用ostream_iterator模板创建这种迭代器
+    //把数据输出接口cout转换为STL使用的接口(即输出迭代器)
     ostream_iterator<int, char> out_iter(cout, " ");
 
+    //将15赋给指针指向的位置，然后将指针加1
     *(out_iter++) = 15;
+    cout.put('\n');
+
+    // copy from array to vector
+                                        //***注***最后一个参数应为输出迭代器
+    cout << "将casts的内容复制到dice\n";
+    copy(casts, casts + 10, dice.begin());
+    cout << "完成！\n";
 
     // copy from vector to output
-    copy(dice.begin(), dice.end(), out_iter);
+    //将dice容器的整个区间复制到输出流中，即显示容器的内容
+    //写法一：
+    //copy(dice.begin(), dice.end(), out_iter);
+    //写法二：不创建命名的迭代器，而直接构建一个匿名迭代器
+    cout << "在显示器上显示dice的内容\n";
+    copy(dice.begin(), dice.end(),
+        ostream_iterator<int, char>(cout, " "));
     cout << endl;
+
     cout << "Implicit use of reverse iterator.\n";
+    //实参一：指向超尾的反向迭代器；实参二：指向第一个元素的反向迭代器
     copy(dice.rbegin(), dice.rend(), out_iter);
     cout << endl;
+
     cout << "Explicit use of reverse iterator.\n";
     // vector<int>::reverse_iterator ri;  // use if auto doesn't work
     for (auto ri = dice.rbegin(); ri != dice.rend(); ++ri)
         cout << *ri << ' ';
     cout << endl;
+
+    //使用STL函数sort
+    sort(dice.begin(),dice.end());
+    copy(dice.begin(), dice.end(),
+        std::ostream_iterator<int, char>(cout, " "));
+
+    cout << endl;
     // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单16.11 使用两种插入迭代器
+//链接无
+#if 0
+#include <string>
+#include <iterator>//back_insert_iterator、insert_iterator
+#include <vector>
+#include <algorithm>//copy()
+
+void output(const std::string& s) 
+{
+    std::cout << s << " "; 
+}
+
+int main()
+{
+    using namespace std;
+
+    string s1[4] = { "fine", "fish", "fashion", "fate" };
+    string s2[2] = { "busy", "bats" };
+    string s3[2] = { "silly", "singers" };
+
+    //创建一个vector数组，其含4个元素，每个元素类型均为string
+    vector<string> words(4);
+
+    //***注***s1 + 4是超尾迭代器，标识超尾的位置
+    copy(s1, s1 + 4, words.begin());
+    for_each(words.begin(), words.end(), output);
+    cout << endl;
+
+    // construct anonymous back_insert_iterator object
+    //创建匿名的back_insert_iterator迭代器
+    copy(s2, s2 + 2,
+        back_insert_iterator<vector<string> >(words));
+    for_each(words.begin(), words.end(), output);
+    cout << endl;
+
+    // construct anonymous insert_iterator object
+    //创建匿名的insert_iterator迭代器
+    copy(s3, s3 + 2, 
+        insert_iterator<vector<string> >(words, words.begin()));
+    copy(words.begin(), words.end(), 
+        std::ostream_iterator<string, char>(cout, " "));//使用迭代器输出
+    cout << endl;           //***注***
+                                      //发送给输出流的数据类型：string
+    // cin.get();               //输出流使用的字符类型：char
     return 0;
 }
 #endif
