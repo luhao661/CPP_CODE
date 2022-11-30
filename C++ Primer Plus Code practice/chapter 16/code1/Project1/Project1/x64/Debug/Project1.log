@@ -1,2 +1,21 @@
 ﻿  code1.cpp
-  Project1.vcxproj -> D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 16\code1\Project1\x64\Debug\Project1.exe
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\algorithm(7460,45): error C2676: 二进制“-”:“const std::_List_unchecked_iterator<std::_List_val<std::_List_simple_types<_Ty>>>”不定义该运算符或到预定义运算符可接收的类型的转换
+          with
+          [
+              _Ty=int
+          ]
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\algorithm(7465): message : 查看对正在编译的函数 模板 实例化“void std::sort<_RanIt,std::less<void>>(const _RanIt,const _RanIt,_Pr)”的引用
+          with
+          [
+              _RanIt=std::_List_iterator<std::_List_val<std::_List_simple_types<int>>>,
+              _Pr=std::less<void>
+          ]
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 16\code1\Project1\Project1\code1.cpp(832): message : 查看对正在编译的函数 模板 实例化“void std::sort<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>>(const _RanIt,const _RanIt)”的引用
+          with
+          [
+              _Ty=int,
+              _RanIt=std::_List_iterator<std::_List_val<std::_List_simple_types<int>>>
+          ]
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\algorithm(7460,5): error C2672: “_Sort_unchecked”: 未找到匹配的重载函数
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\algorithm(7460,1): error C2780: “void std::_Sort_unchecked(_RanIt,_RanIt,iterator_traits<_Iter>::difference_type,_Pr)”: 应输入 4 个参数，却提供了 3 个
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\algorithm(7426): message : 参见“std::_Sort_unchecked”的声明
