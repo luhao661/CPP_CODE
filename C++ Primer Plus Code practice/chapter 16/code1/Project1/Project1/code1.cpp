@@ -670,6 +670,7 @@ int main()
     //要将信息复制到显示器上，则要有一个输出迭代器
     //可以用ostream_iterator模板创建这种迭代器
     //把数据输出接口cout转换为STL使用的接口(即输出迭代器)
+    //让输出流能使用迭代器接口
     ostream_iterator<int, char> out_iter(cout, " ");
 
     //将15赋给指针指向的位置，然后将指针加1
@@ -765,10 +766,10 @@ int main()
 #endif
 
 
-//程序清单16.12 使用insert()、remove()、splice()、
+//程序清单16.12 使用list的insert()、remove()、splice()、
 //unique()、sort()、merge()方法
 //链接无
-#if 1
+#if 0
 #include <iterator>
 #include <list>//成员函数insert()等
 #include <algorithm>//STL函数(非成员函数)：for_each()
@@ -853,6 +854,130 @@ int main()
     cout << endl;
     // cin.get();
 
+    return 0;
+}
+#endif
+
+
+//程序清单16.13 使用关联容器set
+//使用insert()、set_union()、set_intersection()、set_difference()、
+//lower_bound()、upper_bound()
+//链接无
+#if 0
+#include <string>
+#include <set>//关联容器set
+#include <algorithm>//set_union()、set_intersection()、set_difference()
+#include <iterator>
+
+int main()
+{
+    using namespace std;
+    
+    const int N = 6;
+    string s1[N] = { "buffoon", "thinkers", "for", "heavy", "can", "for" };
+    string s2[N] = { "metal", "any", "food", "elegant", "deliver","for" };
+
+    set<string> A(s1, s1 + N);
+    set<string> B(s2, s2 + N);
+
+    //让输出流能使用迭代器接口
+    ostream_iterator<string, char> out(cout, " ");
+
+    cout << "Set A: ";
+    copy(A.begin(), A.end(), out);
+    cout << endl;
+    cout << "Set B: ";
+    copy(B.begin(), B.end(), out);
+    cout << endl;
+
+    cout << "Union of A and B:\n";
+
+    set_union(A.begin(), A.end(), B.begin(), B.end(), out);
+    cout << endl;
+
+    cout << "Intersection of A and B:\n";
+    set_intersection(A.begin(), A.end(), B.begin(), B.end(), out);
+    cout << endl;
+
+    cout << "Difference of A and B:\n";
+    set_difference(A.begin(), A.end(), B.begin(), B.end(), out);
+    cout << endl;
+
+    set<string> C;
+    cout << "Set C:\n";
+    set_union(A.begin(), A.end(), B.begin(), B.end(),
+        insert_iterator<set<string> >(C, C.begin()));//使用插入迭代器
+
+    //***注***错误写法：
+    //set_union(A.begin(), A.end(), B.begin(), B.end(), C.begin());
+    //最后一个参数不能写成C.begin()，
+    //因为对于关联集合，
+    //将键看作常量，C.begin()返回的是迭代器是常量迭代器
+    //而不是输出迭代器
+    copy(C.begin(), C.end(), out);
+    cout << endl;
+
+    string s3("grungy");
+    C.insert(s3);
+    cout << "Set C after insertion:\n";
+    copy(C.begin(), C.end(), out);
+    cout << endl;
+
+    cout << "Showing a range:\n";
+    copy(C.lower_bound("ghost"), C.upper_bound("spook"), out);
+    cout << endl;
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单16.14 使用关联容器multimap
+//使用方法insert()、count()、equal_range()
+//链接无
+#if 1
+#include <string>
+#include <map>
+#include <algorithm>
+
+typedef int KeyType;
+typedef std::pair<const KeyType, std::string> Pair;
+typedef std::multimap<KeyType, std::string> MapCode;
+
+int main()
+{
+    using namespace std;
+    MapCode codes;
+
+    codes.insert(Pair(415, "San Francisco"));
+    codes.insert(Pair(510, "Oakland"));
+    codes.insert(Pair(718, "Brooklyn"));
+    codes.insert(Pair(718, "Staten Island"));
+    codes.insert(Pair(415, "San Rafael"));
+    codes.insert(Pair(510, "Berkeley"));
+
+    cout << "Number of cities with area code 415: "
+        << codes.count(415) << endl;
+    cout << "Number of cities with area code 718: "
+        << codes.count(718) << endl;
+    cout << "Number of cities with area code 510: "
+        << codes.count(510) << endl;
+
+    cout << "Area Code   City\n";
+    MapCode::iterator it;
+    for (it = codes.begin(); it != codes.end(); ++it)
+        cout << "    " << (*it).first << "     "
+        << (*it).second << endl;
+
+    //pair<MapCode::iterator, MapCode::iterator>
+        auto range
+        = codes.equal_range(718);
+
+    cout << "Cities with area code 718:\n";
+    for (it = range.first; it != range.second; ++it)
+        cout << (*it).second << endl;
+
+    // cin.get();
     return 0;
 }
 #endif
