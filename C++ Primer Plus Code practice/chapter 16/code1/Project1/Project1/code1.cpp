@@ -935,12 +935,13 @@ int main()
 //程序清单16.14 使用关联容器multimap
 //使用方法insert()、count()、equal_range()
 //链接无
-#if 1
+#if 0
 #include <string>
 #include <map>
 #include <algorithm>
 
 typedef int KeyType;
+                              //键的类型          存储的值类型
 typedef std::pair<const KeyType, std::string> Pair;
 typedef std::multimap<KeyType, std::string> MapCode;
 
@@ -979,5 +980,316 @@ int main()
 
     // cin.get();
     return 0;
+}
+#endif
+
+
+//程序清单16.15 使用函数对象、使用方法remove_if()
+//链接无
+#if 0
+#include <list> //remove_if()
+#include <iterator>
+#include <algorithm> //for_each()
+
+//函数对象(函数符)
+//重载了()运算符的类对象，则可以像使用函数那样使用类对象
+template<class T>  // functor class defines operator()()
+class TooBig
+{
+private:
+    T cutoff;
+
+public:
+    TooBig(const T& t) : cutoff(t) 
+    {}
+    bool operator()(const T& v)
+    {
+        return v > cutoff; 
+    }
+};
+
+void outint(int n)
+{
+    std::cout << n << " "; 
+}
+
+int main()
+{
+    using std::cout;
+    using std::endl;
+
+    using std::list;
+    using std::for_each;
+    using std::remove_if;
+
+    int vals[10] = { 50, 100, 90, 180, 60, 210, 415, 88, 188, 201 };
+    list<int> yadayada(vals, vals + 10); // range constructor
+    list<int> etcetera(vals, vals + 10);
+
+   //  C++0x can use the following instead
+   //  list<int> yadayada = {50, 100, 90, 180, 60, 210, 415, 88, 188, 201};
+   //  list<int> etcetera {50, 100, 90, 180, 60, 210, 415, 88, 188, 201};
+
+    cout << "Original lists:\n";
+    for_each(yadayada.begin(), yadayada.end(), outint);
+    cout << endl;
+
+    for_each(etcetera.begin(), etcetera.end(), outint);
+    cout << endl;
+    
+    //remove_if()成员将谓词(即返回bool值的一元函数)作为参数
+    //由于类中定义了()运算符重载函数，所以可以把此类对象
+    //当成函数名(或指向函数的指针)看待
+    TooBig<int> f100(100); // limit = 100
+    yadayada.remove_if(f100);               // use a named function object
+
+                                //创建匿名的类对象
+    etcetera.remove_if(TooBig<int>(200));   // construct a function object
+
+    cout << "Trimmed lists:\n";
+    for_each(yadayada.begin(), yadayada.end(), outint);
+    cout << endl;
+    for_each(etcetera.begin(), etcetera.end(), outint);
+    cout << endl;
+    // std::cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单16.16 使用函数适配器
+//链接无
+#if 0
+#include <vector>
+#include <iterator>
+#include <algorithm> //for_each()、transform()
+#include <functional> //bind1st()
+
+void Show(double);
+const int LIM = 6;
+
+int main()
+{
+    using namespace std;
+
+    double arr1[LIM] = { 28, 29, 30, 35, 38, 59 };
+    double arr2[LIM] = { 63, 65, 69, 75, 80, 99 };
+
+    vector<double> gr8(arr1, arr1 + LIM);
+    vector<double> m8(arr2, arr2 + LIM);
+
+    cout.setf(ios_base::fixed);
+    cout.precision(1);
+    
+    cout << "gr8:\t";
+    for_each(gr8.begin(), gr8.end(), Show);
+    cout << endl;
+    
+    cout << "m8: \t";
+    for_each(m8.begin(), m8.end(), Show);
+    cout << endl;
+
+    vector<double> sum(LIM);
+
+    //plus<double>()生成一个匿名对象，同时其可作为函数对象
+    //是个二元函数，接受两个参数
+    transform(gr8.begin(), gr8.end(), m8.begin(), sum.begin(),
+        plus<double>());
+    cout << "sum:\t";
+    for_each(sum.begin(), sum.end(), Show);
+    cout << endl;
+
+    vector<double> prod(LIM);
+
+    //multiplies<double>()生成一个匿名对象，同时其可作为函数对象
+    //是个二元函数，接受两个参数
+    //通过使用函数适配器bind1st()，
+    //把二元函数对象捆绑成为一个一元函数对象
+    //将常数赋给第一个参数，即第一个参数固定
+    transform(gr8.begin(), gr8.end(), prod.begin(),
+        bind1st(multiplies<double>(), 2.5));
+    cout << "prod:\t";
+    for_each(prod.begin(), prod.end(), Show);
+
+    cout << endl;
+    // cin.get();
+    return 0;
+}
+
+void Show(double v)
+{
+    std::cout.width(6);
+    std::cout << v << ' ';
+}
+#endif
+
+
+//程序清单16.17 string类使用STL接口
+//链接无
+#if 0
+#include <string>
+#include <algorithm> //sort()、next_permutation()
+
+int main()
+{
+    using namespace std;
+    string letters;
+
+    cout << "Enter the letter grouping (quit to quit): ";
+
+    while (cin >> letters && letters != "quit")
+    {
+        cout << "Permutations of " << letters << endl;
+        sort(letters.begin(), letters.end());
+        cout << letters << endl;
+
+        //next_permutation()将区间的内容转换为下一种排序方式
+        //***注***必须先对内容进行排序
+        while (next_permutation(letters.begin(), letters.end()))
+            cout << letters << endl;
+        
+        cout << "Enter next sequence (quit to quit): ";
+    }
+
+    cout << "Done.\n";
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+#endif
+
+
+//程序清单16.18 对比STL方法(成员函数)和STL函数(非成员函数)的remove()
+//链接无
+#if 0
+#include <list>
+#include <algorithm>
+
+void Show(int);
+const int LIM = 10;
+
+int main()
+{
+    using namespace std;
+
+    int ar[LIM] = { 4, 5, 4, 2, 2, 3, 4, 8, 1, 4 };
+
+    list<int> la(ar, ar + LIM);
+    list<int> lb(la);
+
+    cout << "Original list contents:\n\t";
+    for_each(la.begin(), la.end(), Show);
+    cout << endl;
+
+    la.remove(4);
+    cout << "After using the remove() method:\n";
+    cout << "la:\t";
+    for_each(la.begin(), la.end(), Show);
+    cout << endl;
+    
+    list<int>::iterator last;
+    last = remove(lb.begin(), lb.end(), 4);
+    cout << "After using the remove() function:\n";
+    cout << "lb:\t";
+    for_each(lb.begin(), lb.end(), Show);
+    cout << endl;
+    
+    lb.erase(last, lb.end());
+    cout << "After using the erase() method:\n";
+    cout << "lb:\t";
+    for_each(lb.begin(), lb.end(), Show);
+
+    cout << endl;
+    // cin.get();    
+    return 0;
+}
+
+void Show(int v)
+{
+    std::cout << v << ' ';
+}
+#endif
+
+
+//程序清单16.19 使用STL实现统计单词出现次数的程序
+//链接无
+#if 1
+#include <vector>
+#include <string>
+#include <set>//关联容器set
+#include <map>//关联容器map
+#include <iterator>
+#include <algorithm> //transform
+#include <cctype> //tolower()
+
+using namespace std;
+
+char toLower(char ch) 
+{
+    return tolower(ch); 
+}
+
+string& ToLower(string& st)
+{
+    transform(st.begin(), st.end(), st.begin(), toLower);
+    return st;
+}
+
+void display(const string& s);
+
+int main()
+{
+    //将输入的单词添加到矢量中
+    vector<string> words;
+    cout << "Enter words (enter quit to quit):\n";
+    string input;
+    while (cin >> input && input != "quit")
+        words.push_back(input);
+    
+    //按输入顺序显示单词
+    cout << "You entered the following words:\n";
+    for_each(words.begin(), words.end(), display);
+    cout << endl;
+
+    //按字母顺序显示单词
+    //关联容器set自动对内容进行排序
+    // place words in set, converting to lowercase
+    set<string> wordset;
+    //首先ToLower()把string元素都处理为小写字符，
+    //然后transform()把每个string元素交给ToLower()处理
+    //插入到set中会自动排序
+    transform(words.begin(), words.end(),
+        insert_iterator<set<string> >(wordset, wordset.begin()),
+        ToLower);
+    cout << "\nAlphabetic list of words:\n";
+    for_each(wordset.begin(), wordset.end(), display);
+    cout << endl;
+
+    //记录每个单词被输入的次数
+    // place word and frequency in map
+    map<string, int> wordmap;
+    set<string>::iterator si;//为set的string类型声明一个迭代器si
+
+    for (si = wordset.begin(); si != wordset.end(); si++)
+     //写法一：  
+        wordmap.insert(pair<string,int>(*si,count(words.begin(),
+            words.end(),*si)));
+     //写法二：(可以用数组表示法(将键用作索引值)来访问存储的值)
+     //wordmap[*si] = count(words.begin(), words.end(), *si);
+
+    // display map contents
+    cout << "\nWord frequency:\n";
+    for (si = wordset.begin(); si != wordset.end(); si++)
+                                        //可以用数组表示法(将键用作索引值)来访问存储的值
+        cout << *si << ": " << wordmap[*si] << endl;
+    
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+
+void display(const string& s)
+{
+    cout << s << " ";
 }
 #endif

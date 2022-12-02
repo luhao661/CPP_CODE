@@ -1,2 +1,23 @@
 ﻿  code1.cpp
+D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\utility(190,54): warning C4244: “初始化”: 从“_Ty”转换到“_Ty2”，可能丢失数据
+          with
+          [
+              _Ty=__int64
+          ]
+          and
+          [
+              _Ty2=int
+          ]
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 16\code1\Project1\Project1\code1.cpp(1276): message : 查看对正在编译的函数 模板 实例化“std::pair<std::string,int>::pair<const std::basic_string<char,std::char_traits<char>,std::allocator<char>>&,__int64,0>(_Other1,_Other2 &&) noexcept(false)”的引用
+          with
+          [
+              _Other1=const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &,
+              _Other2=__int64
+          ]
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 16\code1\Project1\Project1\code1.cpp(1275): message : 查看对正在编译的函数 模板 实例化“std::pair<std::string,int>::pair<const std::basic_string<char,std::char_traits<char>,std::allocator<char>>&,__int64,0>(_Other1,_Other2 &&) noexcept(false)”的引用
+          with
+          [
+              _Other1=const std::basic_string<char,std::char_traits<char>,std::allocator<char>> &,
+              _Other2=__int64
+          ]
   Project1.vcxproj -> D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 16\code1\Project1\x64\Debug\Project1.exe
