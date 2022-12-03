@@ -943,6 +943,7 @@ int main()
 typedef int KeyType;
                               //键的类型          存储的值类型
 typedef std::pair<const KeyType, std::string> Pair;
+//multimap：值与键类型不同，一个键可以与多个值相关联
 typedef std::multimap<KeyType, std::string> MapCode;
 
 int main()
@@ -1213,7 +1214,7 @@ void Show(int v)
 
 //程序清单16.19 使用STL实现统计单词出现次数的程序
 //链接无
-#if 1
+#if 0
 #include <vector>
 #include <string>
 #include <set>//关联容器set
@@ -1264,9 +1265,10 @@ int main()
     cout << "\nAlphabetic list of words:\n";
     for_each(wordset.begin(), wordset.end(), display);
     cout << endl;
-
+  
     //记录每个单词被输入的次数
     // place word and frequency in map
+    //map：值与键类型不同，键唯一，每个键对应一个值
     map<string, int> wordmap;
     set<string>::iterator si;//为set的string类型声明一个迭代器si
 
@@ -1291,5 +1293,194 @@ int main()
 void display(const string& s)
 {
     cout << s << " ";
+}
+#endif
+
+
+//程序清单16.20 比较vector、valarray各自的优势
+//链接无
+#if 0
+#include <vector>//vector支持面向容器的操作
+#include <valarray>//valarray面向数值计算
+#include <algorithm>
+
+int main()
+{
+    using namespace std;
+
+    vector<double> data;
+    double temp;
+
+    cout << "Enter numbers (<=0 to quit):\n";
+    while (cin >> temp && temp > 0)
+        data.push_back(temp);
+    
+    sort(data.begin(), data.end());
+    int size = data.size();
+   
+    valarray<double> numbers(size);
+    int i;
+    //写法一：
+    //for (i = 0; i < size; i++)
+    //    numbers[i] = data[i];
+    //写法二：可能在其他环境下不可行，尤其是出现&numbers[size]时
+    //copy(data.begin(),data.end(),&numbers[0]);
+    //写法三：C++11提供的begin()，这样就满足了STL接口需求
+    copy(data.begin(),data.end(),begin(numbers));
+
+    //valarray类重载了数学函数，接受一个valarray参数，返回一个valarray对象
+    //也可以使用apply()方法，其支持非重载函数作为参数
+    valarray<double> sq_rts(size);
+    //写法一：
+    //sq_rts = sqrt(numbers);
+    //写法二：
+    sq_rts = numbers.apply(sqrt);
+
+    //valarray类重载了所有算术运算符
+    valarray<double> results(size);
+    results = numbers + 2.0 * sq_rts;
+    
+    cout.setf(ios_base::fixed);
+    cout.precision(4);
+
+    for (i = 0; i < size; i++)
+    {
+        cout.width(8);
+        cout << numbers[i] << ": ";
+        cout.width(8);
+        cout << results[i] << endl;
+    }
+    cout << "done\n";
+    // cin.get();
+    // cin.get();
+
+    return 0;
+}
+#endif
+
+
+//程序清单16.21 valarray的其他特性
+//用一维数组表示二维数组的数据内容
+//链接无
+#if 0
+#include <valarray>
+#include <cstdlib>
+
+typedef std::valarray<int> vint;     // simplify declarations
+const int SIZE = 12;
+void show(const vint& v, int cols);
+
+int main()
+{
+    using std::slice;                // from <valarray>
+    using std::cout;
+    vint valint(SIZE);               // think of as 4 rows of 3
+
+    int i;
+    for (i = 0; i < SIZE; ++i)
+        valint[i] = std::rand() % 10;
+
+    cout << "Original array:\n";
+    show(valint, 3);                 // show in 3 columns
+
+    //向vcol传入valint索引1、4、7和10对应的数据
+    vint vcol(valint[slice(1, 4, 3)]); // extract 2nd column
+    cout << "Second column:\n";
+    show(vcol, 1);                   // show in 1 column
+
+    //向vrow传入valint索引3、4和5对应的数据
+    vint vrow(valint[slice(3, 3, 1)]); // extract 2nd row
+    cout << "Second row:\n";
+    show(vrow, 3);
+    
+    //valint的索引2，5，8和11对应的数据改为10
+    valint[slice(2, 4, 3)] = 10;      // assign to 2nd column
+    cout << "Set last column to 10:\n";
+    show(valint, 3);
+    
+    cout << "Set first column to sum of next two:\n";
+    // + not defined for slices, so convert to valarray<int>
+    //valarray类才有+运算符重载函数
+    valint[slice(0, 4, 3)] = vint(valint[slice(1, 4, 3)])
+        + vint(valint[slice(2, 4, 3)]);
+    show(valint, 3);
+    
+    // std::cin.get();
+    return 0;
+}
+
+void show(const vint& v, int cols)
+{
+    using std::cout;
+    using std::endl;
+
+    int lim = v.size();
+    for (int i = 0; i < lim; ++i)
+    {
+        cout.width(3);
+        cout << v[i];
+
+        if (i % cols == cols - 1)
+            cout << endl;
+        else
+            cout << ' ';
+    }
+    if (lim % cols != 0)
+        cout << endl;
+}
+#endif
+
+
+//程序清单16.22 使用模板initializer_list
+//链接无
+#if 0
+#include <initializer_list>
+
+//按值传递initializer_list对象
+double sum(std::initializer_list<double> il);
+//按引用传递initializer_list对象
+double average(const std::initializer_list<double>& ril);
+
+int main()
+{
+    using std::cout;
+
+    cout << "List 1: sum = " << sum({ 2,3,4 })
+        << ", ave = " << average({ 2,3,4 }) << '\n';
+
+    std::initializer_list<double> dl = { 1.1, 2.2, 3.3, 4.4, 5.5 };
+    cout << "List 2: sum = " << sum(dl)
+        << ", ave = " << average(dl) << '\n';
+
+    dl = { 16.0, 25.0, 36.0, 40.0, 64.0 };
+    cout << "List 3: sum = " << sum(dl)
+        << ", ave = " << average(dl) << '\n';
+    // std::cin.get();
+    return 0;
+}
+
+double sum(std::initializer_list<double> il)
+{
+    double tot = 0;
+
+    std::initializer_list<double>::iterator p;
+    for (p = il.begin(); p != il.end(); p++)
+        tot += *p;
+    return tot;
+}
+
+double average(const std::initializer_list<double>& ril)
+{
+    double tot = 0;
+    int n = ril.size();
+    double ave = 0.0;
+
+    if (n > 0)
+    {
+        for (auto p = ril.begin(); p != ril.end(); p++)
+            tot += *p;
+        ave = tot / n;
+    }
+    return ave;
 }
 #endif
