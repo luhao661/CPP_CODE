@@ -18,9 +18,15 @@
     <ClCompile Include="code2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="16.9.10.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="16.9.1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="16.9.10.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
