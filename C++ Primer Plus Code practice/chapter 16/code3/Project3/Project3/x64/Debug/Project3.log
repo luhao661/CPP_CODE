@@ -1,2 +1,8 @@
 ﻿  code3.cpp
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 16\code3\Project3\Project3\code3.cpp(413,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 16\code3\Project3\Project3\code3.cpp(391): message : 查看对正在编译的函数 模板 实例化“int reduce<long>(T *,int)”的引用
+          with
+          [
+              T=long
+          ]
   Project3.vcxproj -> D:\CODE\CPP_CODE\C++ Primer Plus Code practice\chapter 16\code3\Project3\x64\Debug\Project3.exe
