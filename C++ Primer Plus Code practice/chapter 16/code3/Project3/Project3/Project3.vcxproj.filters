@@ -18,5 +18,13 @@
     <ClCompile Include="code3.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="16.10.6.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="16.10.6.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

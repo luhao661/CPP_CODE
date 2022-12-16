@@ -428,8 +428,8 @@ int reduce(T* ar, int n)
 
 
 //6.
-//链接无
-#if 1
+//链接16.10.6.cpp
+#if 0
 #include "16.10.6.h"
 #include <queue>
 #include <cstdlib> // for rand() and srand()
@@ -453,7 +453,7 @@ int main()
     cout << "Enter maximum size of queue: ";
     int qs;
     cin >> qs;
-    queue<int>line;                 //创建对象并用构造函数初始化
+    queue<Item>line;                 //创建对象并用构造函数初始化
                                               // line queue holds up to qs people
 
     cout << "Enter the number of simulation hours: ";
@@ -476,7 +476,6 @@ int main()
     int wait_time = 0;      //  time until autoteller is free
     long line_wait = 0;     //  cumulative time in line
 
-
 // running the simulation
     for (int cycle = 0; cycle < cyclelimit; cycle++)
     {
@@ -488,12 +487,13 @@ int main()
             {
                 customers++;
                 temp.set(cycle);    // cycle = time of arrival
-                line.enqueue(temp); // add newcomer to line
+                line.push(temp); // add newcomer to line
             }
         }
-        if (wait_time <= 0 && !line.isempty())//当队列空闲且有节点时
+        if (wait_time <= 0 && !line.empty())//当队列空闲且有节点时
         {
-            line.dequeue(temp);     //排第一个的顾客在队列中被排除，其开始进行交易
+            temp=line.front();     //排第一个的顾客在队列中被排除，其开始进行交易
+            line.pop();
             wait_time = temp.ptime(); //wait_time即进行交易所花的时间
 
             line_wait += cycle - temp.when();
@@ -501,7 +501,7 @@ int main()
         }
         if (wait_time > 0)
             wait_time--;
-        sum_line += line.queuecount();
+        sum_line += line.size();
     }
 
     // reporting results
@@ -532,4 +532,182 @@ bool newcustomer(double x)
     return (std::rand() * x / RAND_MAX < 1);//详细分析见《C Primer Plus》程序清单17.9
 }
 
+#endif
+
+
+//7.
+//链接无
+#if 0
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
+
+using namespace std;
+vector<int> lotto(int num_of_dot,int num_of_choose);
+
+int main()
+{
+    vector<int> winners;
+    winners = lotto(51,6);
+
+    cout << "\n彩票中奖数字：\n";
+    for (auto p = winners.begin(); p < winners.end(); p++)
+    {
+        cout << *p << '\t';
+    }
+
+    return 0;
+}
+vector<int> lotto(int num_of_dot, int num_of_choose)
+{
+    vector<int> data(num_of_dot);
+    for (int i = 1; i <= num_of_dot; i++)
+    {
+        data[i-1] = i;
+    }
+
+    cout << "数字：";
+    vector<int>::iterator p;
+    for (p = data.begin(); p < data.end(); p++)
+    {
+        cout << *p << " ";
+    }
+    cout << endl;
+
+    srand(time(0));//***注***此处产生的种子能供random_shuffle函数使用
+    random_shuffle(data.begin(),data.end());
+
+    vector<int> win(num_of_choose);
+    for (int index = 0; index < num_of_choose; index++)
+    {
+        win[index] = data[index];
+    }
+    
+    return win;
+}
+#endif
+
+
+//8.
+//链接无
+#if 0
+#include <set>
+#include <string>
+#include <algorithm>
+#include <iterator>
+
+using namespace std;
+
+bool FillData(set<string>&);
+int main()
+{
+    set<string>data_Mat;
+   
+    cout << "请输入姓名：\n";
+    FillData(data_Mat);
+    for (auto p = data_Mat.begin(); p != data_Mat.end(); p++)
+    {
+        cout << *p << '\n';
+    }
+    cout.put('\n');
+
+    set<string>data_Pat;
+
+    cout << "请输入姓名：\n";
+    FillData(data_Pat);
+    for (auto p = data_Pat.begin(); p != data_Pat.end(); p++)
+    {
+        cout << *p << '\n';
+    }
+    cout.put('\n');
+
+    set<string>data_M_and_P;
+    //法一：
+    set_union(data_Mat.begin(), data_Mat.end(), 
+        data_Pat.begin(), data_Pat.end(),
+        insert_iterator<set<string>>(data_M_and_P, data_M_and_P.begin()));//使用插入迭代器
+
+    //法二：尝试失败
+    //错误写法：
+    //copy(data_Mat.begin(), data_Mat.end(), data_M_and_P.begin());
+    //错误使用copy()
+    /*copy(data_Mat.begin(), data_Mat.end(),
+        back_insert_iterator<set<string> > (data_M_and_P));
+    copy(data_Pat.begin(), data_Pat.end(),
+        back_insert_iterator<set<string> >(data_M_and_P));*/
+    //经验：只能使用对集合的操作的函数，如set_union()
+
+    cout << "两人的朋友有：\n";
+    for (auto p = data_M_and_P.begin(); p != data_M_and_P.end(); p++)
+    {
+        cout << *p << '\n';
+    }
+    cout.put('\n');
+
+    return 0;
+}
+bool FillData(set<string>& data)
+{
+    bool status=1;
+
+    string temp;
+
+    getline(cin,temp);
+    while (cin&&temp!="")
+    {
+        data.insert(temp);
+        getline(cin, temp);
+    }
+
+    if (cin)
+        cin.clear();
+
+    if (data.size() == 0)
+        status = 0;
+
+    return status;
+}
+#endif
+
+
+//9.
+//链接
+#if 1
+#include <vector>
+#include <list>
+#include <ctime>
+#include <cstdlib>
+#include <algorithm>
+
+using namespace std;
+
+void show(int);
+int main()
+{
+    vector<int>vi0;
+    srand((int)time(0));
+
+    for (int i = 0; i < 100000; i++)
+        vi0.push_back(rand());
+
+    for_each(vi0.begin(),vi0.end(),show);
+    cout << endl;
+
+    vector<int>vi(vi0);
+    list<int>li(vi.size());
+    copy(vi.begin(),vi.end(),li.begin());
+
+    //计算排序所需的时间
+    clock_t start = clock();
+    sort(vi.begin(),vi.end());
+    clock_t end = clock();
+    cout << (double)(end - start)/CLOCKS_PER_SEC << endl;
+
+    return 0;
+}
+void show(int num)
+{
+    cout << num<<" ";
+}
 #endif
