@@ -673,7 +673,7 @@ bool FillData(set<string>& data)
 
 //9.
 //链接
-#if 1
+#if 0
 #include <vector>
 #include <list>
 #include <ctime>
@@ -686,28 +686,133 @@ void show(int);
 int main()
 {
     vector<int>vi0;
-    srand((int)time(0));
 
+    srand((int)time(0));
     for (int i = 0; i < 100000; i++)
         vi0.push_back(rand());
 
+#if 0
     for_each(vi0.begin(),vi0.end(),show);
     cout << endl;
+#endif
 
     vector<int>vi(vi0);
-    list<int>li(vi.size());
-    copy(vi.begin(),vi.end(),li.begin());
+    list<int>li(vi0.size());
+    copy(vi0.begin(),vi0.end(),li.begin());
 
-    //计算排序所需的时间
+    cout << "STL的sort()函数所用的时间：\n";
+    //计算对数组内容排序所需的时间
     clock_t start = clock();
     sort(vi.begin(),vi.end());
     clock_t end = clock();
     cout << (double)(end - start)/CLOCKS_PER_SEC << endl;
+
+    cout << "list的sort()方法所用的时间：\n";
+    //计算对链表内容排序所需的时间
+    start = clock();
+    li.sort();
+    end = clock();
+    cout << (double)(end - start) / CLOCKS_PER_SEC << endl;
+
+    cout << "链表内容复制到数组，再对vi进行排序所需的时间：\n";
+    copy(vi0.begin(), vi0.end(), li.begin());
+    //计算链表内容复制到数组，对vi进行排序，再将结果复制到li所需的时间
+    start = clock();
+    copy(li.begin(),li.end(),vi.begin());
+    sort(vi.begin(), vi.end());
+    copy(vi.begin(), vi.end(), li.begin());
+    end = clock();
+    cout << (double)(end - start) / CLOCKS_PER_SEC << endl;
 
     return 0;
 }
 void show(int num)
 {
     cout << num<<" ";
+}
+#endif
+
+
+//10.
+//链接
+#if 1
+#include <vector>
+#include <string>
+#include <set>//关联容器set
+#include <map>//关联容器map
+#include <iterator>
+#include <algorithm> //transform
+#include <cctype> //tolower()
+
+using namespace std;
+
+char toLower(char ch)
+{
+    return tolower(ch);
+}
+
+string& ToLower(string& st)
+{
+    transform(st.begin(), st.end(), st.begin(), toLower);
+    return st;
+}
+
+void display(const string& s);
+
+int main()
+{
+    //将输入的单词添加到矢量中
+    vector<string> words;
+    cout << "Enter words (enter quit to quit):\n";
+    string input;
+    while (cin >> input && input != "quit")
+        words.push_back(input);
+
+    //按输入顺序显示单词
+    cout << "You entered the following words:\n";
+    for_each(words.begin(), words.end(), display);
+    cout << endl;
+
+    //按字母顺序显示单词
+    //关联容器set自动对内容进行排序
+    // place words in set, converting to lowercase
+    set<string> wordset;
+    //首先ToLower()把string元素都处理为小写字符，
+    //然后transform()把每个string元素交给ToLower()处理
+    //插入到set中会自动排序
+    transform(words.begin(), words.end(),
+        insert_iterator<set<string> >(wordset, wordset.begin()),
+        ToLower);
+    cout << "\nAlphabetic list of words:\n";
+    for_each(wordset.begin(), wordset.end(), display);
+    cout << endl;
+
+    //记录每个单词被输入的次数
+    // place word and frequency in map
+    //map：值与键类型不同，键唯一，每个键对应一个值
+    map<string, int> wordmap;
+    set<string>::iterator si;//为set的string类型声明一个迭代器si
+
+    for (si = wordset.begin(); si != wordset.end(); si++)
+        //写法一：  
+        wordmap.insert(pair<string, int>(*si, count(words.begin(),
+            words.end(), *si)));
+    //写法二：(可以用数组表示法(将键用作索引值)来访问存储的值)
+    //wordmap[*si] = count(words.begin(), words.end(), *si);
+
+   // display map contents
+    cout << "\nWord frequency:\n";
+    for (si = wordset.begin(); si != wordset.end(); si++)
+        //可以用数组表示法(将键用作索引值)来访问存储的值
+        cout << *si << ": " << wordmap[*si] << endl;
+
+    // cin.get();
+    // cin.get();
+    return 0;
+}
+
+void display(const string& s)
+{
+    cout << s << " ";
 }
 #endif
