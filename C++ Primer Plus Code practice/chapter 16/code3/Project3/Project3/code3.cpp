@@ -623,20 +623,22 @@ int main()
     cout.put('\n');
 
     set<string>data_M_and_P;
-    //法一：
-    set_union(data_Mat.begin(), data_Mat.end(), 
-        data_Pat.begin(), data_Pat.end(),
-        insert_iterator<set<string>>(data_M_and_P, data_M_and_P.begin()));//使用插入迭代器
+    //法一：使用针对集合操作的函数
+    //set_union(data_Mat.begin(), data_Mat.end(), 
+    //    data_Pat.begin(), data_Pat.end(),
+    //    insert_iterator<set<string>>(data_M_and_P, data_M_and_P.begin()));//使用插入迭代器
 
-    //法二：尝试失败
-    //错误写法：
+    //法二：
+    //错误写法：(原因：书P569)
     //copy(data_Mat.begin(), data_Mat.end(), data_M_and_P.begin());
-    //错误使用copy()
+    //错误写法：错误使用back_insert_iterator
     /*copy(data_Mat.begin(), data_Mat.end(),
-        back_insert_iterator<set<string> > (data_M_and_P));
-    copy(data_Pat.begin(), data_Pat.end(),
         back_insert_iterator<set<string> >(data_M_and_P));*/
-    //经验：只能使用对集合的操作的函数，如set_union()
+
+    copy(data_Mat.begin(), data_Mat.end(),
+        insert_iterator<set<string> > (data_M_and_P, data_M_and_P.begin()));
+    copy(data_Pat.begin(), data_Pat.end(),
+        insert_iterator<set<string> >(data_M_and_P, data_M_and_P.begin()));
 
     cout << "两人的朋友有：\n";
     for (auto p = data_M_and_P.begin(); p != data_M_and_P.end(); p++)
@@ -672,7 +674,7 @@ bool FillData(set<string>& data)
 
 
 //9.
-//链接
+//链接无
 #if 0
 #include <vector>
 #include <list>
@@ -734,85 +736,218 @@ void show(int num)
 
 
 //10.
-//链接
-#if 1
+//链接16.10.10.cpp
+#if 0
+#include "16.10.10.h"
 #include <vector>
-#include <string>
-#include <set>//关联容器set
-#include <map>//关联容器map
-#include <iterator>
-#include <algorithm> //transform
-#include <cctype> //tolower()
-
-using namespace std;
-
-char toLower(char ch)
-{
-    return tolower(ch);
-}
-
-string& ToLower(string& st)
-{
-    transform(st.begin(), st.end(), st.begin(), toLower);
-    return st;
-}
-
-void display(const string& s);
+#include <algorithm>//for_each()，sort()，random_shuffle()，swap()
+#include <memory>//shared_ptr
 
 int main()
 {
-    //将输入的单词添加到矢量中
-    vector<string> words;
-    cout << "Enter words (enter quit to quit):\n";
-    string input;
-    while (cin >> input && input != "quit")
-        words.push_back(input);
+    using namespace std;
 
-    //按输入顺序显示单词
-    cout << "You entered the following words:\n";
-    for_each(words.begin(), words.end(), display);
-    cout << endl;
+    //创建一个vectoir数组，每个元素都是智能指针，指向Review类型的值
+    auto p_temp=new Review;
+    vector<shared_ptr<Review>> books;
+       /* = { (shared_ptr<Review>)p_temp};*/
 
-    //按字母顺序显示单词
-    //关联容器set自动对内容进行排序
-    // place words in set, converting to lowercase
-    set<string> wordset;
-    //首先ToLower()把string元素都处理为小写字符，
-    //然后transform()把每个string元素交给ToLower()处理
-    //插入到set中会自动排序
-    transform(words.begin(), words.end(),
-        insert_iterator<set<string> >(wordset, wordset.begin()),
-        ToLower);
-    cout << "\nAlphabetic list of words:\n";
-    for_each(wordset.begin(), wordset.end(), display);
-    cout << endl;
+    while (FillReview(*p_temp))
+        //p_books.push_back(p_temp);
+    {
+        books.push_back((shared_ptr<Review>)p_temp);
+        p_temp++;//指向下一个可用于存储Review的内存区域
+    }
 
-    //记录每个单词被输入的次数
-    // place word and frequency in map
-    //map：值与键类型不同，键唯一，每个键对应一个值
-    map<string, int> wordmap;
-    set<string>::iterator si;//为set的string类型声明一个迭代器si
+    if (books.size() > 0)
+    {
+        cout << "Thank you. You entered the following "
+            << books.size() << " ratings:\n"
+            << "Rating\tBook\n";
 
-    for (si = wordset.begin(); si != wordset.end(); si++)
-        //写法一：  
-        wordmap.insert(pair<string, int>(*si, count(words.begin(),
-            words.end(), *si)));
-    //写法二：(可以用数组表示法(将键用作索引值)来访问存储的值)
-    //wordmap[*si] = count(words.begin(), words.end(), *si);
+        menu();
 
-   // display map contents
-    cout << "\nWord frequency:\n";
-    for (si = wordset.begin(); si != wordset.end(); si++)
-        //可以用数组表示法(将键用作索引值)来访问存储的值
-        cout << *si << ": " << wordmap[*si] << endl;
+        char choice;
+        cin >> choice;
+        while (choice != '7')
+        {
+            switch (choice)
+            {
+            case '1':
+//错误	C2664	“void(const Review*)” :
+//无法将参数 1 从“std::shared_ptr<Review>”转换为“const Review * ”
+//即：智能指针类型不能自动转化成普通指针类型
+                for_each(books.begin(), books.end(), ShowReview);
+                break;
+            case '2':
+                {//***注***若不加括号，则报错：switch控制传输跳过的实例化
+                    vector<shared_ptr<Review>> books_kaobei(books);
+                    sort(*books_kaobei.begin(), *books_kaobei.end());
 
-    // cin.get();
+                }
+            default:
+                cout << "输入有误，请重新输入！"<<endl;
+                break;
+            }//可用于替换程序清单16.8中的for循环
+
+            ////用sort()和内置的<operator()对vector数组的元素进行排序
+            //sort(books.begin(), books.end());
+            //cout << "Sorted by title:\nRating\tBook\n";
+            //for_each(books.begin(), books.end(), ShowReview);
+
+            ////用sort()和自定义的函数对vector数组的元素进行排序
+            //sort(books.begin(), books.end(), worseThan);
+            //cout << "Sorted by rating:\nRating\tBook\n";
+            //for_each(books.begin(), books.end(), ShowReview);
+
+            ////用random_shuffle()进行随机排序，即打乱数组的元素
+            //random_shuffle(books.begin(), books.end());
+            //cout << "After shuffling:\nRating\tBook\n";
+            //for_each(books.begin(), books.end(), ShowReview);
+
+            menu();
+            cin >> choice;
+        }
+    }
+    else
+        cout << "No entries. ";
+    cout << "Bye.\n";
     // cin.get();
     return 0;
 }
+#endif
 
-void display(const string& s)
+
+//10.改正
+//链接16.10.10.1cpp
+#if 0
+#include "16.10.10.1.h"
+#include <vector>
+#include <algorithm>//for_each()，sort()，random_shuffle()，swap()
+#include <memory>//shared_ptr
+
+int main()
 {
-    cout << s << " ";
+    using namespace std;
+
+
+    //待改进的方法：
+    //这只支持最多10组数据
+    //而且输入选择的数字'7'后，程序会崩溃
+    //Expression: _CrtisvalidHeapPointer(block) 发生问题
+#if 0
+    //创建一个vectoir数组，每个元素都是智能指针，指向Review类型的值
+    auto p_temp = new Review[10];
+    vector<shared_ptr<Review>> books;
+    /* = { (shared_ptr<Review>)p_temp};*/
+
+    while (FillReview(*p_temp))
+        //p_books.push_back(p_temp);
+    {
+        books.push_back((shared_ptr<Review>)p_temp);
+        p_temp++;//指向下一个可用于存储Review的内存区域
+    }
+#endif
+
+    //改进后的方法：
+#if 0
+    //创建一个vectoir数组，每个元素都是智能指针，指向Review类型的值
+    vector<shared_ptr<Review>> books;
+
+    auto p_temp = new Review;
+    while (FillReview(*p_temp))
+    {
+        books.push_back((shared_ptr<Review>)p_temp);
+        p_temp = new Review;
+    }
+#endif
+
+    //改进后的方法(更好)：
+#if 1
+    vector<shared_ptr<Review>> books;
+    Review temp;
+
+    while (FillReview(temp))
+    {
+        shared_ptr<Review> p  (new Review (temp));
+        books.push_back(p);//属于智能指针间的赋值，而不是初始化
+    }
+#endif
+
+    if (books.size() > 0)
+    {
+        cout << "Thank you. You entered "
+            << books.size()<<" books !\n";
+
+        menu();
+
+        char choice;
+        cin >> choice;
+        while (choice != '7')
+        {
+            switch (choice)
+            {
+            case '1':
+                for_each(books.begin(), books.end(), ShowReview);
+                break;
+
+            case '2':
+                {//***注***若不加括号，则报错：switch控制传输跳过的实例化
+                    vector<shared_ptr<Review>> books_kaobei(books);
+                    sort(books_kaobei.begin(), books_kaobei.end());
+                    for_each(books_kaobei.begin(), books_kaobei.end(), ShowReview);
+                }
+                break;
+
+            case '3':
+                {//***注***若不加括号，则报错：switch控制传输跳过的实例化
+                    vector<shared_ptr<Review>> books_kaobei(books);
+                    sort(books_kaobei.begin(), books_kaobei.end(),
+                        anpinjishengxu);
+                    for_each(books_kaobei.begin(), books_kaobei.end(), ShowReview);
+                }
+                break;
+
+            case '4':
+                {//***注***若不加括号，则报错：switch控制传输跳过的实例化
+                    vector<shared_ptr<Review>> books_kaobei(books);
+                    sort(books_kaobei.begin(), books_kaobei.end(),
+                        anpinjijiangxu);
+                    for_each(books_kaobei.begin(), books_kaobei.end(), ShowReview);
+                }
+                break;
+
+            case '5':
+                {//***注***若不加括号，则报错：switch控制传输跳过的实例化
+                    vector<shared_ptr<Review>> books_kaobei(books);
+                    sort(books_kaobei.begin(), books_kaobei.end(),
+                        anjiageshengxu);
+                    for_each(books_kaobei.begin(), books_kaobei.end(), ShowReview);
+                }
+                break;
+
+            case '6':
+                {//***注***若不加括号，则报错：switch控制传输跳过的实例化
+                    vector<shared_ptr<Review>> books_kaobei(books);
+                    sort(books_kaobei.begin(), books_kaobei.end(),
+                        anjiagejiangxu);
+                    for_each(books_kaobei.begin(), books_kaobei.end(), ShowReview);
+                }
+                break;
+
+            default:
+                cout << "输入有误，请重新输入！" << endl;
+                break;
+            }
+
+            menu();
+            cin >> choice;
+        }
+    }
+    else
+        cout << "No entries. ";
+    cout << "Bye.\n";
+
+    return 0;
 }
 #endif
