@@ -1,148 +1,254 @@
-#include <iostream>
-
+//1.2 
+//购物单
 #if 0
-int main()
-{	
-	std::cout<<"Hello World !\n";
+#include <iostream>
+#include <valarray>
+//#include <algorithm> 
+using namespace std;
+
+int main ()
+{
+	freopen("cost.txt","r",stdin);
+
+//***注***错误写法： 
+//	valarray<double> jiage[100];
+//	valarray<int> zhekou[100];
+//正确写法：
+	valarray<double> jiage(100);  //默认全为0 
+	valarray<int> zhekou(100); 
+	
+//	double jiage[100]={0.0};
+//	int zhekou[100]={};
+	
+	double a;
+	int b;
+	int index=0;
+	while(cin>>a>>b)
+	{
+//错误： valarray对象长度不支持动态改变 
+//		jiage.push_back(a);
+//		zhekou.push_back(b);
+		jiage[index]=a;
+		zhekou[index]=b;
+		index++;
+	}
+	
+	int count=0;//计算商品数量 
+	for(int i=0;i<100;i++)
+	{
+		if(jiage[i])
+		count++;
+	}
+	
+//	for(int i=0;i<count;i++)
+//	{
+//	cout<<jiage[i];
+//	}
+	 
+	valarray<double> result(100);
+	for(int i=0;i<count;i++) 
+	{
+		if(zhekou[i]>0&&zhekou[i]<10)//打9折 
+		result[i]=jiage[i]*0.1*zhekou[i];
+		else//打88折 
+		result[i]=jiage[i]*0.01*zhekou[i];
+	}
+	
+	double sum=result.sum(); 
+	cout<<sum;
 	
 	return 0;
 }
 #endif
 
 
+//1.3 
+//第几天(判断闰年，即二月是否为29天)
 #if 0
+#include <iostream>
 
-#include <string>
-#include <iterator>//back_insert_iterator、insert_iterator
+using namespace std;
+bool runnian (int year);
+
+int main()
+{
+	int year;
+	
+	cin>>year;
+	
+	if(runnian(year))
+	cout<<"是闰年"<<endl;
+	
+	return 0;
+}
+bool runnian (int year)
+{
+	return(year%4==0&&year%100!=0||year%400==0);
+}
+#endif
+
+
+//1.4 明码 
+#if 0
+#include <iostream>
+#include <fstream>
 #include <vector>
-#include <algorithm>//copy()
-#include "cxqd.h"
+
+using namespace std;
 
 int main()
 {
-    using namespace std;
+	ifstream in;
+	in.open("1.4.txt");
 
-    string s1[4] = { "fine", "fish", "fashion", "fate" };
-    string s2[2] = { "busy", "bats" };
-    string s3[2] = { "silly", "singers" };
+	vector<int>data[10];//创建二维数组 
+	
+	int i,temp;
+	for(i=0; i<10; i++)
+	{
+		for(int j=0;j<32;j++)
+		{
+			in>>temp;
+			data[i].push_back(temp);
+		}
+	}
+	
+	for(i=0; i<10; i++)
+	{
+		for(auto p=data[i].begin();p!=data[i].end();p++)
+		cout<<*p<<" ";
+		
+		cout<<endl;
+	}
+	cout<<endl;
+		
 
-    //创建一个vector数组，其含4个元素，每个元素类型均为string
-    vector<string> words(4);
+	//现在处理的是第几个字 
+	int dijigezi=1;
 
-    //***注***s1 + 4是超尾迭代器，标识超尾的位置
-    copy(s1, s1 + 4, words.begin());
-    for_each(words.begin(), words.end(), output);
-    cout << endl;
+	vector<int> data2[16];//创建一个2*16的二维数组
+	int j=0;
+	for(i=0;i<32;i++)
+	{
+		data2[j].push_back(data[dijigezi-1][i]);
+		data2[j].push_back(data[dijigezi-1][++i]);
+		j++; //换行 
+	} 
 
-    // construct anonymous back_insert_iterator object
-    //创建匿名的back_insert_iterator迭代器
-    copy(s2, s2 + 2,
-        back_insert_iterator<vector<string> >(words));
-    for_each(words.begin(), words.end(), output);
-    cout << endl;
+	//显示十进制表示的字形信息 
+	int huanhang=0;	
+	for(i=0;i<16;i++)
+	for(auto p=data2[i].begin();p!=data2[i].end();p++)
+	{
+		cout<<*p<<" ";
+		huanhang++;
+		
+		if(huanhang%2==0)
+		cout<<endl;
+	}
 
-    // construct anonymous insert_iterator object
-    //创建匿名的insert_iterator迭代器
-    copy(s3, s3 + 2, 
-        insert_iterator<vector<string> >(words, words.begin()));
-    copy(words.begin(), words.end(), 
-        std::ostream_iterator<string, char>(cout, " "));//使用迭代器输出
-    cout << endl;           //***注***
-                                      //发送给输出流的数据类型：string
-    // cin.get();               //输出流使用的字符类型：char
-    return 0;
+	//***注*** 
+	//错误理解：内容全为0 (在C语言中确实是这样)
+	char shuzu[16][16]={{'0'},{'0'}};
+	
+	for(int i=0;i<16;i++)
+	{
+		for(int j=0;j<16;j++)
+			shuzu[i][j]='0';
+	}
+	
+	int num;
+
+	for(int i=0;i<16;i++)		//***注***此处-1必须写 
+	for(auto p=data2[i].begin();p!=data2[i].end()-1;   )
+	{
+		num=*p;			
+		
+		//若为负数 
+		if(num<0)
+		num=256+num;
+		 
+		int index=7;//除后取余倒读，干脆存储时倒着存，读时顺着读 
+		while(num!=0&&index!=0)
+		{
+			shuzu[i][index--]=num%2+'0';
+			num/=2;
+		}
+		
+		p++;
+		num=*p;
+		
+				
+		if(num<0)
+		num=256+num;
+		
+		index=15;
+		while(num!=0&&index!=8)
+		{
+			shuzu[i][index--]=num%2+'0';
+			num/=2;
+		}			
+//***负数如何转化成二进制？？ 
+//法二：用bitset模板类 
+	}
+	
+	for(int i=0;i<16;i++)
+	{
+		for(int j=0;j<16;j++)
+		cout<<shuzu[i][j];
+	cout<<endl;
+	}
+	
+	return 0;
 }
-
 #endif
 
 
+//1.5 年号字符串 
+//用字母组合来表示数字 
+//***思路***
+//相当于数字用26进制来表示 
 #if 1
-#include <iterator>
-#include <list>//成员函数insert()等
-#include <algorithm>//STL函数(非成员函数)：for_each()
+#include <iostream>
+#include <vector>
 
-void outint(int n) 
-{
-    std::cout << n << " "; 
-}
+using namespace std;
 
 int main()
 {
-    using namespace std;
+	int num;
+	
+	while(cin>>num)
+	{
+		vector<int> data;
+		
+		while(num!=0)
+		{
+			data.push_back(num%26);
 
-    //创建一个由5个int类型的值2组成的序列
-    list<int> one(5, 2); // list of 5 2s
-
-    cout << "List one: ";
-    for_each(one.begin(), one.end(), outint);
-
-    //创建一个空序列
-    list<int> two;
-
-    //将整个stuff数组的内容插入到two的首元素前
-    int stuff[5] = { 1,2,4,8, 6 };
-    //法一：(使用insert()成员函数)
-    two.insert(two.begin(), stuff, stuff + 5);
-    //法二：(使用insert_iterator插入迭代器)
-    /*copy(stuff,stuff+5,
-        insert_iterator<list<int>>(two,two.end()));*/
-    
-    cout << endl << "List two: ";
-    for_each(two.begin(), two.end(), outint);
-    
-    //调用复制构造函数进行类型复制
-    list<int> three(two);
-
-    int more[6] = { 6, 4, 2, 4, 6, 5 };
-    three.insert(three.end(), more, more + 6);
-    
-    cout << endl << "List three: ";
-    for_each(three.begin(), three.end(), outint);
-    
-    //从双向链表中删除值为2的所有实例
-    three.remove(2);
-    cout << endl << "List three (删除了值为2的实例): ";
-    for_each(three.begin(), three.end(), outint);
-
-    //将链表one的内容插入到three头结点的前面
-    //***注***one将清空
-    three.splice(three.begin(), one);
-    cout << endl << "List three after splice: ";
-    for_each(three.begin(), three.end(), outint);
-    cout << endl << "List one: ";
-    for_each(one.begin(), one.end(), outint);
-
-    //将连续的相同元素压缩为单个元素
-    three.unique();
-    cout << endl << "List three after unique: ";
-    for_each(three.begin(), three.end(), outint);
-
-    //排序(默认递增)
-    three.sort();
-    //***注***
-    //不能使用STL函数sort()，
-    //因为非成员函数sort()需要随机访问迭代器，
-    //而list不支持随机访问
-    //sort(three.begin(),three.end());
-
-    //合并同类项
-    three.unique();
-    cout << endl << "List three after sort & unique: ";
-    for_each(three.begin(), three.end(), outint);
-
-    //排序(默认递增)
-    two.sort();
-    //将两个链表合并
-    //***注***前提：两个链表必须已经排序
-    three.merge(two);
-    cout << endl << "Sorted two merged into three: ";
-    for_each(three.begin(), three.end(), outint);
-
-    cout << endl;
-    // cin.get();
-
-    return 0;
+			num/=26;
+		}
+		
+		//***注***写成
+//		for(auto i=data.end()-1;i>=data.begin();i--)//也可以 
+		for(auto i=data.rbegin();i!=data.rend();i++)
+		cout<<*i;
+		
+		//以上已经转化成二十六进制表示 
+		
+		
+		cout<<endl;
+	}
+	
+	return 0;
 }
-
 #endif
+
+
+
+
+
+
+
+
 
