@@ -52,22 +52,37 @@ int main()
 	int gongcha=1;
 	int k=1;
 	int shuliechangdu;
+	
+	//从第一项开始试 
 	for(auto p=num_vector.begin();p!=num_vector.end();p++)
 	{
+		//三大参数重置为1 
 		shuliechangdu=1;
+		k=1;
+		gongcha=1;
 		
-		for(auto q=p;q!=num_vector.end();q++)
-			if(*p+gongcha*k==*q)
-				{
-					shuliechangdu++;
-					
-					if(shuliechangdu==10)
-						goto conclusion;
-					
-					k*=2; 
-					continue;
-				}
-		gongcha++;
+		while(gongcha<1000)
+		{
+			//两大参数重置为1 
+			shuliechangdu=1;
+			k=1;
+			
+			//从最外层p指向的元素开始试 
+			for(auto q=p;q!=num_vector.end();q++)
+			if((*p)+gongcha*k==*q)//公差从1开始试 
+			{
+				shuliechangdu++;
+				
+				if(shuliechangdu==10)
+					goto conclusion;
+				
+				k++; 
+				continue;
+			}
+			
+			//公差增1 
+			gongcha++;
+		}
 	}
 	
 conclusion:cout<<gongcha;
