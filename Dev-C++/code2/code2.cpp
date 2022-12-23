@@ -258,6 +258,7 @@ int main()
 bool operator<(const RiQiTypeDef& RiQiStruct1, const RiQiTypeDef& RiQiStruct2)
 {
     bool status=0;
+    
     if (RiQiStruct1.x < RiQiStruct2.x)
         status = 1;
     else if (RiQiStruct1.x == RiQiStruct2.x &&
@@ -336,6 +337,7 @@ int main()
 			space++;
 		
 		//根据存储空白字符数的栈判断是否要减少循环
+		//***注***要用while语句 
 		while(space<=kongbaizifushu_stack.top()) 
 		{
 			zongxunhuanshu/=xunhuancishu_stack.top();
@@ -351,7 +353,8 @@ int main()
 			
 			xunhuancishu_stack.push(xunhuanshu);
 			kongbaizifushu_stack.push(space);
-		}else//若不是REPEAT语句 
+		}
+		else//若不是REPEAT语句 
 		{	//要加上的数 
 			int jiashu=st[st.size()-1]-'0';
 			result+=jiashu*zongxunhuanshu; 
@@ -453,7 +456,7 @@ int main()
 
 
 //2.6 整数拼接 
-#if 1
+#if 0
 #include <iostream>
 #include <cmath>
 #include <set>
@@ -530,6 +533,161 @@ int CheckNumber(int num)
 //1 2 3 4 
 //5 2
 //1 12 123 1234 12345
+#endif
+
+
+//2.7 卡片 
+#if 0
+#include <iostream>
+#include <vector>
+#include <stdio.h>//sprintf() 
+using namespace std;
+
+void meiweideshuzi(vector<int>& ,int num);
+int main()
+{
+	vector<int> data[10];
+	
+	for(int i=0;i<10;i++)
+	{
+		data[i].push_back(i);
+		data[i].push_back(2021);
+	}
+	
+//显示数组内容 
+//	for(int i=0;i<10;i++)
+//	{
+//		cout<<data[i][0]<<" "<<data[i][1];
+//		cout<<endl;
+//	}
+
+	vector<int> shuzi;
+	
+	//要拼的整数 
+	int pindezhengshu=1;
+	int result;
+	
+	while(1)
+	{
+		meiweideshuzi(shuzi,pindezhengshu);
+		
+		for(auto p=shuzi.begin();p!=shuzi.end();p++)
+			for(int i=0;i<10;i++)
+				if(*p==data[i][0])
+				{
+					if(data[i][1])
+						data[i][1]--;
+					else
+						{
+							result=pindezhengshu-1;
+							goto step1;
+						}
+				}
+		
+		pindezhengshu++;
+	}	 
+	
+step1:cout<<result;
+
+	return 0;
+}
+
+//计算每位上的数字 
+void meiweideshuzi(vector<int>& data,int num)
+{
+//	int num1=num;
+//	int weishu=0;
+//	do
+//	{
+//		num1/=10;
+//		weishu++;
+//	}while(num1);
+
+//***注***有至少两种方法	
+//法一：循环提取法 
+// data.clear();
+//	while(num)
+//	{					//***注***要插入到头部 
+//		data.insert(data.begin(),num%10);
+//		num/=10;	
+//	}
+//	for(auto p=data.begin();p!=data.end();p++)
+//		cout<<*p<<" ";
+//法二：使用sprintf()直接将数字转换为字符串，
+//然后可以选择以字符的形式输出，也可以选择向int数组存入每位的数字 
+	char str[100]={'\0'};
+	sprintf(str,"%d",num);
+	
+	int index=0;
+	int weishu=0;
+	while(str[index++])
+	{
+		weishu++;
+	}
+	
+	//改正： 
+	//***注***在每次调用此函数时，vector数组都要先恢复初始状态 
+	data.clear();
+	for(index=0;index<weishu;index++)
+		data.push_back(str[index]-'0');
+		
+//	for(auto p=data.begin();p!=data.end();p++)
+//		cout<<*p<<" ";
+}
+#endif
+
+
+//2.8 杨辉三角 
+#if 0
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	long long N;
+	cin>>N;
+	
+	long long yanghui[100][100];
+	
+	for(int i=0;i<100;i++)
+		for(int j=0;j<100;j++)
+			yanghui[i][j]=0;
+			
+	yanghui[0][0]=1;
+	yanghui[1][0]=yanghui[1][1]=1;
+	for(int i=2;i<100;i++)//从第三层开始 
+	{
+		yanghui[i][0]=yanghui[i][i]=1;
+		for(int j=1;j<=i-1;j++)
+			yanghui[i][j]=yanghui[i-1][j-1]+yanghui[i-1][j]; 
+	}
+		
+//	for(int i=0;i<100;i++)
+//	{
+//		for(int j=0;j<100;j++)
+//			if(yanghui[i][j]!=0)
+//				cout<<yanghui[i][j]<<" ";
+//		cout<<endl;
+//	}
+
+	int jishu=0;
+	for(int i=0;i<100;i++)
+	{
+		for(int j=0;j<100;j++)
+		{	
+			if(yanghui[i][j]==0)
+				continue;
+				
+			++jishu;
+			if(yanghui[i][j]==N)
+				goto step;
+		}	
+	}
+
+step:cout<<jishu;
+
+	return 0;
+}
 #endif
 
 
