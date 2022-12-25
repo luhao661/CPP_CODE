@@ -279,11 +279,11 @@ int main()
 
 
 //3.4 数的分解 
-#if 1
+#if 0
 #include <iostream>
 #include <set>
 #include <vector>
-#include <algorithm>//sort() 
+#include <algorithm>//STL的sort() 
 using namespace std;
 
 typedef struct s
@@ -320,7 +320,7 @@ int main()
 //					if(i==2||j==2||k==2||i==4||j==4||k==4)
 //						continue;
 					
-					//改正3：每个正整数都不含数字2或4					
+					//每个正整数是否含数字2或4的标记					
 					int biaoji=0;
 					
 					itoa(i,erhuosi,10); 
@@ -348,7 +348,7 @@ int main()
 					v1.push_back(j);
 					v1.push_back(k);
 					
-					//排序 
+					//排序(对vector容器使用sort()) 
 					sort(v1.begin(),v1.end());
 					
 					//按升序赋给x,y,z 
@@ -356,7 +356,7 @@ int main()
 					fenjieStruct.y=v1[1];
 					fenjieStruct.z=v1[2];		
 					
-					//自动删掉重复项 
+					//自动删掉重复项(利用set关联容器) 
 					num_set.insert(fenjieStruct);
 				}
 	
@@ -402,6 +402,377 @@ bool operator<(const fenjieTypeDef& f1,const fenjieTypeDef& f2)
 //	else
 //	return 0;
 //}
+#endif
+//法二： 
+#if 0
+#include <iostream>
+
+using namespace std;
+
+bool judge(int);
+int main()
+{
+	int count=0;
+	
+//通过巧妙地设置三个循环的起始值和和终止值来避免出现数字重复
+//i,j,2019-i-j三个数以升序的形式生成
+ 
+//	for(int i=1;i<2019/3+1;i++)
+//		if(judge(i))				
+//			for(int j=i+1;j<2019-i-j;j++)
+//				if(judge(j))
+//					if(judge(2019-i-j))
+//						count++;
+		
+	//也可以写成				
+		for(int i=1;i<2019;i++)
+			if(judge(i))
+				for(int j=i+1;j<2019-i-j;j++)
+					if(judge(j))
+						if(judge(2019-i-j))
+							count++;
+						
+	cout<<count;
+
+	return 0;
+}
+bool judge(int num)
+{
+	while(num)
+	{
+		if(num%10==2||num%10==4)//对num从最低位开始判断是否有数字2或4 
+			return 0;
+		
+		num/=10;
+	}
+
+	return 1; 
+}
+#endif
+
+
+//3.5 特别数之和 
+#if 0
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	long long num;
+	cin>>num;
+	
+	bool flag=0;
+	long long result=0;
+	for(int i=1;i<=num;i++)
+	{
+		long long temp=i;
+		flag=0;
+		while(temp)
+		{
+			if(temp%10==2||temp%10==0||temp%10==1||temp%10==9)
+				flag=1;
+				
+			temp/=10;
+		}
+		
+		if(flag)
+		result+=i;
+	}
+	
+	cout<<result<<endl;
+
+	return 0;
+} 
+#endif
+//法二： 
+#if 0
+#include <iostream>
+#include <vector>  
+#include <algorithm>//STL的find()函数 
+
+using namespace std;
+
+bool judge(long );
+int main()
+{
+	long long num;
+	cin>>num;
+	
+	long long result=0;
+	for(int i=1;i<=num;i++)
+	{
+		if(judge(i))
+		result+=i;
+	}
+	
+	cout<<result<<endl;
+
+	return 0;
+} 
+bool judge (long num)
+{
+	char shuzi[10]={'\0'};
+	itoa(num,shuzi,10);
+	
+	vector<char> shuzi2;
+	for(int index=0;shuzi[index];index++)
+		shuzi2.push_back(shuzi[index]);
+
+//写法一：		
+//	for(auto p=shuzi2.begin();p!=shuzi2.end();p++)
+//		if(*p=='2'||*p=='0'||*p=='1'||*p=='9')
+//			return 1;
+		
+//写法二： 
+	char ch[4]={'2','0','1','9'};
+	for(int index=0;index<4;index++)
+		if(find(shuzi2.begin(),shuzi2.end(),ch[index])!=shuzi2.end())
+			return 1;
+	
+	return 0;	
+}
+#endif
+
+
+//3.6 完全二叉树的权值 
+#if 0
+#include <iostream>
+#include <cmath>
+//#include <valarray>
+using namespace std;
+
+typedef int SqBiTree[100];//SqBiTree是顺序存储结构的二叉树类型 
+
+bool InitBiTree(SqBiTree T);
+bool CreateBiTree(SqBiTree T); 
+
+int num;
+	
+int main()
+{
+	SqBiTree T;
+	InitBiTree(T);
+	
+	CreateBiTree(T);
+
+	int deep;
+	deep=log2(num)+1;//***注***n个节点求深度公式 
+	
+	//创建一个数组，用于存每层的元素之和 
+	int* p=new int[deep];
+	
+	//数组初始化为0 
+	for(int i=0;i<deep;i++)
+		p[i]=0;
+	
+	int d=deep;
+	
+	for(int i=1;i<=d;i++)//第几层 
+		for(int j=pow(2,i-1)-1;j<=pow(2,i-1)-1+pow(2,i-1)-1;j++)
+			*(p+i-1)+=T[j];
+	
+	//遍历寻找数组中的最大值对应的索引值，索引值+1就是层号(深度)		
+	int max=p[0];
+	int result=1;
+	for(int i=0;i<deep;i++)
+		if(p[i]>max)
+		{
+			max=p[i]; 
+			result=i+1; 
+		} 
+		
+	cout<<result;
+		
+	return 0;
+}
+
+bool InitBiTree(SqBiTree T)
+{
+	int i;
+	for (i = 0; i < 100; i++)
+		T[i] = 0; /* 初值为空 */
+
+	return 1;
+}
+bool CreateBiTree(SqBiTree T)
+{
+	cin>>num;
+	
+	for(int index=0;index<num;index++)
+		cin>>T[index];	
+}
+//测试：
+//7
+//1 6 5 4 3 2 1 
+#endif
+
+
+//3.7 等差数列 
+#if 0
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+int main()
+{
+	int size;
+	cin>>size;
+	
+	vector<long long> shuzu(size);
+	long long temp;
+	for(int i=0;i<size;i++)
+	{	
+		cin>>temp;
+		shuzu[i]=temp;
+	}
+	
+	sort(shuzu.begin(),shuzu.end());
+	
+//	for(int i=0;i<size;i++)
+//		cout<<shuzu[i];
+
+	long long gongcha=shuzu[1]-shuzu[0];
+
+	long long min=shuzu[0];
+	long long max=shuzu[0];
+	for(int i=0;i<size;i++)
+	{
+		if(shuzu[i]>max)
+			max=shuzu[i];
+		if(shuzu[i]<min)
+			min=shuzu[i];			
+	}
+	
+	cout<<(max-min)/gongcha+1;
+		
+	return 0;
+} 
+#endif
+
+
+//3.8 跑步训练 
+#if 0
+#include <iostream>
+
+using namespace std;
+int main()
+{
+	int energy = 10000;
+	
+	int seconds=0;
+	while(1)
+	{
+		energy-=10;
+		seconds++;
+		
+		if(energy<=0)
+			break;
+			
+		energy+=5;
+		seconds++;
+	}
+	//***错误：理解为了跑一秒钟休息一秒钟 
+	cout<<seconds;
+
+	return 0; 
+}
+#endif
+//改正 
+#if 0
+#include <iostream>
+
+using namespace std;
+int main()
+{
+	int energy = 10000;
+	
+	int seconds=0;
+	while(1)
+	{
+		if(energy>=600)
+		{	
+			energy-=600;
+			seconds+=60;
+		}
+		else//当体力小于600时 
+		{
+			seconds+=energy/10;//(体力每秒下降10点)
+			break; 
+		}
+			
+		energy+=300;
+		seconds+=60;
+	}
+
+	cout<<seconds;
+
+	return 0; 
+}
+#endif
+
+
+//3.9 合并检测 
+#if 1
+#include <iostream>
+#include <valarray>
+#include <algorithm>
+
+using namespace std;
+int main()
+{
+	long zongrenshu=10000;
+	int ganranrenshu=10000*0.01;
+	int k=2;//2人混管 
+	int k1=0;
+	
+	valarray<long> data(998);
+	int index=0;
+	
+	char ch[10]={'\0'};
+	
+	for(   ;   k<=1000;    k++,k1=0)
+	{			
+		int temp=zongrenshu/k;//第一次筛查时用了几个试剂盒 
+		k1+=temp;		
+		
+		int temp2;
+//错误写法1： 
+//		itoa(temp*0.01,ch,10);
+
+//错误写法2： 
+//		sprintf(ch,"%f",temp*0.01);//即使是整除，也会在数字后补零，如50.000000 
+//		cout<<ch;
+//		if(find(ch,ch+10,'.')!=ch+10)//判断是否是小数 
+//			temp2=temp*0.01+1;//第一次有异样的试剂盒数		
+//		else
+//			temp2=temp*0.01;
+
+		if(temp*0.01>int(temp*0.01))
+			temp2=temp*0.01+1;//第一次有异样的试剂盒数		
+		else
+			temp2=temp*0.01;						
+		
+		k1+=temp2*k;//第二次筛查时要用的试剂盒数 
+		
+		data[index++]=k1;
+	}
+	
+	for(int index=0;index<998;index++)
+		cout<<data[index]<<" ";
+		
+	cout<<endl<<data.min()<<endl;
+	
+	int result;
+	for(int index=0;index<998;index++)
+		if(data[index]==data.min())
+			result=index;
+
+	cout<<"索引值："<<result;
+
+	return 0;
+}
 #endif
 
 
