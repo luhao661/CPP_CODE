@@ -714,10 +714,10 @@ int main()
 
 
 //3.9 合并检测 
-#if 1
+#if 0
 #include <iostream>
 #include <valarray>
-#include <algorithm>
+//#include <algorithm>
 
 using namespace std;
 int main()
@@ -738,7 +738,7 @@ int main()
 		k1+=temp;		
 		
 		int temp2;
-//错误写法1： 
+//错误写法1： itoa即int to a，只支持整数转换成字符串 
 //		itoa(temp*0.01,ch,10);
 
 //错误写法2： 
@@ -754,7 +754,7 @@ int main()
 		else
 			temp2=temp*0.01;						
 		
-		k1+=temp2*k;//第二次筛查时要用的试剂盒数 
+		k1+=temp2*k;//k1再加上第二次筛查时要用的试剂盒数 
 		
 		data[index++]=k1;
 	}
@@ -769,10 +769,303 @@ int main()
 		if(data[index]==data.min())
 			result=index;
 
-	cout<<"索引值："<<result;
+	cout<<"索引值："<<result;//得到：           10000个人，110个人混管最节省试剂盒，为200盒 
+	
+//***疑问***
+//人数的不同，会影响程序模拟得到的试剂盒最小值 
+//***错误 
+//没有考虑类似10000个人3人混管的情况要去除 
 
 	return 0;
 }
+#endif
+//改正 
+#if 0
+#include <iostream>
+#include <valarray>
+#include <map> 
+//#include <iterator>
+using namespace std;
+int main()
+{
+	long zongrenshu=100;
+	int k=2;//2人混管 
+	int k1=0;
+	
+	map<long,long> data_map;
+	
+	for(   ;   k<=100;    k++,k1=0)
+	{			
+		int temp=zongrenshu/k;//第一次筛查时用了几个试剂盒 
+		
+		//检查是否整除 
+		if(zongrenshu/(double)k>temp)
+			continue;
+		
+		k1+=temp;		
+		
+		int temp2;
+		//再检查是否整除 
+		if(temp*0.01>int(temp*0.01))
+			temp2=temp*0.01+1;//第一次有异样的试剂盒数		
+		else
+			temp2=temp*0.01;						
+		
+		k1+=temp2*k;//k1再加上第二次筛查时要用的试剂盒数 
+		
+		//向map中存数据方法一： 
+		//***数组表示法***
+		data_map[k]=k1;
+		//方法二： 
+//		data_map.insert(pair<long,long>(k,k1));
+	}
+	
+	//***map关联容器的遍历方法***
+	for(auto p=data_map.begin();p!=data_map.end();p++)
+	{
+		cout<<p->first<<' '<<p->second<<endl;
+	}
+	
+	//寻找试剂盒数最少的数字
+	map<long,long>::iterator di;
+	di=data_map.begin();
+	long min=di->second;	
+	for(auto p=data_map.begin();p!=data_map.end();p++)
+	{
+		if(p->second<min)
+		{	
+			min=p->second;
+			di=p;//暂存p的值 
+		} 
+	}
+	
+	cout<<endl<<di->first<<" "<<min;
+
+//***错误***只能通过键来寻找元素，而不能通过元素来寻找键	
+//	auto search = data_map.find(min);
+//   if (search != data_map.end()) 
+//	{
+//      cout << "Found " << search->first << " " << search->second << '\n';
+//   }
+
+	return 0;
+}
+#endif
+
+
+//3.10 直线 
+//***思路***
+//方程Ax+By+C=0能表示所有直线(包括垂直于x轴的直线)
+//可以利用直线的两点式推出A、B、C对应的表达式 
+#if 0
+#include <iostream>
+#include <vector>
+#include <set>
+#include <algorithm>
+
+//求最大公约数(A、B、C三个数同时乘以一个非0的倍数，
+//还是表示同一条直线，但这种情况set无法去重)
+int measure(int ,int); 
+
+using namespace std;
+int main()
+{
+	int x,y;//坐标的范围 
+	cin>>x>>y;
+	
+	pair<int,int> pa;
+	vector<pair<int,int>>v;//以坐标点为元素，存入vector对象 
+	for(int i=0;i<x;i++)
+		for(int j=0;j<y;j++) 
+		{
+			pa.first=i;
+			pa.second=j;
+			v.push_back(pa);
+		}
+		
+	pair<pair<int,int>,int> pa2;
+	set<pair<pair<int,int>,int>>s;//好处：不用重新定义<运算符重载函数 
+	//或声明一个结构布局，存3个变量 
+	//set<jiegou_TypeDef>s;
+	 
+	for(int i=0;i<v.size();i++)//取一个点 
+		for(int j=i+1;j<v.size();j++)//取另一个点 
+		{
+			int x1=v[i].first;
+			int y1=v[i].second; 
+			int x2=v[j].first;
+			int y2=v[j].second;
+			
+			int A=y2-y1;
+			int B=x1-x2;
+			int C=x2*y1-x1*y2;
+			
+			int gongyueshu=measure(measure(A,B),C);
+			
+			pa.first=A/gongyueshu;
+			pa.second=B/gongyueshu;
+			pa2.first=pa;
+			pa2.second=C/gongyueshu;
+			
+			s.insert(pa2); 
+		} 
+		
+	cout<<s.size();
+
+	return 0;
+} 
+
+int measure(int a,int b)
+{
+//	if (b==0)
+//		return a;
+//	else 
+//	   return measure(b,a%b); 
+
+	//法二：algorithm头文件中包含的__gcd() 
+	return __gcd(a,b);
+	
+	//补充：最小公倍数=两数乘积/最大公约数
+}
+ /* 辗转相除法基于如下原理：
+    两个整数的最大公约数等于其中较小的数和两数的相除的余数的最大公约数
+	 那y和x%y如果余数为0，那y不就是最大公约数
+    补充：两个数的最小公倍数等于  x*y/measure(x,y);
+*/
+#endif
+
+
+//3.11 货物摆放 
+#if 0
+#include <iostream>
+
+using namespace std;
+int main()
+{
+	long long num=2021041820210418;
+	
+	long long count=0;
+//	for(int i=1;i<=num;i++)
+//		for(int j=1;j<=num;j++)
+//			for(int k=1;k<=num;k++)
+//			{
+//				if(i*j*k==2021041820210418)
+//				count++;
+//			}
+
+	for(long long i=1;i<=num;i++)
+		for(long long j=1;j<=num;j++)
+		{
+			long long k=num/i/j;
+			
+			if(k>num||k<1||((double)num/i/j)>k)
+			continue; 
+			else
+			{ 
+				cout<<i<<' '<<j<<' '<<k<<' '<<endl;
+				count++;		
+			}
+		
+		}
+//***错误***
+//严重超时 
+
+	cout<<count;		
+			
+	return 0;
+} 
+#endif
+//改正 
+#if 0
+#include <iostream>
+
+using namespace std;
+int main()
+{
+	long long num=2021041820210418;
+	
+	long long count=0;
+
+	//求出num的因子，并存入数组 
+	long long a[1000]={0}; 
+	
+	//***补充知识***
+	//若num的因子的集合为A，
+	//则a*b*c=num，a、b、c均来自集合A 
+	
+	int index=0;
+	for(long long i=1;i*i<=num;i++)
+	{
+		if(num%i==0)//若i是因子 
+		{
+			a[index++]=i; 
+			
+			//***注***以下语句必须写 
+			if(num/i!=i)
+				a[index++]=num/i;//存入num/i即因子的较大者 
+		} 
+	} 
+	
+	cout<<"index="<<index<<endl; 
+
+	for(int i=0;i<index;i++)
+		for(int j=0;j<index;j++)
+			for(int k=0;k<index;k++)
+			{
+				if(a[i]*a[j]*a[k]==num)
+					count++;
+			}	
+			
+	cout<<count;		
+			
+	return 0;
+} 
+#endif
+//法二：使用set关联容器 
+#if 1
+#include <iostream>
+#include <set>
+
+using namespace std;
+int main()
+{
+	long long num=2021041820210418;
+	
+	long long count=0;
+
+	//求出num的因子，并存入数组 
+	set<long long>a; 
+	
+	//***补充知识***
+	//若num的因子的集合为A，
+	//则a*b*c=num，a、b、c均来自集合A 
+	
+	int index=0;
+	for(long long i=1;i*i<=num;i++)
+	{
+		if(num%i==0)//若i是因子 
+		{
+			a.insert(i);//计算到900000009后面的数字时会非常慢 
+//							//所以才需要i*i<num这一判断条件 
+			a.insert(num/i); 
+		} 
+	} 
+	
+	for(auto p=a.begin();p!=a.end();p++)
+	cout<<*p<<endl; 
+
+	for(auto i=a.begin();i!=a.end();i++)
+		for(auto j=a.begin();j!=a.end();j++)
+			for(auto k=a.begin();k!=a.end();k++)
+			{
+				if((*i)*(*j)*(*k)==num)
+					count++;
+			}	
+			
+	cout<<count;		
+			
+	return 0;
+} 
 #endif
 
 
