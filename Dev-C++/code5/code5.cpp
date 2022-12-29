@@ -423,7 +423,7 @@ typedef long long LL;
 //}NumTypeDef;
 
 //1.用内置的pair类型代替结构体，不用写<运算符重载函数
-//2.用deque容器，支持数字表示法随机访问元素， 
+//2.用deque容器，支持数组表示法随机访问元素， 
 //支持元素的增删
 //3.支持对deque对象使用sort()排序 
 
@@ -463,10 +463,12 @@ int main()
 	int fushu_count=0;
 	for(int i=0;i<K;i++)
 	{
-		result*=(*Num_deque.end()).first;
+//***错误写法*** 
+//		result*=(*Num_deque.end()).first;
+		result*=(*(Num_deque.end()-1)).first;
 		result%=1000000009;
 		
-		if((*Num_deque.end()).second)
+		if((*(Num_deque.end()-1)).second)
 			fushu_count++;
 		
 		Num_deque.pop_back();
