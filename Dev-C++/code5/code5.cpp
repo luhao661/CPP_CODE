@@ -326,6 +326,7 @@ int big(const vector<int>& v,int key)
 #include <map>
 #include <cmath>
 #include <algorithm>//copy()
+#include <iterator> 
 using namespace std;
 typedef long long LL;
 
@@ -344,6 +345,12 @@ int main()
 	
 	valarray<LL>shuzu(N);//N必须要写 
 	copy(data.begin(),data.end(),begin(shuzu));
+
+	//以下尝试失败 
+//	valarray<LL>shuzu; 
+//	copy(data.begin(),data.end(),
+//	back_insert_iterator<valarray<LL>>(shuzu));
+
 
 //不能用map，因为不能存相同值的键	
 //	map<LL,LL>data_map;
@@ -407,7 +414,7 @@ int main()
 	return 0;
 } 
 #endif
-#if 1
+#if 0
 #include <iostream>
 #include <deque>
 #include <algorithm>
@@ -488,6 +495,124 @@ int main()
 //-100000
 //-100000
 #endif 
+
+
+//5.5 后缀表达式
+//思路：把最大的数相加，把最小的数相减 
+#if 0
+#include <iostream>
+#include <deque>
+#include <algorithm>
+
+using namespace std;
+int main()
+{
+	int N,M;
+	cin>>N>>M;
+	
+//	long long * shuzu=new long long[N+M+1];
+//	
+//	for(int i=0;i<N+M+1;i++)
+//	{
+//		long long temp;
+//		cin>>temp;
+//		shuzu[i]=temp;				
+//	}
+
+	deque<long long>shuzu(N+M+1);
+	for(int i=0;i<N+M+1;i++)
+	{
+		long long temp;
+		cin>>temp;
+		shuzu[i]=temp;				
+	}
+		
+	sort(shuzu.begin(),shuzu.end()); 	
+	
+	long long result; 
+	//如果至少有一个加号 
+	if(N) 
+	{
+		result=*(shuzu.end()-1);//取最大的数 
+		shuzu.pop_back();
+	}
+	else//如果没有加号 
+	{
+		result=*(shuzu.begin());//取最小的数 
+		shuzu.pop_front();	
+	} 
+	
+	for(int i=1;i<=N;i++)
+	{
+		//让最大的两个数先相加 
+		result+=*(shuzu.end()-1);
+		shuzu.pop_back();		
+	}	
+
+	for(int i=1;i<=M;i++)
+	{
+		//让最小的两个数相减 
+		result-=*(shuzu.begin());
+		shuzu.pop_front();
+	}	
+
+
+	cout<<result<<endl;
+//***错误***
+//将题目理解成了必须先加后减。 
+//题目的意思其实是，可以使用括号表达式的，
+//因此，可以利用括号，将最小的数减去
+//整个后缀表达式可以表示为
+//max______-(min______)
+//进一步归纳总结为
+//max-min+余下的所有数的绝对值	
+	return 0;
+} 
+#endif
+//改正 
+#if 0
+#include <iostream>
+#include <deque>
+#include <algorithm>
+#include <cmath>
+using namespace std;
+int main()
+{
+	int N,M;
+	cin>>N>>M;
+	
+	deque<long long>shuzu(N+M+1);
+	for(int i=0;i<N+M+1;i++)
+	{
+		long long temp;
+		cin>>temp;
+		shuzu[i]=temp;				
+	}
+		
+	sort(shuzu.begin(),shuzu.end()); 	
+	
+	long long result=0; 
+	//如果全是加号 
+	if(M==0) 
+	{
+		for(int i=0;i<N+M+1;i++)
+			result+=shuzu[i]; 
+	}
+	else//如果有加有减 
+	{
+		result=shuzu[N+M]-*(shuzu.begin());//最大的数减去最小的数 
+		
+		for(int i=1;i<=N+M-1;i++)			
+		{
+			result+=abs(shuzu[i]); 
+		} 
+	} 
+
+	cout<<result<<endl;
+
+	return 0;
+} 
+#endif
 
 
 
