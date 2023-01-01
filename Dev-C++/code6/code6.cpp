@@ -1,13 +1,14 @@
 //6.1 搜索算法 
 //深度优先遍历(DFS)、广度优先遍历(BFS) 
+//       栈						队列 
 #if 0
 #include <iostream>
 
 using namespace std;
 
-const int XLEN=14,YLEN=17;
-int migong [XLEN][YLEN];
-int mark[XLEN][YLEN];
+const int ROW=14,COL=17;
+int migong [ROW][COL];
+int mark[ROW][COL];
 int ox,oy;
 bool seek_path(int ix,int iy);
 int main()
@@ -17,15 +18,13 @@ int main()
 //	int XLEN,YLEN;
 //	cin>>XLEN>>YLEN;
 	
-	for(int i=0;i<XLEN;i++)
-		for(int j=0;j<YLEN;j++)
+	for(int i=0;i<ROW;i++)
+		for(int j=0;j<COL;j++)
 		{
 			cin>>migong[i][j];
 			mark[i][j]=0;
-		}
+		}	
 	
-	fclose(stdin);
-	freopen("CON","r",stdin);	
 	cout<<"入口坐标：";
 	int ix,iy;
 //	cin>>ix>>iy;
@@ -50,8 +49,9 @@ int main()
 }
 
 //上下左右 
-int dx[4]={0,0,-1,1};
-int dy[4]={1,-1,0,0};
+int dx[4]={1,-1,0,0};
+int dy[4]={0,0,-1,1};
+
 bool seek_path(int ix,int iy)
 {
 	if(ix==ox&&iy==oy)
@@ -157,7 +157,7 @@ bool mark[20];
 //1号位至5号位的各个球员的评分存入vector 
 	
 //***错误写法*** 
-//	vector<int> rates(20) [5];
+//vector<int> rates(20) [5];
 vector<int> rates[5];
 
 int max_sum;
@@ -382,8 +382,12 @@ void dfs(int x,int y)
 #endif
 //改正：
 //***思路***
-//对#进行搜索，找到后对其进行dfs搜索，看其周围是否有陆地
-//都有，则flag置1 
+//没必要先算出岛屿数量再算出没淹没的岛屿数量，再相减
+//可以认为#就表示一座岛屿， 
+//对#进行搜索，找到后对其进行dfs搜索(搜索其上下左右)，
+//看其周围是否有陆地， 
+//都有，则flag置1，表示该片岛屿不会全部淹没，
+//反之，淹没的岛屿数加一 
 #if 0
 #include<iostream>
 #include<string>
@@ -461,7 +465,7 @@ void dfs(int x, int y)
 //  } 
 //}
 
-#if 1
+#if 0
 #include <iostream>
 #include <queue>
 #include <string>
@@ -521,6 +525,7 @@ void bfs(int x,int y)
 			int xn=t.x+dir[i][0];
 			int yn=t.y+dir[i][1];
 			
+			//若未越界且未访问且不是障碍 
 			if(xn>=0&&xn<ROW&&yn>=0&&yn<COL&&
 			!visited[xn][yn]&&migong[xn][yn]!='1')
 			{
