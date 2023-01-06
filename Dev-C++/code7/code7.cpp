@@ -285,7 +285,7 @@ int main()
 			//拿到j/w[i]件为止 
 			for(int k=1;k<=j/w[i];k++) 
 			{
-				//若背包当前容量大于等于第x件物品的重量 
+				//若背包当前容量大于等于k个第x件物品的重量 
 				if(j>=k*w[i])
 				value[j]=
 				max(value[j],
@@ -407,12 +407,14 @@ int main()
 //这类不定方程。
 //结论：对于n维的式子，如下：
 //a1x1+a2x2+a3x3+…+anxn=c，如果a1,a2,a3…an
-//互质，则x1,x2,x3…xn一定有解且有无穷多个。
+//互质，则x1,x2,x3…xn一定有解且有无穷多个 
+//但当x1,x2,...xn>=0且都为整数时,导致方程解的个数有限，
+//或无解。 
 //如果a1,a2,a3…an不互质,那么就有无穷多个c使得
 //方程无解。
 //若最大公约数不为1，则有无限个凑不出
 //若最大公约数为1，则需考虑用完全背包思想解题
-#if 1
+#if 0
 #include <iostream>
 #include <algorithm>
 
@@ -461,7 +463,7 @@ int main()
 		{
 			//若当前要的包子数大于等于第x笼含的包子数 
 			if(j>=zhenglong[i])
-				dp[j]=max(dp[j],dp[j-zhenglong[i]]); 
+				dp[j]=max(dp[j],dp[j-zhenglong[i]]);//完全背包问题的优化写法 
 		}
 	}
 
@@ -483,6 +485,150 @@ int main()
 //		if(dp[j])
 //			dp[j+zhenglong[i]]=1;
 //	}
+
+
+//7.3 K倍区间 
+#if 0
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+int main()
+{
+	int N,K;
+	cin>>N>>K;
+	
+	vector<int>shulie(N+1);
+	for(int i=1;i<=N;i++)
+		cin>>shulie[i];	
+	
+	int count=0;	
+	//从第1个数到第N个数 
+	for(int i=1;i<=N;i++)
+		for(int j=i;j<=N;j++)//第i个数到第i个数到第N个数 
+		{
+			int sum=0;
+			
+			//若只取一个数 
+			if(i==j)
+			{
+				if(shulie[i]%K==0)
+				count++;
+			}
+			else//若取2至j-i+1个数 
+			{ 
+				int temp=i;
+				
+				do
+				sum+=shulie[temp];
+				while(temp++!=j);
+				
+				if(sum%K==0)
+					count++;
+			}
+		} 
+
+	cout<<count;
+
+	return 0;
+}
+//5 2
+//1
+//2
+//3
+//4
+//5
+#endif
+
+
+//7.4 测试次数 
+//***思路***
+//要兼顾最坏运气与最佳策略 
+#if 0
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+const int N=1000;
+
+int main()
+{
+	//创建一部手机，两步手机，三步手机
+	//从第一层到第N层测试的dp数组 
+	int dp[4][N+1];	
+
+//***注***
+//用fill()对二维数组赋值 
+//错误的参数填法 
+//	fill(&dp[0][0],&dp[4][N+1],0);
+//正确的填法 
+//	fill(&dp[0][0],&(dp[0][0])+4*(N+1),0);
+
+
+	for(int i=1;i<=3;i++)
+		for(int j=0;j<=N;j++)
+			dp[i][j]=j;
+		
+	//有i步手机 
+	for(int i=2;i<=3;i++)
+	{	
+		//要测第j层 
+		for(int j=1;j<=N;j++)
+		{
+			//在测第k层楼时 
+			for(int k=1;k<=j;k++)
+				dp[i][j]=
+				//在最坏的运气下选最优的决策(选最少的测试次数) 
+				min(dp[i][j],
+				//取最坏的运气   +1:表示已经经过一次测试 
+				1+max
+				//手机摔坏，待测1~k-1层 
+				(dp[i-1][k-1],
+				//手机没坏，待测k+1~j层，共j-(k+1)+1层 
+				dp[i][j-(k+1)+1]));
+		} 
+	}
+	
+	cout<<dp[3][N];
+
+	return 0;
+}
+#endif
+
+
+//7.5 矩阵 
+//***不理解*** 
+#if 1
+#include <iostream> 
+
+using namespace std;
+int dp[2030][1020];
+
+int main()
+{
+	int n=2020;
+	
+   dp[1][1]=1;
+   
+   //当前用了i个数字 
+   for(int i=2;i<=n;i++)
+   {
+      for(int j=1;j<=i;j++)
+      {
+         dp[i][j]+=dp[i-1][j-1];
+         
+         if(i-j<=j)
+			   dp[i][j]+=dp[i-1][j];
+			   
+			dp[i][j]%=n;
+      }
+   }
+   
+   printf("%d\n",dp[2020][1010]);
+   return 0;
+}
+#endif
 
 
 
