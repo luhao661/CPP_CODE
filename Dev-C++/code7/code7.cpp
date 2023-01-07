@@ -34,7 +34,7 @@ int main()
 				cc[i]=min(cc[i-a[j]]+1,cc[i]);//algorithm头文件中的min() 
 		}
 	}
-	lower_bound
+
 	cout<<cc[21]<<endl;
 
 	return 0;
@@ -554,7 +554,7 @@ const int N=1000;
 
 int main()
 {
-	//创建一部手机，两步手机，三步手机
+	//创建一部手机，两部手机，三部手机
 	//从第一层到第N层测试的dp数组 
 	int dp[4][N+1];	
 
@@ -565,12 +565,12 @@ int main()
 //正确的填法 
 //	fill(&dp[0][0],&(dp[0][0])+4*(N+1),0);
 
-
+	//将扔手机的次数赋值为楼层数(即都只用一部手机的情况) 
 	for(int i=1;i<=3;i++)
 		for(int j=0;j<=N;j++)
 			dp[i][j]=j;
 		
-	//有i步手机 
+	//有i部手机 
 	for(int i=2;i<=3;i++)
 	{	
 		//要测第j层 
@@ -599,7 +599,7 @@ int main()
 
 //7.5 矩阵 
 //***不理解*** 
-#if 1
+#if 0
 #include <iostream> 
 
 using namespace std;
@@ -628,6 +628,162 @@ int main()
    printf("%d\n",dp[2020][1010]);
    return 0;
 }
+#endif
+
+
+//7.6走方格 
+#if 0
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+long dp[10000][100];
+
+int main()
+{
+	long n,m;
+	cin>>n>>m;
+	
+	//第一行走法只有一种 
+	fill(&dp[1][1],&dp[1][1]+99,1);
+	
+	//从第二行开始 
+	for(int i=2;i<=n;i++)
+	{  
+		//第i行第一列走法只有一种 
+		dp[i][1]=1;
+		//从第i行第二列开始 
+		for(int j=2;j<=m;j++)
+		{
+			//当i、j均为偶数 
+			if(i%2==0&&j%2==0)
+				dp[i][j]=0;
+			//当待计算元素的前面一个元素为0 
+			else if(dp[i][j-1]==0)
+			{
+				dp[i][j]=dp[i-1][j];
+			}
+			//当待计算元素的上面一个元素为0 
+			else if(dp[i-1][j]==0)
+			{
+				dp[i][j]=dp[i][j-1];	
+			}
+			//当待计算元素前面一个元素和上面一个元素均不为0
+			else
+			{
+				dp[i][j]=dp[i-1][j]+dp[i][j-1];
+			}			 
+		}
+	}	
+	
+//	for(int i=0;i<=n;i++)
+//	{
+//		for(int j=0;j<=m;j++)
+//			printf("%6d",dp[i][j]);
+//		cout<<endl;
+//	}
+
+	cout<<dp[n][m];
+	
+	return 0;
+}
+#endif
+
+
+//7.7 砝码称重 
+#if 0
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int dp[110][200010];
+
+int main()
+{
+	int N;
+	cin>>N;
+	
+	vector<int> fama(N+1);
+	
+	for(int i=1;i<=N;i++)
+		cin>>fama[i];		
+		
+	//第i个砝码 
+	for(int i=1;i<=N;i++)
+	{
+		//上一行的数据拷贝到当前行 
+		for(int j=1;j<=200010;j++)
+		{
+			dp[i][j]=dp[i-1][j];
+		}
+		
+		//记录1~i个砝码能表示的最大质量 
+		int Max=0;
+		for(int index=1;index<=i;index++)
+			Max+=fama[index];
+		
+		//要凑的质量 
+		for(int j=1;j<=Max;j++)
+		{
+			if(j==fama[i])
+				dp[i][j]=1;
+				
+			if(fama[i]-j>=1&&dp[i-1][fama[i]-j])
+				dp[i][j]=1;
+			
+			if(j-fama[i]>=1&&dp[i-1][j-fama[i]])
+				dp[i][j]=1;
+		} 
+	}
+	
+//	for(int i=0;i<=N;i++)
+//	{
+//		for(int j=0;j<=15;j++)
+//			printf("%6d",dp[i][j]);
+//		cout<<endl;
+//	}	
+	 
+	int count=0;
+	for(int j=0;j<=200010;j++)
+		if(dp[N][j])
+			count++;
+	
+	cout<<count;			
+	 
+	return 0;
+}
+#endif
+
+
+//7.8 括号序列 
+//***不理解*** 
+#if 0
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+	string str;
+	cin>>str;
+
+	string::iterator p;
+	int l_count=0,r_count=0;
+	for(p=str.begin();p!=str.end();p++)
+	{
+		if(*p=='(')
+			l_count++;
+		if(*p==')')
+			r_count++;
+	}
+	
+	cout<<l_count<<" "<<r_count;	
+
+	return 0;
+} 
 #endif
 
 
