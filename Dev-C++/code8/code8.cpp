@@ -85,11 +85,15 @@ int main()
 
 
 //8.4 日志统计 
-#if 1
+#if 0
 #include <iostream>
 #include <set>
 #include <map> 
+#include <vector> 
+#include <algorithm>
 using namespace std;
+
+long f1(vector<long> v,long d);
 
 int main()
 {
@@ -99,13 +103,15 @@ int main()
 	
 //***注***
 //不能使用multiset关联容器，
-//因为对于此容器来说，值就是键 
+//因为对于此容器来说，值就是键，即pair对象，
+//那么查询也只能查pair对象 
+
 //	multiset<pair<long,long>>record;
 	
 //	for(int i=0;i<N;i++)
 //	{
 //		long ts,id;
-//		cin>>ts>>id;
+//		cin>>ts>>id;					 //错误理解： 
 //								          //键 值 
 //		record.insert(pair<long,long>(id,ts));
 //	}
@@ -126,14 +132,16 @@ int main()
 		record.insert(pair<long,long>(id,ts));
 	}
 	
+	#if 0
 	cout.put('\n');
 	for(auto p=record.begin();p!=record.end();p++)
 	{
 		cout<<(*p).first<<" "<<(*p).second<<endl;
 	}
+	#endif
 	
 	set <long> id;
-	
+	vector<long> v1;
 	for(auto p=record.begin();p!=record.end();p++)
 	{
 		//找到含该id的记录的范围 
@@ -145,19 +153,27 @@ int main()
 		int count=0;
 		//***注***range.second-1无定义 
 		//no match for 'operator -'
-		for(auto it=range.first;it!=range.second;    )
-		{
-			//no match for 'operator +'
+//		for(auto it=range.first;it!=range.second;    )
+//		{
+//no match for 'operator +'
 //			if(it+1<range.second&&*((it+1)).second-(*it).second<D)
 //				count++; 
 
-			auto temp=it;
-			it++;
-			
-			if((*it).second-(*temp).second<D)
-				count++;
+//			auto temp=it;
+//			it++;
+//			
+//			if((*it).second-(*temp).second<D)
+//				count++;
+//		}
+		//由于不能保证同一键对应的值是升序排列的，那么把
+		//这些值存入vector中，对数组进行排序后计算时间间隔 
+		for(auto it=range.first;it!=range.second;it++)	
+		{
+			v1.push_back((*it).second);
 		}
-		
+		count=f1(v1,D);
+		v1.clear();//***必写*** 
+
 		if(count>=K)
 			id.insert((*p).first);
 	}
@@ -166,6 +182,23 @@ int main()
 		cout<<*i<<endl;
 
 	return 0;
+}
+
+long f1(vector<long> v,long d)
+{
+	long count=1;//***注***是1不是0 
+	
+	sort(v.begin(),v.end());
+	
+	for(auto it=v.begin();it+1!=v.end();it++)
+	{
+		if(*(it+1)-*it<d)//若两个时间的间隔小于d   
+		{
+			count++;
+		}		
+	}	
+	
+	return count;
 }
 //7 10 2
 //0 1
@@ -176,7 +209,97 @@ int main()
 //100 3
 //100 3
 #endif
+//改进：
+//用set的元素值来对multimap的记录进行查找，
+//减少对multimap重复查找的次数 
+#if 1
+#include <iostream>
+#include <set>
+#include <map> 
+#include <vector> 
+#include <algorithm>
+using namespace std;
 
+//计算符合时间间隔的赞的数量 
+long f1(vector<long> v,long d);
+
+int main()
+{
+	//N条记录，D的时间长度，K个赞 
+	long N,D,K;
+	cin>>N>>D>>K;
+	
+	multimap<long,long> record;
+	
+	for(int i=0;i<N;i++)
+	{
+		long ts,id;
+		cin>>ts>>id;
+								          //键 值 
+		record.insert(pair<long,long>(id,ts));
+	}
+	
+	#if 0
+	cout.put('\n');
+	for(auto p=record.begin();p!=record.end();p++)
+	{
+		cout<<(*p).first<<" "<<(*p).second<<endl;
+	}
+	#endif
+	
+	//存用于遍历multimap键的键 
+	set<long> ID;	
+	for(auto p=record.begin();p!=record.end();p++)
+	{
+		ID.insert((*p).first);
+	} 
+	
+	//存符合条件的id号 
+	set <long> id;
+	//存id号对应的各个时间 
+	vector<long> v1;
+	//对set对象的元素进行遍历 
+	for(auto p=ID.begin();p!=ID.end();p++)
+	{
+		//在multimap中找到含该ID的记录的范围 
+		auto range=record.equal_range((*p)); 
+		
+		int count=0;
+
+		for(auto it=range.first;it!=range.second;it++)	
+		{
+			v1.push_back((*it).second);
+		}
+		count=f1(v1,D);
+		v1.clear();//***必写*** 
+
+		if(count>=K)
+			id.insert(*p);
+	}
+	
+	for(auto i=id.begin();i!=id.end();i++)
+		cout<<*i<<endl;
+
+	return 0;
+}
+
+long f1(vector<long> v,long d)
+{
+	long count=1;//***注***是1不是0 
+	
+	sort(v.begin(),v.end());
+	
+	for(auto it=v.begin();it+1!=v.end();it++)
+	{
+		if(*(it+1)-*it<d)//若两个时间的间隔小于d   
+		{
+			count++;
+		}		
+	}	
+	
+	return count;
+}
+#endif
 
 
 
