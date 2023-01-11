@@ -212,7 +212,7 @@ long f1(vector<long> v,long d)
 //改进：
 //用set的元素值来对multimap的记录进行查找，
 //减少对multimap重复查找的次数 
-#if 1
+#if 0
 #include <iostream>
 #include <set>
 #include <map> 
@@ -278,27 +278,193 @@ int main()
 	}
 	
 	for(auto i=id.begin();i!=id.end();i++)
-		cout<<*i<<endl;
+//		cout<<*i<<endl;
+		printf("%ld\n",*i); 
 
+//***注***
+//要输出大量数据时cout比printf慢，为了不影响评测结果，此处用printf() 
 	return 0;
 }
 
 long f1(vector<long> v,long d)
 {
-	long count=1;//***注***是1不是0 
+	//***注***
+	//错误理解：
+	//只要两个赞的时间间隔小于d，则满足条件 
 	
+//	//赞的数量 
+//	long count=1;//***注***是1不是0 
+//	
+//	sort(v.begin(),v.end());
+//	
+//	for(auto it=v.begin();it+1!=v.end();it++)
+//	{
+//		if(*(it+1)-*it<d)//若两个时间的间隔小于d   
+//		{
+//			count++;
+//		}		
+//	}
+
+	//正确理解： 
+	//记录的某一时刻开始的d时间段内的赞的数量，
+	//在另一个时刻开始的d时间段记录时赞要回到1 
+
 	sort(v.begin(),v.end());
 	
-	for(auto it=v.begin();it+1!=v.end();it++)
+	long max_count=1;
+	long count=1;
+	for(auto it1=v.begin();it1!=v.end();it1++)
 	{
-		if(*(it+1)-*it<d)//若两个时间的间隔小于d   
+		for(auto it2=it1+1;it2!=v.end();it2++) 
 		{
-			count++;
-		}		
-	}	
+			if(*it2-*it1<d)
+			{	
+				count++;
+				max_count=max_count>count?max_count:count;
+			}
+		}
+		
+		count=1;
+	}		
 	
-	return count;
+	return max_count;
 }
+#endif
+
+
+//8.5 灵能传输 
+//***理解有难度*** 
+#if 0
+#include <iostream>
+#include <algorithm>
+#include <string.h>//memset()
+#define ll long long
+
+using namespace std;
+
+const int N=3e5+3;
+
+ll a[N],s[N];
+bool vis[N];
+int n;
+
+int main()
+{
+   int T;
+   scanf("%d",&T);
+   
+   while(T--)
+	{
+      memset(vis,0,sizeof(vis));
+   
+	   scanf("%d",&n);
+   
+	   s[0]=0;
+   
+	   for(int i=1;i<=n;++i)
+		{
+         scanf("%lld",&s[i]);
+         s[i]+=s[i-1];
+      }
+      
+      ll s0=0,sn=s[n];
+      
+      if(s0>sn) swap(s0,sn);//前小后大，为方便取数，可避免讨论取数时重复取的问题。 
+      	sort(s,s+n+1);
+      	
+      int l=0,r=n;
+      for(int i=lower_bound(s,s+n+1,s0)-s;i>=0;i-=2)
+		{
+         a[l++]=s[i],vis[i]=1;
+      }
+      
+      for(int i=lower_bound(s,s+n+1,sn)-s;i<=n;i+=2)
+		{
+         a[r--]=s[i],vis[i]=1;
+      }
+      
+      for(int i=0;i<=n;++i)
+		{
+         if(!vis[i]) 
+				a[l++]=s[i];
+      }
+      
+      ll res=0;
+      
+		for(int i=1;i<=n;++i)
+         res=max(res,abs(a[i]-a[i-1]));
+         
+      printf("%lld\n",res);
+   }
+   return 0;
+}
+#endif
+
+
+//8.6 双向排序 
+#if 1
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+bool mycompare(const long& a,const long& b);
+
+int main()
+{
+	//序列长度，操作次数
+	long n,m;
+	cin>>n>>m;
+	
+	vector<long>v1;
+	for(long i=0;i<=n;i++)//0~n，为了与序列的下标对应，
+		v1.push_back(i);	 //索引0的元素不使用 
+	
+//	for(auto x:v1)
+//		cout<<x<<" ";			
+//	cout<<endl;
+	
+	//使用new创建二维数组
+	long (*caozuo)[3]=new long[m+1][3]; 
+	
+	fill(&caozuo[0][0],&caozuo[0][0]+(m+1)*3,0L);
+	
+	for(long i=1;i<=m;i++)
+	{
+		cin>>caozuo[i][1]>>caozuo[i][2];
+	}
+	
+	int i=1;
+	while(m--)
+	{		
+		if(caozuo[i][1]==0)//***注***sort()是对[)范围排序 
+			sort(&v1[1],&v1[caozuo[i][2]]+1,mycompare);
+	
+		if(caozuo[i][1]==1)
+			sort(&v1[caozuo[i][2]],&v1[n]+1);	
+				
+		i++;
+		
+		for(auto x:v1)
+			cout<<x<<" ";			
+		cout<<endl;
+	}
+	
+	for(int i=1;i<=n;i++)
+		cout<<v1[i]<<" ";
+
+	delete []caozuo;
+
+	return 0;
+}  
+bool mycompare(const long& a,const long& b)
+{
+	return a>b;
+}
+//3 3
+//0 3
+//1 2
+//0 2
 #endif
 
 
